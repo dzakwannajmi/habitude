@@ -97,6 +97,8 @@
     .btn-danger { @apply bg-ink text-paper hover:bg-carbon; }
     .btn-sm { @apply px-3 py-1.5 text-caption; }
     .btn-icon { @apply size-8 p-0; }
+    .btn-lg { @apply h-10 px-6; }
+    .btn-link { @apply text-pewter underline-offset-4 hover:text-ink hover:underline; }
 
     /* Cards: Paper surface, hairline Mist border, no shadow */
     .card { @apply rounded-xl border border-mist/60 bg-paper; }

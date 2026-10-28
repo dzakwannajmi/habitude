@@ -27,6 +27,13 @@ document.addEventListener('click', (event) => {
     }
     if (event.target.closest('[data-sidebar-overlay]')) root.dataset.sidebar = 'closed';
 
+    // Elements that are in the design but not built yet (magic link, SSO, legal pages)
+    const soon = event.target.closest('[data-soon]');
+    if (soon) {
+        event.preventDefault();
+        toast({ title: soon.dataset.soon || 'Coming soon', body: 'This is not available in the beta yet.', icon: 'info' });
+    }
+
     // Delete confirmation modal (native <dialog>)
     const opener = event.target.closest('[data-modal-open]');
     if (opener) document.getElementById(opener.dataset.modalOpen)?.showModal();

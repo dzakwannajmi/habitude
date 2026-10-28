@@ -23,8 +23,7 @@ class DatabaseSeeder extends Seeder
 
         mt_srand(42); // the same demo data on every run
 
-        $admin = User::factory()->admin()->create(['name' => 'Admin', 'email' => 'admin@example.com']);
-        $admin->profile()->create(['timezone' => 'Asia/Makassar', 'onboarded_at' => now()]);
+        $this->call(AdminSeeder::class);
 
         $user = User::factory()->create([
             'name' => 'Test User',

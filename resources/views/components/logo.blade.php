@@ -1,4 +1,4 @@
-@props(['text' => true, 'badge' => null])
+@props(['text' => true, 'badge' => null, 'large' => false])
 
 @php
     // null = show the release stage (Beta); pass a string to override, or false to hide.
@@ -6,7 +6,7 @@
 @endphp
 
 <span {{ $attributes->merge(['class' => 'inline-flex items-center gap-2 text-ink']) }}>
-    <svg class="h-8 w-auto shrink-0" viewBox="0 0 40 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg class="{{ $large ? 'h-12' : 'h-8' }} w-auto shrink-0" viewBox="0 0 40 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M18.5 19V4L21.5 4V19H18.5Z"/>
         <path d="M18.5 44V29H21.5V44H18.5Z"/>
         <path d="M22.4754 19.404L33.082 8.79736L35.2034 10.9187L26.7181 19.404L22.4754 19.404Z"/>
@@ -18,7 +18,7 @@
     </svg>
     @if ($text)
         <span class="flex items-start gap-1">
-            <span class="text-subheading font-semibold leading-none tracking-tight">Habitude</span>
+            <span class="{{ $large ? 'text-heading-sm' : 'text-subheading' }} font-semibold leading-none tracking-tight">Habitude</span>
             @if ($label)
                 <span class="-mt-1.5 rounded-md bg-ink px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wide text-paper">{{ $label }}</span>
             @endif

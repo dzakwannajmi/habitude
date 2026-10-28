@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Achievement;
 use App\Models\Habit;
 use App\Models\User;
+use Database\Seeders\AdminSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -151,6 +152,27 @@ class AdminTest extends TestCase
 
         $this->get('/admin')->assertSee('Admin console. Changes here affect every user', false)->assertSee('>Admin<', false);
         $this->get('/')->assertSee('Admin console')->assertSee('>Beta<', false); // menu link + stage badge on the user side
+    }
+
+    public function test_admin_seeder_is_safe_to_run_on_a_database_with_data(): void
+    {
+        $existing = User::factory()->create(['email' => 'someone@example.com']);
+
+        $this->seed(AdminSeeder::class);
+        $admin = User::firstWhere('email', 'admin@example.com');
+        $this->assertTrue($admin->isAdmin());
+        $this->assertNotNull($admin->profile->onboarded_at);
+        $this->assertModelExists($existing);
+
+        // running it again keeps the same account and password
+        $hash = $admin->password;
+        $this->seed(AdminSeeder::class);
+        $this->assertSame(1, User::where('email', 'admin@example.com')->count());
+        $this->assertSame($hash, $admin->fresh()->password);
+
+        // and the account can actually log in
+        $this->post('/login', ['email' => 'admin@example.com', 'password' => 'password'])->assertRedirect('/');
+        $this->assertAuthenticatedAs($admin);
     }
 
     public function test_make_admin_command_grants_and_revokes_the_role(): void

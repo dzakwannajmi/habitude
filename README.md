@@ -28,6 +28,7 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 
 - The release label comes from `HABITUDE_STAGE` in `.env` (`beta` by default). Set it to `production` to hide the badge and the preview bar.
 - Make someone an admin with `php artisan habitude:make-admin email@example.com` (add `--revoke` to undo).
+- No admin account yet on a database that already has data? Run `php artisan db:seed --class=AdminSeeder`. It never deletes anything; credentials come from `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env` (default `admin@example.com` / `password`).
 - Regular users get a 403 on every `/admin` page.
 
 ## Database Design
@@ -127,7 +128,7 @@ Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status
 ## Tests
 
 ```bash
-php artisan test   # 58 tests, in-memory SQLite
+php artisan test   # 59 tests, in-memory SQLite
 ```
 
 ## Contributing / Forking
