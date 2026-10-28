@@ -43,6 +43,22 @@
         </div>
     </div>
 
+    {{-- A year of check-ins: GitHub-style heat map that folds up into a 3D skyline --}}
+    @php
+        $skylineOptions = [
+            'endDate' => $today->toDateString(),
+            'unit' => 'check-in',
+            'weekStart' => 1,
+            'href' => route('dashboard'),
+            'palette' => ['#ffd1b8', '#ffac80', '#ff8340', '#ff5900'], // one hue, opacity 28% / 50% / 75% / 100%
+        ];
+    @endphp
+    <section class="mb-6" aria-label="Your year in check-ins">
+        <div data-skyline="{{ json_encode($skylineOptions) }}">
+            <script type="application/json">{!! json_encode($activity, JSON_HEX_TAG) !!}</script>
+        </div>
+    </section>
+
     <div class="grid gap-6 lg:grid-cols-3">
         {{-- Today's habits --}}
         <section class="card lg:col-span-2" aria-labelledby="habits-title">
@@ -140,7 +156,7 @@
                         <span>Less</span>
                         <span class="flex gap-1">
                             @foreach ([0, 0.25, 0.5, 0.75, 1] as $r)
-                                <span class="size-3 rounded-md" style="background: color-mix(in srgb, var(--color-ink) {{ $r * 100 }}%, var(--color-fog))"></span>
+                                <span class="size-3 rounded-md" style="background: color-mix(in srgb, var(--color-ember) {{ $r * 100 }}%, var(--color-fog))"></span>
                             @endforeach
                         </span>
                         <span>All done</span>

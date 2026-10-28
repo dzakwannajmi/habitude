@@ -19,6 +19,7 @@ A home page where the day is tracked: check-ins, timers, a calendar, and streaks
 | J2 | Streak engine (per habit and overall) | ✅ Done | 2026-10-28 | [`StreakService`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Services/StreakService.php) |
 | J3 | Month calendar with completion heat | ✅ Done | 2026-10-28 | [`CalendarService`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Services/CalendarService.php) |
 | J4 | Dashboard stats and category progress | ✅ Done | 2026-10-28 | [`DashboardController`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Controllers/DashboardController.php), [`dashboard.blade.php`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/dashboard.blade.php) |
+| J5 | Year skyline: 2D heat map and 3D, one colour | ✅ Done | 2026-10-28 | [`skyline.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/skyline.js) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 
@@ -37,6 +38,11 @@ A home page where the day is tracked: check-ins, timers, a calendar, and streaks
 ### J4: Stats and category progress
 - Four animated stat tiles. **By category** uses the Has-Many-Through relation `Category → Habit → HabitLog`, limited to the user and month.
 - **Bug found by tests:** a hand-edited `?date=garbage` caused a 500; invalid dates now fall back to today.
+
+### J5: Year skyline
+- A port of the *Contribution Skyline* component ([`skyline.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/skyline.js)): a GitHub-style heat map of the last year that folds into a 3D isometric skyline with one camera and a rising wave of bars. Toggle 2D/3D (remembered), drag to orbit, hover for the day, arrow keys, legend isolation, and a click opens that day on the dashboard.
+- One number per day: how many habits reached their target. The stats (year total, busiest day, longest and current streak) use the same rule as the streak service.
+- **One colour:** blocks are Ember at 28%, 50%, 75% and 100% opacity, so less activity is simply fainter. The month calendar uses the same single hue.
 
 ## Next
 P05: mood and journal.

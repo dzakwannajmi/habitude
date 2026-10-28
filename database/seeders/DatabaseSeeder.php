@@ -40,6 +40,14 @@ class DatabaseSeeder extends Seeder
             ->map(fn (string $name) => Tag::firstOrCreate(['name' => $name]));
 
         $today = $user->today();
+
+        // About 7 months of history. Some whole days are skipped so streaks end, and older months
+        // are quieter, which gives the year view some shape.
+        $history = 210;
+        $activeDay = [];
+        foreach (range(1, $history) as $daysAgo) {
+            $activeDay[$daysAgo] = $daysAgo <= 9 || mt_rand(1, 100) <= 45 + (int) (45 * (1 - $daysAgo / $history));
+        }
         $categories = Category::all()->keyBy('slug');
 
         foreach (config('habitude.starters') as $slug => $starters) {
@@ -54,7 +62,7 @@ class DatabaseSeeder extends Seeder
                     'unit' => $unit,
                 ]);
 
-                $habit->forceFill(['created_at' => $today->subDays(46)])->save(); // the demo history starts 45 days ago
+                $habit->forceFill(['created_at' => $today->subDays($history + 1)])->save();
                 $habit->tags()->attach($tags->random(2)->pluck('id'));
 
                 // Every habit gets a reminder; the first three also get a second one.
@@ -62,7 +70,11 @@ class DatabaseSeeder extends Seeder
 
                 // The first three habits keep a 9-day streak up to yesterday, today is left open.
                 $streaky = $habit->id <= 3;
-                foreach (range(1, 45) as $daysAgo) {
+                foreach (range(1, $history) as $daysAgo) {
+                    if (! $activeDay[$daysAgo]) {
+                        continue;
+                    }
+
                     $roll = mt_rand(1, 100);
                     $value = $streaky && $daysAgo <= 9 ? $target
                         : ($roll <= 70 ? $target : ($roll <= 85 ? max(1, intdiv($target, 2)) : 0));

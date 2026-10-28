@@ -61,7 +61,20 @@ class DashboardController extends Controller
             ->sortBy(fn ($pair) => $pair[1]->remind_at)
             ->values();
 
+        // One number per day for the skyline: how many habits reached their target.
+        $activity = HabitLog::query()
+            ->join('habits', 'habits.id', '=', 'habit_logs.habit_id')
+            ->where('habits.user_id', $user->id)
+            ->whereColumn('habit_logs.value', '>=', 'habits.target_count')
+            ->whereBetween('habit_logs.logged_date', [$today->subDays(400)->toDateString(), $today->toDateString()])
+            ->groupBy('habit_logs.logged_date')
+            ->selectRaw('habit_logs.logged_date as day, count(*) as total')
+            ->get()
+            ->map(fn ($row) => ['date' => CarbonImmutable::parse($row->day)->toDateString(), 'count' => (int) $row->total])
+            ->values();
+
         return view('dashboard', [
+            'activity' => $activity,
             'date' => $date,
             'today' => $today,
             'month' => $month,

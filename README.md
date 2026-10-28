@@ -8,7 +8,8 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 - Track daily habits grouped into eight life categories:
   Health & Fitness, Mindfulness, Productivity, Better Sleep, Stay Hydrated, Read More, Social Connections, and Self Care
 - Daily check-ins with a spring checkbox, +1 progress, and a **timer** for habits measured in minutes
-- **Calendar** on the home page that shades each day by completion, plus current and best **streaks**
+- A year **skyline** on the home page: a GitHub-style heat map of your check-ins that folds into a 3D city (one orange, fainter when you did less), with year total, busiest day, and longest and current **streaks**; click a day to open it
+- A month **calendar** that shades each day by completion
 - **Mood check-in** for each day (1–5 hearts)
 - **Daily journal** that can be linked to the day's mood
 - Habit reminders with custom time and weekdays, listed on the dashboard
@@ -128,7 +129,7 @@ Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status
 ## Tests
 
 ```bash
-php artisan test   # 59 tests, in-memory SQLite
+php artisan test   # 60 tests, in-memory SQLite
 ```
 
 ## Contributing / Forking

@@ -178,6 +178,23 @@ class TrackingTest extends TestCase
         $this->assertSame(0, $unlogged['total']); // the habit did not exist yet
     }
 
+    public function test_skyline_gets_one_number_per_day_of_completed_habits(): void
+    {
+        $a = $this->habit(['target_count' => 1]);
+        $b = $this->habit(['target_count' => 5]);
+        $this->logDays($a, [0, 1, 410]);       // 410 days ago is outside the window
+        $this->logDays($b, [0], 5);            // complete today
+        $this->logDays($b, [1], 2);            // partial yesterday: must not count
+
+        $response = $this->get('/')->assertOk()->assertSee('data-skyline', false);
+        $activity = $response->viewData('activity')->keyBy('date');
+
+        $this->assertSame(2, $activity['2026-10-28']['count']);
+        $this->assertSame(1, $activity['2026-10-27']['count']);
+        $this->assertCount(2, $activity);
+        $response->assertSee('&quot;unit&quot;:&quot;check-in&quot;', false)->assertSee('&quot;#ff5900&quot;', false)->assertSee('2026-10-28', false);
+    }
+
     // ---- achievements ----
 
     public function test_achievements_unlock_from_check_ins(): void
