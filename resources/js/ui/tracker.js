@@ -40,14 +40,19 @@ function applyResult(row, res) {
         streak.closest('[data-streak-wrap]')?.toggleAttribute('hidden', res.habit_streak === 0);
     }
 
+    const week = row.querySelector('[data-week-text]');
+    if (week && res.week_done !== null && res.week_done !== undefined) {
+        week.textContent = t(':done of :goal days this week', { done: res.week_done, goal: row.dataset.goal });
+    }
+
     const s = stat('streak');
     if (s) renderCounter(s, res.streak.current);
     const b = stat('best');
     if (b) renderCounter(b, res.streak.best);
     const d = stat('done');
     if (d) renderCounter(d, res.done);
-    const t = stat('total');
-    if (t) renderCounter(t, res.total);
+    const total = stat('total');
+    if (total) renderCounter(total, res.total);
 
     const cell = document.querySelector(`[data-cal-date="${res.date}"]`);
     if (cell && res.total > 0) {

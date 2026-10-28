@@ -212,4 +212,27 @@ class LocaleTest extends TestCase
             }
         }
     }
+
+    /**
+     * A local variable called `t` in a script that imports the translator `t` throws as soon as the
+     * translator is used ("Cannot access 't' before initialization"). In tracker.js that made every
+     * check-in look like a failed save, so no script may do it.
+     */
+    public function test_no_script_shadows_the_imported_translator(): void
+    {
+        $checked = 0;
+
+        foreach (glob(resource_path('js/{,ui/}*.js'), GLOB_BRACE) as $file) {
+            $code = file_get_contents($file);
+
+            if (! preg_match('/import\s*\{[^}]*\bt\b(?!\s+as)[^}]*\}\s*from\s*[\'"]\.\/i18n\.js[\'"]/', $code)) {
+                continue;
+            }
+
+            $checked++;
+            $this->assertDoesNotMatchRegularExpression('/\b(const|let|var)\s+t\b/', $code, basename($file).' declares its own `t`');
+        }
+
+        $this->assertGreaterThan(5, $checked);
+    }
 }
