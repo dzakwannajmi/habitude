@@ -3,7 +3,117 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+/*
+ * Design tokens: Brex style reference (see DESIGN.md).
+ * Spacing tokens are kept as plain CSS variables on :root instead of @theme,
+ * because `--spacing-8` etc. inside @theme would redefine Tailwind's p-8, m-16, ...
+ */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Colors */
+    --color-ember: #ff5900;
+    --color-abyss: #000710;
+    --color-carbon: #15191e;
+    --color-ink: #000000;
+    --color-paper: #ffffff;
+    --color-fog: #f3f3f7;
+    --color-mist: #b9bbc6;
+    --color-steel: #8b8d98;
+    --color-pewter: #6f737b;
+    --color-graphite: #60646c;
+
+    /* Typography */
+    --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-flecha: 'Flecha', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: var(--font-inter);
+
+    --text-caption: 12px;
+    --text-caption--line-height: 1.5;
+    --text-body-sm: 14px;
+    --text-body-sm--line-height: 1.43;
+    --text-body: 16px;
+    --text-body--line-height: 1.5;
+    --text-subheading: 20px;
+    --text-subheading--line-height: 1.4;
+    --text-heading-sm: 24px;
+    --text-heading-sm--line-height: 1.33;
+    --text-heading: 36px;
+    --text-heading--line-height: 1.21;
+
+    /* Border radius */
+    --radius-md: 6px;
+    --radius-xl: 12px;
+}
+
+:root {
+    --spacing-8: 8px;
+    --spacing-16: 16px;
+    --spacing-24: 24px;
+    --spacing-32: 32px;
+    --spacing-48: 48px;
+    --spacing-72: 72px;
+    --spacing-80: 80px;
+    --spacing-160: 160px;
+    --page-max-width: 1200px;
+    --sidebar-width: 17rem;
+}
+
+@layer base {
+    html {
+        font-family: var(--font-inter);
+        font-feature-settings: 'calt' 0, 'liga' 0, 'ss03', 'cv01', 'cv05' 0, 'cv10', 'ss01' 0, 'zero' 0;
+        letter-spacing: -0.01em;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        background: var(--color-fog);
+        color: var(--color-ink);
+        font-size: var(--text-body-sm);
+    }
+
+    h1, h2, h3 {
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+}
+
+@layer components {
+    /* Buttons: 12px radius, Ember reserved for the single primary action */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl border border-transparent px-4 py-2 text-body-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember disabled:opacity-50;
+    }
+    .btn-primary { @apply bg-ember text-paper hover:bg-ember/90; }
+    .btn-outline { @apply border-mist bg-paper text-ink hover:bg-fog; }
+    .btn-ghost { @apply text-ink hover:bg-fog; }
+    .btn-danger { @apply bg-ink text-paper hover:bg-carbon; }
+    .btn-sm { @apply px-3 py-1.5 text-caption; }
+    .btn-icon { @apply size-8 p-0; }
+
+    /* Cards: Paper surface, hairline Mist border, no shadow */
+    .card { @apply rounded-xl border border-mist/60 bg-paper; }
+    .card-header { @apply flex flex-wrap items-center justify-between gap-3 border-b border-mist/60 px-6 py-4; }
+    .card-body { @apply p-6; }
+
+    /* Inputs */
+    .label { @apply mb-2 block text-body-sm font-medium text-ink; }
+    .input { @apply block w-full rounded-xl border border-mist bg-paper px-3 py-2 text-body-sm text-ink placeholder:text-steel focus:border-ink focus:outline-none focus:ring-0; }
+    .input-error { @apply border-ember; }
+    .field-error { @apply mt-1.5 text-caption text-ember; }
+    .help { @apply mt-1.5 text-caption text-pewter; }
+
+    /* Tags and badges: 6px radius */
+    .badge { @apply inline-flex items-center gap-1.5 rounded-md bg-fog px-2 py-0.5 text-caption font-medium text-graphite; }
+    .badge-active { @apply bg-ink text-paper; }
+
+    /* Table */
+    .table { @apply w-full text-left text-body-sm; }
+    .table thead th { @apply border-b border-mist/60 px-6 py-3 text-caption font-medium text-pewter; }
+    .table tbody td { @apply border-b border-mist/40 px-6 py-3 align-middle text-graphite; }
+    .table tbody tr:last-child td { @apply border-b-0; }
+
+    /* Sidebar menu */
+    .menu-item { @apply flex w-full items-center gap-2 rounded-md px-2 py-2 text-body-sm font-medium text-graphite transition-colors hover:bg-paper hover:text-ink; }
+    .menu-item[aria-current='page'] { @apply bg-paper text-ink; }
+    .menu-sub { @apply flex items-center rounded-md px-2 py-1.5 text-body-sm text-graphite hover:text-ink; }
+    .menu-sub[aria-current='page'] { @apply font-semibold text-ink; }
 }

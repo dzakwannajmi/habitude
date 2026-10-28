@@ -47,7 +47,7 @@ erDiagram
 
 - PHP 8.3+ and Laravel
 - Blade templates
-- Tailwind CSS (via Vite)
+- Tailwind CSS v4 (via Vite) with the Brex-style design tokens, Inter font, and a shadcn sidebar-08 style layout
 - MySQL or SQLite
 - Laravel MCP for AI-assisted development
 
@@ -78,7 +78,7 @@ Then open <http://localhost:8000>.
 
 ## Progress
 
-Phase progress (P01, ...) broken into jobs (J1, J2, ...) with proof, status, and completion dates: [`docs/progress`](docs/progress/P01-database-design.md).
+Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status, and completion dates: [`docs/progress`](docs/progress/P01-database-design.md).
 
 ## Contributing / Forking
 
@@ -88,23 +88,25 @@ New to forking the course repository? See the step-by-step guide for Windows and
 
 ```
 app/Models/        Eloquent models and relationships
+app/Http/Controllers/  Resource controllers (habits, categories, tags)
 database/
   migrations/      Table definitions
   factories/       Fake data generators
   seeders/         Categories and sample data
-resources/views/   Blade templates
+resources/views/   Blade templates (components/app-layout is the sidebar layout)
 docs/
   database/        ERD and relationship documentation
   guides/          Fork and Git workflow guide
-  progress/        Phase tracker (P01, ...)
+  progress/        Phase tracker (P01, P02, ...)
 ```
 
 ## Roadmap
 
 - [x] Database design and documentation
 - [x] Migrations, models, factories, and seeders
+- [x] CRUD pages for categories, tags, and habits (Blade + Tailwind, sidebar layout)
 - [ ] Authentication
-- [ ] Habit, mood, and journal CRUD
+- [ ] Mood and journal CRUD
 - [ ] Dashboard with streaks and category progress
 - [ ] Reminders and achievements
 
