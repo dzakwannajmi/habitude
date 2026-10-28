@@ -26,20 +26,20 @@
     {{-- Stats --}}
     <div class="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <div class="card p-5">
-            <p class="flex items-center gap-2 text-caption text-pewter"><x-icon name="flame" class="size-4" /> Current streak</p>
-            <p class="mt-2 flex items-baseline gap-1.5 text-[40px] font-semibold tracking-tight"><x-counter data-stat="streak" :value="$streak['current']" /><span class="text-body-sm font-normal text-pewter">days</span></p>
+            <p class="flex items-center gap-2 text-caption text-pewter"><x-icon name="flame" class="size-4 text-ember" /> Current streak</p>
+            <p class="mt-2 flex items-baseline gap-1.5 text-[40px] font-semibold tracking-tight"><x-counter class="text-ember" data-stat="streak" :value="$streak['current']" /><span class="text-body-sm font-normal text-pewter">days</span></p>
         </div>
         <div class="card p-5">
             <p class="flex items-center gap-2 text-caption text-pewter"><x-icon name="trophy" class="size-4" /> Best streak</p>
-            <p class="mt-2 flex items-baseline gap-1.5 text-[40px] font-semibold tracking-tight"><x-counter data-stat="best" :value="$streak['best']" /><span class="text-body-sm font-normal text-pewter">days</span></p>
+            <p class="mt-2 flex items-baseline gap-1.5 text-[40px] font-semibold tracking-tight"><x-counter class="text-ember" data-stat="best" :value="$streak['best']" /><span class="text-body-sm font-normal text-pewter">days</span></p>
         </div>
         <div class="card p-5">
             <p class="flex items-center gap-2 text-caption text-pewter"><x-icon name="circle-check" class="size-4" /> {{ $isToday ? 'Done today' : 'Done that day' }}</p>
-            <p class="mt-2 flex items-baseline gap-1 text-[40px] font-semibold tracking-tight"><x-counter data-stat="done" :value="$doneCount" /><span class="text-heading-sm font-normal text-steel">/</span><x-counter class="text-heading-sm text-steel" data-stat="total" :value="$rows->count()" /></p>
+            <p class="mt-2 flex items-baseline gap-1 text-[40px] font-semibold tracking-tight"><x-counter class="text-ember" data-stat="done" :value="$doneCount" /><span class="text-heading-sm font-normal text-steel">/</span><x-counter class="text-heading-sm text-steel" data-stat="total" :value="$rows->count()" /></p>
         </div>
         <div class="card p-5">
             <p class="flex items-center gap-2 text-caption text-pewter"><x-icon name="calendar" class="size-4" /> {{ $month->format('F') }} completion</p>
-            <p class="mt-2 flex items-baseline gap-1 text-[40px] font-semibold tracking-tight"><x-counter data-stat="rate" :value="$monthRate" /><span class="text-heading-sm font-normal text-steel">%</span></p>
+            <p class="mt-2 flex items-baseline gap-1 text-[40px] font-semibold tracking-tight"><x-counter class="text-ember" data-stat="rate" :value="$monthRate" /><span class="text-heading-sm font-normal text-steel">%</span></p>
         </div>
     </div>
 
@@ -87,13 +87,13 @@
                                 </p>
                                 @if ($multi)
                                     <div class="mt-1.5 h-1 max-w-48 overflow-hidden rounded bg-fog">
-                                        <span data-progress-bar class="block h-full rounded bg-ink transition-[width] duration-500" style="width: {{ min(100, $r['value'] / $h->target_count * 100) }}%"></span>
+                                        <span data-progress-bar class="block h-full rounded bg-ember transition-[width] duration-500" style="width: {{ min(100, $r['value'] / $h->target_count * 100) }}%"></span>
                                     </div>
                                 @endif
                             </div>
 
                             <span data-streak-wrap class="badge" @if ($r['streak'] === 0) hidden @endif title="Habit streak">
-                                <x-icon name="flame" class="size-3.5" /><x-counter data-streak :value="$r['streak']" />
+                                <x-icon name="flame" class="size-3.5 text-ember" /><x-counter data-streak :value="$r['streak']" />
                             </span>
 
                             @if ($r['timed'])
@@ -216,7 +216,7 @@
             <ul class="card-body space-y-3">
                 @forelse ($recentAchievements as $a)
                     <li class="flex items-center gap-3">
-                        <span class="flex size-9 flex-none items-center justify-center rounded-xl bg-ink text-paper"><x-icon name="trophy" /></span>
+                        <span class="flex size-9 flex-none items-center justify-center rounded-xl bg-ember text-paper"><x-icon name="trophy" /></span>
                         <span class="min-w-0"><span class="block truncate text-body-sm font-semibold">{{ $a->name }}</span><span class="block text-caption text-pewter">{{ \Carbon\Carbon::parse($a->pivot->earned_at)->format('j M Y') }}</span></span>
                     </li>
                 @empty

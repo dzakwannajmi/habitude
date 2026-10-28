@@ -43,6 +43,7 @@ A home page where the day is tracked: check-ins, timers, a calendar, and streaks
 - A port of the *Contribution Skyline* component ([`skyline.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/skyline.js)): a GitHub-style heat map of the last year that folds into a 3D isometric skyline with one camera and a rising wave of bars. Toggle 2D/3D (remembered), drag to orbit, hover for the day, arrow keys, legend isolation, and a click opens that day on the dashboard.
 - One number per day: how many habits reached their target. The stats (year total, busiest day, longest and current streak) use the same rule as the streak service.
 - **One colour:** blocks are Ember at 28%, 50%, 75% and 100% opacity, so less activity is simply fainter. The month calendar uses the same single hue.
+- **Rule for orange:** it means *your progress* (streak and stat numbers, completed check, progress bars, mood hearts, unlocked achievements, sign-up bars) next to the one primary button per screen. Black stays for structure and text, gray for the inactive. Small text is never orange (about 3.4:1 on white, enough for 24px+ numbers and icons only).
 
 ## Next
 P05: mood and journal.

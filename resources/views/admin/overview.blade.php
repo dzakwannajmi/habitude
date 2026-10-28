@@ -28,7 +28,7 @@
                     @foreach ($signups as $day)
                         <div class="group/bar flex h-full flex-1 flex-col items-center justify-end gap-1.5" title="{{ $day['date']->format('j M') }}: {{ $day['count'] }}">
                             <span class="text-caption text-pewter">{{ $day['count'] ?: '' }}</span>
-                            <span class="w-full rounded-md {{ $day['count'] ? 'bg-ink' : 'bg-fog' }}" style="height: {{ $day['count'] ? max(8, $day['count'] / $max * 100) : 4 }}%"></span>
+                            <span class="w-full rounded-md {{ $day['count'] ? 'bg-ember' : 'bg-fog' }}" style="height: {{ $day['count'] ? max(8, $day['count'] / $max * 100) : 4 }}%"></span>
                         </div>
                     @endforeach
                 </div>

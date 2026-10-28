@@ -361,7 +361,7 @@
 .sc-inner { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; }
 .sc-ring { position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 2px var(--color-ink); opacity: 0.28; transition: opacity 120ms ease; }
 .sc:hover .sc-ring { opacity: 0.5; }
-.sc-fill { position: absolute; inset: 0; border-radius: inherit; background: var(--color-ink); transform: scale(0); transition: transform 0.45s var(--ease-spring); }
+.sc-fill { position: absolute; inset: 0; border-radius: inherit; background: var(--color-ember); transform: scale(0); transition: transform 0.45s var(--ease-spring); }
 .sc-tick { position: relative; width: 68%; height: 68%; overflow: visible; fill: none; stroke: var(--color-paper); stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
 .sc-tick path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.25s ease 0.05s; }
 .sc-word { display: inline-block; transition: opacity 0.2s ease; }
@@ -413,7 +413,7 @@
 .pr-star:focus-visible { outline: 2px solid var(--color-ember); outline-offset: 2px; border-radius: 6px; }
 .pr-lift { display: block; transform-origin: bottom; transition: transform 320ms var(--ease-out); }
 .pr-glyph { display: block; width: var(--pr-size); height: var(--pr-size); color: var(--color-mist); transition: color 160ms ease; }
-.pr-glyph[data-lit='true'] { color: var(--color-ink); }
+.pr-glyph[data-lit='true'] { color: var(--color-ember); }
 .pr-glyph svg { display: block; width: 100%; height: 100%; }
 
 /* ---------- Counter (odometer) ---------- */
@@ -585,7 +585,7 @@
     font-weight: 500;
     transition: transform 160ms var(--ease-out), background-color 300ms ease;
 }
-.cal-day[data-high] { color: var(--color-paper); font-weight: 600; }
+.cal-day[data-high] { color: var(--color-ink); font-weight: 600; } /* dark text stays readable on every orange level */
 .cal-day:not(.is-future):hover { transform: scale(1.06); }
 .cal-day.is-out { opacity: 0.35; }
 .cal-day.is-future { opacity: 0.45; pointer-events: none; }

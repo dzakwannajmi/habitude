@@ -18,7 +18,7 @@
             @endphp
             <article class="card flex flex-col p-5 {{ $got ? '' : 'bg-fog/50' }}">
                 <div class="flex items-start gap-3">
-                    <span class="flex size-11 flex-none items-center justify-center rounded-xl {{ $got ? 'bg-ink text-paper' : 'bg-fog text-steel' }}"><x-icon name="{{ $got ? 'trophy' : 'lock' }}" class="size-5" /></span>
+                    <span class="flex size-11 flex-none items-center justify-center rounded-xl {{ $got ? 'bg-ember text-paper' : 'bg-fog text-steel' }}"><x-icon name="{{ $got ? 'trophy' : 'lock' }}" class="size-5" /></span>
                     <div class="min-w-0 flex-1">
                         <h2 class="truncate text-body font-semibold">{{ $a->name }}</h2>
                         <p class="text-body-sm text-graphite">{{ $a->description }}</p>
@@ -29,7 +29,7 @@
                         <span>{{ config('habitude.criteria')[$type] ?? $type }}</span>
                         <span>{{ $have }} / {{ $threshold }}</span>
                     </div>
-                    <div class="h-1.5 overflow-hidden rounded bg-fog"><span class="block h-full rounded bg-ink transition-[width] duration-700" style="width: {{ $threshold ? $have / $threshold * 100 : 0 }}%"></span></div>
+                    <div class="h-1.5 overflow-hidden rounded bg-fog"><span class="block h-full rounded bg-ember transition-[width] duration-700" style="width: {{ $threshold ? $have / $threshold * 100 : 0 }}%"></span></div>
                     <p class="mt-2 text-caption text-pewter">{{ $got ? 'Unlocked '.\Carbon\Carbon::parse($got->pivot->earned_at)->format('j M Y') : 'Locked' }}</p>
                 </div>
                 @if ($admin)
