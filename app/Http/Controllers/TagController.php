@@ -24,7 +24,7 @@ class TagController extends Controller
     {
         Tag::create($this->validated($request));
 
-        return redirect()->route('tags.index')
+        return redirect()->route('admin.tags.index')
             ->with('success', 'Tag created.');
     }
 
@@ -37,7 +37,7 @@ class TagController extends Controller
     {
         $tag->update($this->validated($request, $tag));
 
-        return redirect()->route('tags.index')
+        return redirect()->route('admin.tags.index')
             ->with('success', 'Tag updated.');
     }
 
@@ -46,7 +46,7 @@ class TagController extends Controller
         // The habit_tag pivot rows are removed by the cascade rule.
         $tag->delete();
 
-        return redirect()->route('tags.index')
+        return redirect()->route('admin.tags.index')
             ->with('success', 'Tag deleted.');
     }
 

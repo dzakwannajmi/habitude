@@ -15,13 +15,16 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database. Demo login: test@example.com / password.
+     * Seed the application's database. Demo logins (password is "password"): test@example.com (user), admin@example.com (admin).
      */
     public function run(): void
     {
         $this->call([CategorySeeder::class, AchievementSeeder::class]);
 
         mt_srand(42); // the same demo data on every run
+
+        $admin = User::factory()->admin()->create(['name' => 'Admin', 'email' => 'admin@example.com']);
+        $admin->profile()->create(['timezone' => 'Asia/Makassar', 'onboarded_at' => now()]);
 
         $user = User::factory()->create([
             'name' => 'Test User',

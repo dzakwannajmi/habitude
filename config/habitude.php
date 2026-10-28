@@ -1,6 +1,12 @@
 <?php
 
 return [
+    // Release stage shown as a badge next to the logo. Use "production" to hide the badge and the preview banner.
+    'stage' => env('HABITUDE_STAGE', 'beta'),
+
+    // Where beta testers can report problems.
+    'feedback_url' => env('HABITUDE_FEEDBACK_URL', 'https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/issues'),
+
     // Timezones offered in the profile and onboarding forms.
     'timezones' => [
         'Asia/Jakarta' => 'WIB (Jakarta)',

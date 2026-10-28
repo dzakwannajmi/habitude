@@ -18,6 +18,18 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 - Habits as a grouped **list or grid** (Finder style) with swipe-to-edit rows
 - Mobile **dock** navigation
 
+## Two Sides: Beta app and Admin console
+
+| | Beta app (`/`) | Admin console (`/admin`) |
+|---|---|---|
+| For | Everyone who signs up | Administrators only |
+| Label | **BETA** badge and a "preview, not production" bar | **ADMIN** badge and an "affects every user" bar |
+| Does | Habits, check-ins, calendar, streaks, mood, journal, reminders | System overview, users and roles, categories, tags, achievements |
+
+- The release label comes from `HABITUDE_STAGE` in `.env` (`beta` by default). Set it to `production` to hide the badge and the preview bar.
+- Make someone an admin with `php artisan habitude:make-admin email@example.com` (add `--revoke` to undo).
+- Regular users get a 403 on every `/admin` page.
+
 ## Database Design
 
 The full schema and every relationship are documented with Mermaid diagrams in
@@ -102,7 +114,9 @@ The app uses **MySQL**, as in the course module.
    php artisan migrate:fresh --seed
    ```
 4. Inspect the tables and foreign keys in phpMyAdmin or HeidiSQL.
-5. Log in with the demo account **`test@example.com` / `password`** (it already finished onboarding), or register a new one to see the stepper.
+5. Log in with a demo account (password `password` for both), or register a new one to see the stepper:
+   - **`test@example.com`**: a regular user with 45 days of sample data
+   - **`admin@example.com`**: an administrator for the console at `/admin`
 
 Automated tests (`php artisan test`) use an in-memory SQLite database, so they never touch your MySQL data.
 
@@ -113,7 +127,7 @@ Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status
 ## Tests
 
 ```bash
-php artisan test   # 47 tests, in-memory SQLite
+php artisan test   # 58 tests, in-memory SQLite
 ```
 
 ## Contributing / Forking
@@ -148,6 +162,7 @@ docs/
 - [x] Mood and journal
 - [x] Reminders and achievements
 - [x] UI kit: branched menu, glide select, swipe row, spring check, peek rating, counter, stepper, dock
+- [x] Admin console and Beta release stage
 - [ ] Run and verify on MySQL
 
 ## Author

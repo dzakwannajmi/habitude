@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title }} · {{ config('app.name') }}</title>
+    <title>{{ $title }} · {{ config('app.name') }}{{ request()->routeIs('admin.*') ? ' Admin' : '' }}</title>
 
     {{-- Set the sidebar state before first paint to avoid a flash --}}
     <script>
@@ -20,43 +20,76 @@
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-svh antialiased">
+<body class="min-h-svh antialiased" style="--bar-h: {{ request()->routeIs('admin.*') || config('habitude.stage') !== 'production' ? '1.75rem' : '0px' }}">
     @php
         $user = auth()->user();
         $initials = collect(explode(' ', $user->name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('');
+        $admin = request()->routeIs('admin.*');
+        $preview = config('habitude.stage') !== 'production';
+        $bar = $admin || $preview;
 
-        $nav = [
-            ['label' => 'Dashboard', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-            ['label' => 'Track', 'children' => [
+        if ($admin) {
+            $nav = [
+                ['label' => 'Overview', 'url' => route('admin.overview'), 'active' => request()->routeIs('admin.overview')],
+                ['label' => 'Users', 'url' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
+                ['label' => 'Master Data', 'children' => [
+                    ['label' => 'Categories', 'icon' => 'folder', 'url' => route('admin.categories.index'), 'active' => request()->routeIs('admin.categories.*')],
+                    ['label' => 'Tags', 'icon' => 'tag', 'url' => route('admin.tags.index'), 'active' => request()->routeIs('admin.tags.*')],
+                    ['label' => 'Achievements', 'icon' => 'trophy', 'url' => route('admin.achievements.index'), 'active' => request()->routeIs('admin.achievements.*')],
+                ]],
+                ['label' => 'Back to app', 'url' => route('dashboard'), 'active' => false],
+            ];
+            $dock = [
+                ['label' => 'Overview', 'icon' => 'layout-grid', 'url' => route('admin.overview'), 'active' => request()->routeIs('admin.overview')],
+                ['label' => 'Users', 'icon' => 'users', 'url' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
+                ['label' => 'Categories', 'icon' => 'folder', 'url' => route('admin.categories.index'), 'active' => request()->routeIs('admin.categories.*', 'admin.tags.*', 'admin.achievements.*')],
+                ['label' => 'Back to app', 'icon' => 'arrow-left', 'url' => route('dashboard'), 'active' => false],
+                ['label' => 'Menu', 'icon' => 'menu', 'toggle' => true],
+            ];
+        } else {
+            $nav = [
+                ['label' => 'Dashboard', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+                ['label' => 'Track', 'children' => [
+                    ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
+                    ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
+                    ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
+                    ['label' => 'Achievements', 'icon' => 'trophy', 'url' => route('achievements.index'), 'active' => request()->routeIs('achievements.*')],
+                ]],
+            ];
+            $dock = [
+                ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
                 ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
                 ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
                 ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
-                ['label' => 'Achievements', 'icon' => 'trophy', 'url' => route('achievements.index'), 'active' => request()->routeIs('achievements.*')],
-            ]],
-            ['label' => 'Master Data', 'children' => [
-                ['label' => 'Categories', 'icon' => 'folder', 'url' => route('categories.index'), 'active' => request()->routeIs('categories.*')],
-                ['label' => 'Tags', 'icon' => 'tag', 'url' => route('tags.index'), 'active' => request()->routeIs('tags.*')],
-            ]],
-        ];
-
-        $dock = [
-            ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-            ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
-            ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
-            ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
-            ['label' => 'Menu', 'icon' => 'menu', 'toggle' => true],
-        ];
+                ['label' => 'Menu', 'icon' => 'menu', 'toggle' => true],
+            ];
+        }
     @endphp
+
+    {{-- Top announcement bar (design system): preview notice for users, console notice for admins --}}
+    @if ($bar)
+        <div class="fixed inset-x-0 top-0 z-50 flex h-7 items-center justify-center gap-2 bg-carbon px-3 text-caption font-medium text-paper" role="note">
+            @if ($admin)
+                <x-icon name="shield" class="size-3.5" />
+                <span>Admin console. Changes here affect every user.</span>
+                <a href="{{ route('dashboard') }}" class="font-semibold text-ember underline-offset-2 hover:underline">Back to app</a>
+            @else
+                <span class="max-sm:hidden">Beta preview, not production. Data may be reset.</span>
+                <span class="sm:hidden">Beta preview, not production.</span>
+                <a href="{{ config('habitude.feedback_url') }}" target="_blank" rel="noopener" class="font-semibold text-ember underline-offset-2 hover:underline">Send feedback</a>
+            @endif
+        </div>
+    @endif
 
     {{-- Mobile overlay --}}
     <div data-sidebar-overlay class="fixed inset-0 z-30 hidden bg-ink/40 in-data-[sidebar=open]:block lg:hidden!"></div>
 
     {{-- Sidebar (shadcn sidebar-08, inset variant) --}}
     <aside aria-label="Sidebar"
-        class="fixed inset-y-0 left-0 z-40 flex w-(--sidebar-width) -translate-x-full flex-col bg-fog transition-transform duration-200 in-data-[sidebar=open]:translate-x-0 max-lg:border-r max-lg:border-mist/60 max-lg:bg-paper">
+        class="fixed bottom-0 left-0 top-(--bar-h) z-40 flex w-(--sidebar-width) -translate-x-full flex-col bg-fog transition-transform duration-200 in-data-[sidebar=open]:translate-x-0 max-lg:border-r max-lg:border-mist/60 max-lg:bg-paper">
         <div class="p-4 pb-2">
-            <a href="{{ route('dashboard') }}" class="flex items-center rounded-xl px-1 py-1" aria-label="Habitude Admin home">
-                <x-logo />
+            <a href="{{ $admin ? route('admin.overview') : route('dashboard') }}" class="flex items-center rounded-xl px-1 py-1" aria-label="Habitude home">
+                <x-logo :badge="$admin ? 'Admin' : null" />
             </a>
         </div>
 
@@ -84,6 +117,11 @@
                 </summary>
                 <div class="absolute inset-x-3 bottom-full mb-2 rounded-xl border border-mist/60 bg-paper p-1 shadow-[0_8px_24px_-8px_rgb(0_0_0/0.18)]">
                     <a href="{{ route('profile.edit') }}" class="menu-item"><x-icon name="user" /> Profile</a>
+                    @if ($user->isAdmin())
+                        <a href="{{ $admin ? route('dashboard') : route('admin.overview') }}" class="menu-item">
+                            <x-icon name="{{ $admin ? 'arrow-left' : 'shield' }}" /> {{ $admin ? 'Back to app' : 'Admin console' }}
+                        </a>
+                    @endif
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="menu-item"><x-icon name="log-out" /> Log out</button>
@@ -94,8 +132,8 @@
     </aside>
 
     {{-- Inset content --}}
-    <div class="p-0 transition-[padding] duration-200 lg:p-2 lg:in-data-[sidebar=open]:pl-(--sidebar-width)">
-        <div class="flex min-h-svh flex-col bg-paper lg:min-h-[calc(100svh-1rem)] lg:rounded-xl lg:border lg:border-mist/60">
+    <div class="p-0 pt-(--bar-h) transition-[padding] duration-200 lg:p-2 lg:pt-[calc(var(--bar-h)+0.5rem)] lg:in-data-[sidebar=open]:pl-(--sidebar-width)">
+        <div class="flex min-h-[calc(100svh-var(--bar-h))] flex-col bg-paper lg:min-h-[calc(100svh-1rem-var(--bar-h))] lg:rounded-xl lg:border lg:border-mist/60">
             <header class="flex h-14 shrink-0 items-center gap-2 border-b border-mist/60 px-4">
                 <button type="button" data-sidebar-toggle class="btn btn-ghost btn-icon" aria-label="Toggle sidebar">
                     <x-icon name="panel-left" />

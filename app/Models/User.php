@@ -65,6 +65,19 @@ class User extends Authenticatable
         return $this->belongsToMany(Achievement::class)->withPivot('earned_at');
     }
 
+    public const ROLE_USER = 'user';
+
+    public const ROLE_ADMIN = 'admin';
+
+    /**
+     * `role` is deliberately not mass assignable: it is only set by the
+     * admin console, the seeder, or the `habitude:make-admin` command.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
     /**
      * Today's date in the user's own timezone (falls back to the app timezone).
      */

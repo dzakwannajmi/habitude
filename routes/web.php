@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AchievementController;
+use App\Http\Controllers\Admin\OverviewController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -27,6 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding.show');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
 
+    // Admin console: the whole system, master data and every user.
+    Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+        Route::get('/', [OverviewController::class, 'index'])->name('overview');
+        Route::resource('users', UserController::class)->only(['index', 'edit', 'update', 'destroy']);
+        Route::resource('categories', CategoryController::class)->except('show');
+        Route::resource('tags', TagController::class)->except('show');
+        Route::resource('achievements', AchievementController::class)->except('show');
+    });
+
     Route::middleware('onboarded')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -42,9 +53,7 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('journal', JournalEntryController::class)->except('show');
 
-        Route::resource('categories', CategoryController::class)->except('show');
-        Route::resource('tags', TagController::class)->except('show');
-        Route::resource('achievements', AchievementController::class)->except('show');
+        Route::get('/achievements', [AchievementController::class, 'index'])->name('achievements.index');
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');

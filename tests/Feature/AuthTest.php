@@ -19,7 +19,7 @@ class AuthTest extends TestCase
 
     public function test_guests_are_sent_to_login(): void
     {
-        foreach (['/', '/habits', '/mood', '/journal', '/categories', '/profile'] as $url) {
+        foreach (['/', '/habits', '/mood', '/journal', '/admin', '/admin/users', '/profile'] as $url) {
             $this->get($url)->assertRedirect('/login');
         }
     }

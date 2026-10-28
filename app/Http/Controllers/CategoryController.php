@@ -27,7 +27,7 @@ class CategoryController extends Controller
 
         Category::create($data);
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Category created.');
     }
 
@@ -42,7 +42,7 @@ class CategoryController extends Controller
 
         $category->update($data);
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Category updated.');
     }
 
@@ -50,13 +50,13 @@ class CategoryController extends Controller
     {
         // habits.category_id is restricted on delete, so explain instead of failing.
         if ($category->habits()->exists()) {
-            return redirect()->route('categories.index')
+            return redirect()->route('admin.categories.index')
                 ->with('error', "\"{$category->name}\" still has habits. Move or delete them first.");
         }
 
         $category->delete();
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Category deleted.');
     }
 

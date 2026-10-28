@@ -21,12 +21,12 @@ class CrudTest extends TestCase
 
         $this->withoutVite();
 
-        $this->user = $this->signIn();
+        $this->user = $this->signIn(User::factory()->admin()->create());
     }
 
     public function test_all_index_pages_render(): void
     {
-        foreach (['/', '/habits', '/categories', '/tags', '/habits/create', '/categories/create', '/tags/create', '/mood', '/journal', '/journal/create', '/achievements', '/achievements/create', '/profile'] as $url) {
+        foreach (['/', '/habits', '/habits/create', '/mood', '/journal', '/journal/create', '/achievements', '/profile', '/admin', '/admin/users', '/admin/categories', '/admin/tags', '/admin/achievements', '/admin/categories/create', '/admin/tags/create', '/admin/achievements/create'] as $url) {
             $this->get($url)->assertOk()->assertSee('Habitude');
         }
     }
@@ -35,8 +35,8 @@ class CrudTest extends TestCase
 
     public function test_category_can_be_created_with_generated_slug(): void
     {
-        $this->post('/categories', ['name' => 'Self Care', 'icon' => '🌸', 'color' => '#f97316'])
-            ->assertRedirect('/categories')
+        $this->post('/admin/categories', ['name' => 'Self Care', 'icon' => '🌸', 'color' => '#f97316'])
+            ->assertRedirect('/admin/categories')
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('categories', ['name' => 'Self Care', 'slug' => 'self-care']);
@@ -46,17 +46,17 @@ class CrudTest extends TestCase
     {
         Category::factory()->create(['name' => 'Mindfulness']);
 
-        $this->post('/categories', [])->assertSessionHasErrors(['name', 'color']);
-        $this->post('/categories', ['name' => 'Mindfulness', 'color' => '#000000'])->assertSessionHasErrors('name');
-        $this->post('/categories', ['name' => 'New', 'color' => 'red'])->assertSessionHasErrors('color');
+        $this->post('/admin/categories', [])->assertSessionHasErrors(['name', 'color']);
+        $this->post('/admin/categories', ['name' => 'Mindfulness', 'color' => '#000000'])->assertSessionHasErrors('name');
+        $this->post('/admin/categories', ['name' => 'New', 'color' => 'red'])->assertSessionHasErrors('color');
     }
 
     public function test_category_can_be_updated_without_changing_its_name(): void
     {
         $category = Category::factory()->create(['name' => 'Read More', 'slug' => 'read-more']);
 
-        $this->put("/categories/{$category->id}", ['name' => 'Read More', 'color' => '#10b981'])
-            ->assertRedirect('/categories')
+        $this->put("/admin/categories/{$category->id}", ['name' => 'Read More', 'color' => '#10b981'])
+            ->assertRedirect('/admin/categories')
             ->assertSessionDoesntHaveErrors();
 
         $this->assertSame('#10b981', $category->fresh()->color);
@@ -67,7 +67,7 @@ class CrudTest extends TestCase
         $category = Category::factory()->create();
         Habit::factory()->create(['user_id' => $this->user->id, 'category_id' => $category->id]);
 
-        $this->delete("/categories/{$category->id}")->assertSessionHas('error');
+        $this->delete("/admin/categories/{$category->id}")->assertSessionHas('error');
 
         $this->assertModelExists($category);
     }
@@ -76,7 +76,7 @@ class CrudTest extends TestCase
     {
         $category = Category::factory()->create();
 
-        $this->delete("/categories/{$category->id}")->assertSessionHas('success');
+        $this->delete("/admin/categories/{$category->id}")->assertSessionHas('success');
 
         $this->assertModelMissing($category);
     }
@@ -85,13 +85,13 @@ class CrudTest extends TestCase
 
     public function test_tag_crud_and_unique_name(): void
     {
-        $this->post('/tags', ['name' => 'morning'])->assertRedirect('/tags');
-        $this->post('/tags', ['name' => 'morning'])->assertSessionHasErrors('name');
-        $this->post('/tags', [])->assertSessionHasErrors('name');
+        $this->post('/admin/tags', ['name' => 'morning'])->assertRedirect('/admin/tags');
+        $this->post('/admin/tags', ['name' => 'morning'])->assertSessionHasErrors('name');
+        $this->post('/admin/tags', [])->assertSessionHasErrors('name');
 
         $tag = Tag::firstWhere('name', 'morning');
-        $this->put("/tags/{$tag->id}", ['name' => 'morning'])->assertSessionDoesntHaveErrors();
-        $this->put("/tags/{$tag->id}", ['name' => 'evening'])->assertRedirect('/tags');
+        $this->put("/admin/tags/{$tag->id}", ['name' => 'morning'])->assertSessionDoesntHaveErrors();
+        $this->put("/admin/tags/{$tag->id}", ['name' => 'evening'])->assertRedirect('/admin/tags');
         $this->assertSame('evening', $tag->fresh()->name);
     }
 
@@ -101,7 +101,7 @@ class CrudTest extends TestCase
         $tag = Tag::factory()->create();
         $habit->tags()->attach($tag);
 
-        $this->delete("/tags/{$tag->id}")->assertSessionHas('success');
+        $this->delete("/admin/tags/{$tag->id}")->assertSessionHas('success');
 
         $this->assertDatabaseMissing('habit_tag', ['tag_id' => $tag->id]);
         $this->assertModelExists($habit);

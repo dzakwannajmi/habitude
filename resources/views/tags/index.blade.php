@@ -1,11 +1,11 @@
-<x-app-layout title="Tags" :crumbs="[['Master Data'], ['Tags']]">
+<x-app-layout title="Tags" :crumbs="[['Admin', route('admin.overview')], ['Tags']]">
     <div class="card">
         <div class="card-header">
             <div>
                 <h1 class="text-subheading">Tags <span class="text-pewter font-normal">({{ $tags->count() }})</span></h1>
                 <p class="text-body-sm text-pewter">Free-form labels you can attach to any habit.</p>
             </div>
-            <a href="{{ route('tags.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.tags.create') }}" class="btn btn-primary">
                 <x-icon name="plus" /> Add tag
             </a>
         </div>
@@ -28,7 +28,7 @@
                             <td>{{ $tag->habits_count }}</td>
                             <td>
                                 <div class="flex justify-end gap-1">
-                                    <a href="{{ route('tags.edit', $tag) }}" class="btn btn-outline btn-icon" aria-label="Edit {{ $tag->name }}">
+                                    <a href="{{ route('admin.tags.edit', $tag) }}" class="btn btn-outline btn-icon" aria-label="Edit {{ $tag->name }}">
                                         <x-icon name="pencil" />
                                     </a>
                                     <button type="button" class="btn btn-outline btn-icon" data-modal-open="delete-tag-{{ $tag->id }}" aria-label="Delete {{ $tag->name }}">
@@ -36,7 +36,7 @@
                                     </button>
                                 </div>
                                 <x-delete-modal id="delete-tag-{{ $tag->id }}"
-                                    :action="route('tags.destroy', $tag)"
+                                    :action="route('admin.tags.destroy', $tag)"
                                     title="Delete tag"
                                     :message="'Delete the tag &quot;'.$tag->name.'&quot;? It will be removed from all habits.'" />
                             </td>

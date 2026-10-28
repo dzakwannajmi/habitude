@@ -45,7 +45,7 @@
     <fieldset>
         <legend class="label">Tags <span class="font-normal text-pewter">(optional)</span></legend>
         @if ($tags->isEmpty())
-            <p class="help">No tags yet. <a href="{{ route('tags.create') }}" class="text-ink underline">Create one</a>.</p>
+            <p class="help">No tags yet.@if (auth()->user()->isAdmin()) <a href="{{ route('admin.tags.create') }}" class="text-ink underline">Create one</a>.@else An administrator manages the tag list.@endif</p>
         @else
             <div class="flex flex-wrap gap-2">
                 @foreach ($tags as $tag)

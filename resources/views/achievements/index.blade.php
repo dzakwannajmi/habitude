@@ -1,10 +1,12 @@
-<x-app-layout title="Achievements" :crumbs="[['Track'], ['Achievements']]">
+<x-app-layout title="Achievements" :crumbs="$admin ? [['Admin', route('admin.overview')], ['Achievements']] : [['Track'], ['Achievements']]">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
             <h1 class="text-heading-sm">Achievements <span class="font-normal text-pewter">({{ $earned->count() }}/{{ $achievements->count() }})</span></h1>
-            <p class="text-body-sm text-pewter">Unlocked automatically when you reach the goal. Edit the goals below.</p>
+            <p class="text-body-sm text-pewter">{{ $admin ? 'Master data: the goals every user can unlock.' : 'Unlocked automatically when you reach the goal.' }}</p>
         </div>
-        <a href="{{ route('achievements.create') }}" class="btn btn-primary"><x-icon name="plus" /> Add achievement</a>
+        @if ($admin)
+            <a href="{{ route('admin.achievements.create') }}" class="btn btn-primary"><x-icon name="plus" /> Add achievement</a>
+        @endif
     </div>
 
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -30,12 +32,14 @@
                     <div class="h-1.5 overflow-hidden rounded bg-fog"><span class="block h-full rounded bg-ink transition-[width] duration-700" style="width: {{ $threshold ? $have / $threshold * 100 : 0 }}%"></span></div>
                     <p class="mt-2 text-caption text-pewter">{{ $got ? 'Unlocked '.\Carbon\Carbon::parse($got->pivot->earned_at)->format('j M Y') : 'Locked' }}</p>
                 </div>
-                <div class="mt-4 flex justify-end gap-1 border-t border-mist/40 pt-3">
-                    <a href="{{ route('achievements.edit', $a) }}" class="btn btn-outline btn-icon" aria-label="Edit {{ $a->name }}"><x-icon name="pencil" /></a>
-                    <button type="button" class="btn btn-outline btn-icon" data-modal-open="delete-achievement-{{ $a->id }}" aria-label="Delete {{ $a->name }}"><x-icon name="trash" /></button>
-                </div>
-                <x-delete-modal id="delete-achievement-{{ $a->id }}" :action="route('achievements.destroy', $a)" title="Delete achievement"
-                    :message="'Delete &quot;'.$a->name.'&quot;? Everyone who unlocked it loses it.'" />
+                @if ($admin)
+                    <div class="mt-4 flex justify-end gap-1 border-t border-mist/40 pt-3">
+                        <a href="{{ route('admin.achievements.edit', $a) }}" class="btn btn-outline btn-icon" aria-label="Edit {{ $a->name }}"><x-icon name="pencil" /></a>
+                        <button type="button" class="btn btn-outline btn-icon" data-modal-open="delete-achievement-{{ $a->id }}" aria-label="Delete {{ $a->name }}"><x-icon name="trash" /></button>
+                    </div>
+                    <x-delete-modal id="delete-achievement-{{ $a->id }}" :action="route('admin.achievements.destroy', $a)" title="Delete achievement"
+                        :message="'Delete &quot;'.$a->name.'&quot;? Everyone who unlocked it loses it.'" />
+                @endif
             </article>
         @empty
             <div class="card col-span-full px-6 py-16 text-center text-pewter">No achievements yet.</div>

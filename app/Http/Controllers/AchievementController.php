@@ -15,6 +15,7 @@ class AchievementController extends Controller
         $service->award($user);
 
         return view('achievements.index', [
+            'admin' => request()->routeIs('admin.*'),
             'achievements' => Achievement::orderBy('name')->get(),
             'earned' => $user->achievements()->get()->keyBy('id'),
             'metrics' => $service->metrics($user),
@@ -31,7 +32,7 @@ class AchievementController extends Controller
         Achievement::create($this->validated($request));
         $service->award($request->user());
 
-        return redirect()->route('achievements.index')->with('success', 'Achievement created.');
+        return redirect()->route('admin.achievements.index')->with('success', 'Achievement created.');
     }
 
     public function edit(Achievement $achievement)
@@ -45,14 +46,14 @@ class AchievementController extends Controller
     {
         $achievement->update($this->validated($request, $achievement));
 
-        return redirect()->route('achievements.index')->with('success', 'Achievement updated.');
+        return redirect()->route('admin.achievements.index')->with('success', 'Achievement updated.');
     }
 
     public function destroy(Achievement $achievement)
     {
         $achievement->delete(); // achievement_user rows go with it (cascade)
 
-        return redirect()->route('achievements.index')->with('success', 'Achievement deleted.');
+        return redirect()->route('admin.achievements.index')->with('success', 'Achievement deleted.');
     }
 
     private function validated(Request $request, ?Achievement $achievement = null): array

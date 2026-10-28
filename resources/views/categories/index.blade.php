@@ -1,11 +1,11 @@
-<x-app-layout title="Categories" :crumbs="[['Master Data'], ['Categories']]">
+<x-app-layout title="Categories" :crumbs="[['Admin', route('admin.overview')], ['Categories']]">
     <div class="card">
         <div class="card-header">
             <div>
                 <h1 class="text-subheading">Categories <span class="text-pewter font-normal">({{ $categories->count() }})</span></h1>
                 <p class="text-body-sm text-pewter">The themes your habits are grouped into.</p>
             </div>
-            <a href="{{ route('categories.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">
                 <x-icon name="plus" /> Add category
             </a>
         </div>
@@ -35,7 +35,7 @@
                             <td>{{ $category->habits_count }}</td>
                             <td>
                                 <div class="flex justify-end gap-1">
-                                    <a href="{{ route('categories.edit', $category) }}" class="btn btn-outline btn-icon" aria-label="Edit {{ $category->name }}">
+                                    <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-outline btn-icon" aria-label="Edit {{ $category->name }}">
                                         <x-icon name="pencil" />
                                     </a>
                                     <button type="button" class="btn btn-outline btn-icon" data-modal-open="delete-category-{{ $category->id }}" aria-label="Delete {{ $category->name }}">
@@ -43,7 +43,7 @@
                                     </button>
                                 </div>
                                 <x-delete-modal id="delete-category-{{ $category->id }}"
-                                    :action="route('categories.destroy', $category)"
+                                    :action="route('admin.categories.destroy', $category)"
                                     title="Delete category"
                                     :message="'Delete the category &quot;'.$category->name.'&quot;?'" />
                             </td>

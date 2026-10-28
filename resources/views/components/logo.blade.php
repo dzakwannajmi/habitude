@@ -1,4 +1,9 @@
-@props(['text' => true, 'badge' => 'Admin'])
+@props(['text' => true, 'badge' => null])
+
+@php
+    // null = show the release stage (Beta); pass a string to override, or false to hide.
+    $label = $badge === null ? (config('habitude.stage') === 'production' ? null : ucfirst(config('habitude.stage'))) : ($badge ?: null);
+@endphp
 
 <span {{ $attributes->merge(['class' => 'inline-flex items-center gap-2 text-ink']) }}>
     <svg class="h-8 w-auto shrink-0" viewBox="0 0 40 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -14,8 +19,8 @@
     @if ($text)
         <span class="flex items-start gap-1">
             <span class="text-subheading font-semibold leading-none tracking-tight">Habitude</span>
-            @if ($badge)
-                <span class="-mt-1.5 rounded-md bg-ink px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wide text-paper">{{ $badge }}</span>
+            @if ($label)
+                <span class="-mt-1.5 rounded-md bg-ink px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wide text-paper">{{ $label }}</span>
             @endif
         </span>
     @endif

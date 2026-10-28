@@ -200,19 +200,21 @@ class TrackingTest extends TestCase
 
     public function test_achievement_crud_composes_criteria(): void
     {
-        $this->post('/achievements', ['name' => 'Page turner', 'criteria_type' => 'journals', 'criteria_threshold' => 5])->assertRedirect('/achievements');
+        $this->user = $this->signIn(User::factory()->admin()->create());
+
+        $this->post('/admin/achievements', ['name' => 'Page turner', 'criteria_type' => 'journals', 'criteria_threshold' => 5])->assertRedirect('/admin/achievements');
         $a = Achievement::firstWhere('name', 'Page turner');
         $this->assertSame('journals:5', $a->criteria);
 
-        $this->post('/achievements', ['name' => 'Page turner', 'criteria_type' => 'journals', 'criteria_threshold' => 5])->assertSessionHasErrors('name');
-        $this->post('/achievements', ['name' => 'X', 'criteria_type' => 'bogus', 'criteria_threshold' => 0])->assertSessionHasErrors(['criteria_type', 'criteria_threshold']);
+        $this->post('/admin/achievements', ['name' => 'Page turner', 'criteria_type' => 'journals', 'criteria_threshold' => 5])->assertSessionHasErrors('name');
+        $this->post('/admin/achievements', ['name' => 'X', 'criteria_type' => 'bogus', 'criteria_threshold' => 0])->assertSessionHasErrors(['criteria_type', 'criteria_threshold']);
 
-        $this->get("/achievements/{$a->id}/edit")->assertOk();
-        $this->put("/achievements/{$a->id}", ['name' => 'Page turner', 'criteria_type' => 'logs', 'criteria_threshold' => 20])->assertRedirect('/achievements');
+        $this->get("/admin/achievements/{$a->id}/edit")->assertOk();
+        $this->put("/admin/achievements/{$a->id}", ['name' => 'Page turner', 'criteria_type' => 'logs', 'criteria_threshold' => 20])->assertRedirect('/admin/achievements');
         $this->assertSame('logs:20', $a->fresh()->criteria);
 
         $this->user->achievements()->attach($a, ['earned_at' => now()]);
-        $this->delete("/achievements/{$a->id}")->assertRedirect('/achievements');
+        $this->delete("/admin/achievements/{$a->id}")->assertRedirect('/admin/achievements');
         $this->assertDatabaseMissing('achievement_user', ['achievement_id' => $a->id]);
     }
 
