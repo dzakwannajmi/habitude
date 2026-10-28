@@ -8,18 +8,26 @@
 @endphp
 
 <x-app-layout title="Dashboard" :crumbs="[['Dashboard']]">
-    <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
-        <div>
-            <h1 class="text-heading-sm">{{ $isToday ? 'Today' : $date->format('l') }}, {{ $date->format('j F Y') }}</h1>
-            <p class="text-body-sm text-pewter">
-                @if ($isToday)
-                    Hi {{ explode(' ', auth()->user()->name)[0] }}, here is what is on your list.
-                @else
+    <div class="mb-6 flex flex-wrap items-start justify-between gap-3">
+        @if ($isToday)
+            {{-- A different welcome on every visit, built from today's open habits --}}
+            <div class="greet flex items-center gap-4">
+                <x-logo :text="false" :large="true" class="text-ember" />
+                <div>
+                    <h1 class="text-[28px] font-semibold leading-tight tracking-tight sm:text-[34px]">{{ $greeting['hello'] }}</h1>
+                    <p class="text-subheading text-graphite">{{ $greeting['line'] }}</p>
+                    <p class="mt-1 text-caption text-pewter">{{ $date->format('l, j F Y') }}</p>
+                </div>
+            </div>
+        @else
+            <div>
+                <h1 class="text-heading-sm">{{ $date->format('l') }}, {{ $date->format('j F Y') }}</h1>
+                <p class="text-body-sm text-pewter">
                     You are looking at a past day. You can still log it.
                     <a href="{{ route('dashboard') }}" class="font-semibold text-ink underline">Back to today</a>
-                @endif
-            </p>
-        </div>
+                </p>
+            </div>
+        @endif
         <a href="{{ route('habits.create') }}" class="btn btn-primary"><x-icon name="plus" /> Add habit</a>
     </div>
 

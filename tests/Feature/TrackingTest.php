@@ -142,8 +142,8 @@ class TrackingTest extends TestCase
     {
         $this->habit();
 
-        $this->get('/?date=2026-12-25')->assertOk()->assertSee('Today, 28 October 2026');
-        $this->get('/?date=garbage&month=2026-99')->assertOk()->assertSee('Today, 28 October 2026');
+        $this->get('/?date=2026-12-25')->assertOk()->assertSee('Wednesday, 28 October 2026');
+        $this->get('/?date=garbage&month=2026-99')->assertOk()->assertSee('Wednesday, 28 October 2026');
         $this->get('/?date=2026-10-20')->assertOk()->assertSee('past day');
     }
 

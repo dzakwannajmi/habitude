@@ -5,7 +5,7 @@
     $label = $badge === null ? (config('habitude.stage') === 'production' ? null : ucfirst(config('habitude.stage'))) : ($badge ?: null);
 @endphp
 
-<span {{ $attributes->merge(['class' => 'inline-flex items-center gap-2 text-ink']) }}>
+<span {{ $attributes->merge(['class' => 'inline-flex items-center gap-2']) }}>
     <svg class="{{ $large ? 'h-12' : 'h-8' }} w-auto shrink-0" viewBox="0 0 40 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M18.5 19V4L21.5 4V19H18.5Z"/>
         <path d="M18.5 44V29H21.5V44H18.5Z"/>

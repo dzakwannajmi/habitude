@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\HabitLog;
 use App\Services\CalendarService;
 use App\Services\StreakService;
+use App\Support\Greeting;
 use Carbon\CarbonImmutable;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\Request;
@@ -73,14 +74,17 @@ class DashboardController extends Controller
             ->map(fn ($row) => ['date' => CarbonImmutable::parse($row->day)->toDateString(), 'count' => (int) $row->total])
             ->values();
 
+        $overall = $streaks->overall($user, $today);
+
         return view('dashboard', [
+            'greeting' => Greeting::for($user, CarbonImmutable::now($user->profile?->timezone ?? config('app.timezone')), $rows, $overall),
             'activity' => $activity,
             'date' => $date,
             'today' => $today,
             'month' => $month,
             'rows' => $rows,
             'weeks' => $weeks,
-            'streak' => $streaks->overall($user, $today),
+            'streak' => $overall,
             'doneCount' => $rows->where('done', true)->count(),
             'monthRate' => $monthDays->sum('total') > 0 ? (int) round($monthDays->sum('done') / $monthDays->sum('total') * 100) : 0,
             'categoryProgress' => $categoryProgress,

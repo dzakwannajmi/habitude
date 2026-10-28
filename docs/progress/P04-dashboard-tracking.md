@@ -45,5 +45,9 @@ A home page where the day is tracked: check-ins, timers, a calendar, and streaks
 - **One colour:** blocks are Ember at 28%, 50%, 75% and 100% opacity, so less activity is simply fainter. The month calendar uses the same single hue.
 - **Rule for orange:** it means *your progress* (streak and stat numbers, completed check, progress bars, mood hearts, unlocked achievements, sign-up bars) next to the one primary button per screen. Black stays for structure and text, gray for the inactive. Small text is never orange (about 3.4:1 on white, enough for 24px+ numbers and icons only).
 
+### J6: Greeting
+- `App\Support\Greeting` writes a different welcome on every visit, such as "Good evening, Ayu. Ready to hit the gym?". The question comes from the category of a habit that is still open today (gym, read, water, self-care, ...), or from the streak ("Keep your 19-day streak alive?") or progress ("1 of 13 done"). Bedtime habits are only suggested in the evening; when everything is done it celebrates, and with no habits it invites you to add one. The opener follows the user's local time. Past days keep the plain date header.
+- **Verified:** 8 tests with a seeded random engine (name, line per category, finished habits not repeated, evening-only, time of day, variety).
+
 ## Next
 P05: mood and journal.
