@@ -60,6 +60,19 @@ class User extends Authenticatable
         return $this->hasMany(JournalEntry::class);
     }
 
+    public function restDays(): HasMany
+    {
+        return $this->hasMany(RestDay::class);
+    }
+
+    /** The rest day taken in the same week (Monday to Sunday) as the date, if any. */
+    public function restDayInWeekOf(CarbonImmutable $date): ?RestDay
+    {
+        return $this->restDays()
+            ->whereBetween('rest_date', [$date->startOfWeek()->toDateString(), $date->endOfWeek()->toDateString()])
+            ->first();
+    }
+
     public function achievements(): BelongsToMany
     {
         return $this->belongsToMany(Achievement::class)->withPivot('earned_at');

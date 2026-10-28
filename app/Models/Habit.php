@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-#[Fillable(['user_id', 'category_id', 'name', 'description', 'target_count', 'unit', 'is_active'])]
+#[Fillable(['user_id', 'category_id', 'name', 'description', 'target_count', 'unit', 'weekly_goal', 'is_active'])]
 class Habit extends Model
 {
     use HasFactory, MassPrunable, SoftDeletes;
@@ -47,6 +47,12 @@ class Habit extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    /** A weekly habit ("3 days a week"); every other habit is daily. */
+    public function isWeekly(): bool
+    {
+        return $this->weekly_goal !== null;
     }
 
     /**

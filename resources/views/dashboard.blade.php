@@ -37,6 +37,13 @@
             <x-icon name="calendar" class="size-4 flex-none text-ember" />
             <p class="flex-1 text-graphite">{{ __('Nothing was checked off on') }} <strong class="text-ink">{{ $yesterday->translatedFormat('l, j F') }}</strong>{{ __('. Want to log it?') }}</p>
             <a href="{{ route('dashboard', ['date' => $yesterday->toDateString()]) }}" class="btn btn-outline btn-sm">{{ __('Log yesterday') }}</a>
+            @if ($restYesterdayFree)
+                <form action="{{ route('rest-days.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="date" value="{{ $yesterday->toDateString() }}">
+                    <button type="submit" class="btn btn-outline btn-sm"><x-icon name="moon" class="size-3.5" /> {{ __('It was a rest day') }}</button>
+                </form>
+            @endif
             <button type="button" class="btn btn-ghost btn-sm" data-nudge-dismiss>{{ __('Not now') }}</button>
         </div>
     @endif
@@ -46,6 +53,22 @@
         <div class="card p-5">
             <p class="flex items-center gap-2 text-caption text-pewter"><x-icon name="flame" class="size-4 text-ember" /> {{ __('Current streak') }}</p>
             <p class="mt-2 flex items-baseline gap-1.5 text-[40px] font-semibold tracking-tight"><x-counter class="text-ember" data-stat="streak" :value="$streak['current']" /><span class="text-body-sm font-normal text-pewter">{{ __('days') }}</span></p>
+            @if ($isToday)
+                @if ($restToday)
+                    <form action="{{ route('rest-days.destroy', $today->toDateString()) }}" method="POST" class="mt-2 flex items-center gap-1.5 text-caption text-pewter">
+                        @csrf @method('DELETE')
+                        <x-icon name="moon" class="size-3.5" /> {{ __('Resting today.') }}
+                        <button type="submit" class="font-semibold text-ink underline">{{ __('Undo') }}</button>
+                    </form>
+                @elseif (! $restThisWeek)
+                    <form action="{{ route('rest-days.store') }}" method="POST" class="mt-2">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center gap-1.5 text-caption text-pewter hover:text-ink" title="{{ __('A rest day keeps your streak safe. One per week.') }}"><x-icon name="moon" class="size-3.5" /> {{ __('Take a rest day') }}</button>
+                    </form>
+                @else
+                    <p class="mt-2 flex items-center gap-1.5 text-caption text-pewter"><x-icon name="moon" class="size-3.5" /> {{ __('Rest day used on :day', ['day' => $restThisWeek->rest_date->translatedFormat('l')]) }}</p>
+                @endif
+            @endif
         </div>
         <div class="card p-5">
             <p class="flex items-center gap-2 text-caption text-pewter"><x-icon name="trophy" class="size-4" /> {{ __('Best streak') }}</p>
@@ -113,7 +136,7 @@
                         <li data-today-group="{{ $r['group'] }}" @class(['hidden' => $r['index'] >= 5, 'bg-fog/50 px-6 py-1.5 text-caption font-medium uppercase tracking-wide text-pewter'])>{{ __(['morning' => 'Morning', 'afternoon' => 'Afternoon', 'evening' => 'Evening', 'anytime' => 'Anytime'][$r['group']]) }}</li>
                     @endif
                     <li data-habit-row data-group="{{ $r['group'] }}" data-name="{{ $h->name }}" data-value="{{ $r['value'] }}" data-url="{{ route('habits.log', $h) }}" data-date="{{ $date->toDateString() }}"
-                        data-target="{{ $h->target_count }}" data-unit="{{ $h->unit }}" data-done="{{ $r['done'] ? 1 : 0 }}"
+                        data-target="{{ $h->target_count }}" data-unit="{{ $h->unit }}" @if ($r['weekly']) data-goal="{{ $h->weekly_goal }}" @endif data-done="{{ $r['done'] ? 1 : 0 }}"
                         @class(['hidden' => $r['index'] >= 5])>
                         <div class="flex items-center gap-3 px-6 py-3">
                             <x-spring-check :checked="$r['done']" :aria-label="__('Complete :name', ['name' => $h->name])" />
@@ -125,6 +148,9 @@
                                 <p class="text-caption text-pewter" data-progress-text>
                                     @if ($multi) {{ $r['value'] }} / {{ $h->target_count }} {{ __($h->unit) }} @else {{ $r['done'] ? __('Done') : __('Not yet') }} @endif
                                 </p>
+                                @if ($r['weekly'])
+                                    <p class="text-caption text-pewter" data-week-text>{{ __(':done of :goal days this week', ['done' => $r['week_done'], 'goal' => $h->weekly_goal]) }}</p>
+                                @endif
                                 @if ($multi)
                                     <div class="mt-1.5 h-1 max-w-48 overflow-hidden rounded bg-fog">
                                         <span data-progress-bar class="block h-full rounded bg-ember transition-[width] duration-500" style="width: {{ min(100, $r['value'] / $h->target_count * 100) }}%"></span>
@@ -137,7 +163,7 @@
                             @endif
 
                             <span data-streak-wrap class="badge" @if ($r['streak'] === 0) hidden @endif title="{{ __('Habit streak') }}">
-                                <x-icon name="flame" class="size-3.5 text-ember" /><x-counter data-streak :value="$r['streak']" />
+                                <x-icon name="flame" class="size-3.5 text-ember" /><x-counter data-streak :value="$r['streak']" />@if ($r['weekly'])<span class="text-caption text-pewter">{{ __('wk') }}</span>@endif
                             </span>
 
                             @if ($r['timed'])

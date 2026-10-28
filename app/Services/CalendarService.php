@@ -19,7 +19,7 @@ class CalendarService
         $gridStart = $first->startOfWeek(CarbonImmutable::MONDAY);
         $gridEnd = $first->endOfMonth()->endOfWeek(CarbonImmutable::SUNDAY);
 
-        $habits = $user->habits()->get(['id', 'target_count', 'created_at', 'is_active']);
+        $habits = $user->habits()->get(['id', 'target_count', 'weekly_goal', 'created_at', 'is_active']);
         $logs = HabitLog::query()
             ->whereIn('habit_id', $habits->pluck('id'))
             ->whereBetween('logged_date', [$gridStart->toDateString(), $gridEnd->toDateString()])
@@ -36,10 +36,11 @@ class CalendarService
 
         for ($day = $gridStart; $day <= $gridEnd; $day = $day->addDay()) {
             $key = $day->toDateString();
-            // A day counts the active habits that existed then, plus any habit logged on it (back-filled days).
+            // A day counts the active daily habits that existed then, plus any habit logged on it (back-filled days).
+            // A weekly habit is not expected on every day, so it only counts on the days it was logged.
             $dayLogs = $logs[$key] ?? collect();
             $total = $habits
-                ->filter(fn ($h) => ($h->is_active && $h->created_at->startOfDay() <= $day) || $dayLogs->contains('habit_id', $h->id))
+                ->filter(fn ($h) => ($h->is_active && ! $h->isWeekly() && $h->created_at->startOfDay() <= $day) || $dayLogs->contains('habit_id', $h->id))
                 ->count();
             $done = $dayLogs
                 ->filter(fn ($l) => $targets->has($l->habit_id) && $l->value >= $targets[$l->habit_id]->target_count)

@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
                     'description' => $categories[$slug]->name.' starter habit.',
                     'target_count' => $target,
                     'unit' => $unit,
+                    'weekly_goal' => $name === 'Workout' ? 4 : null, // one weekly habit to show "4 days a week"
                 ]);
 
                 $habit->forceFill(['created_at' => $today->subDays($history + 1)])->save();
@@ -84,6 +85,12 @@ class DatabaseSeeder extends Seeder
                     }
                 }
             }
+        }
+
+        // A rest day on the most recent day with no check-in, so the demo shows a streak bridged by one.
+        $missed = collect(range(10, $history))->first(fn ($d) => ! $activeDay[$d]);
+        if ($missed) {
+            $user->restDays()->create(['rest_date' => $today->subDays($missed)->toDateString()]);
         }
 
         foreach (range(0, 24) as $daysAgo) {

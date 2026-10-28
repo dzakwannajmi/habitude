@@ -27,12 +27,19 @@
             </form>
         </section>
 
-        <section class="card overflow-hidden lg:col-span-3" aria-labelledby="history-title">
+        <section class="card h-fit overflow-hidden lg:col-span-3" aria-labelledby="history-title" data-history data-history-key="habitude.moodRows" data-history-default="5">
             <div class="card-header">
                 <h2 id="history-title" class="text-subheading">{{ __('History') }} <span class="font-normal text-pewter">({{ $entries->count() }})</span></h2>
+                <div class="w-28" data-history-limit>
+                    <x-select name="rows" label="{{ __('Rows to show') }}" value="5" :compact="true" :options="[
+                        ['value' => '5', 'label' => __('5 rows')], ['value' => '10', 'label' => __('10 rows')],
+                        ['value' => '20', 'label' => __('20 rows')], ['value' => 'all', 'label' => __('All rows')],
+                    ]" />
+                </div>
             </div>
             <div class="divide-y divide-mist/40">
                 @forelse ($entries as $entry)
+                    <div data-history-row @class(['hidden' => $loop->index >= 5])>
                     <x-swipe-row :delete-id="'delete-mood-'.$entry->id">
                         <div class="flex min-w-0 flex-1 items-center gap-3 px-6 py-3">
                             <span class="flex size-10 flex-none flex-col items-center justify-center rounded-xl bg-fog leading-none">
@@ -55,12 +62,19 @@
                             @endif
                         </div>
                     </x-swipe-row>
+                    </div>
                     <x-delete-modal id="delete-mood-{{ $entry->id }}" :action="route('mood.destroy', $entry)" title="{{ __('Delete mood entry') }}"
                         :message="__('Delete your mood for :date? Its journal entry is kept.', ['date' => $entry->entry_date->translatedFormat('j F')])" />
                 @empty
                     <p class="px-6 py-12 text-center text-pewter">{{ __('No mood entries yet. Rate how you feel today.') }}</p>
                 @endforelse
             </div>
+            @if ($entries->isNotEmpty())
+                <div class="flex items-center justify-between gap-3 border-t border-mist/60 px-6 py-3 text-caption text-pewter">
+                    <span data-history-summary>{{ __('Showing :shown of :total', ['shown' => min(5, $entries->count()), 'total' => $entries->count()]) }}</span>
+                    <button type="button" data-history-more @if ($entries->count() <= 5) hidden @endif class="btn btn-ghost btn-sm" aria-expanded="false">{{ __('Show :n more', ['n' => max(0, $entries->count() - 5)]) }}</button>
+                </div>
+            @endif
         </section>
     </div>
 </x-app-layout>

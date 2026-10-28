@@ -66,6 +66,7 @@ class HabitLogController extends Controller
             'target' => $habit->target_count,
             'completed' => $value >= $habit->target_count,
             'habit_streak' => $streaks->habitStreak($habit, $today),
+            'week_done' => $habit->isWeekly() ? ($streaks->weekCounts(collect([$habit]), CarbonImmutable::parse($date))[$habit->id] ?? 0) : null,
             'streak' => $streaks->overall($user, $today),
             'done' => $doneToday,
             'total' => $habits->count(),

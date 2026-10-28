@@ -15,6 +15,7 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\RestDayController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('habits', HabitController::class)->except('show');
         Route::post('/habits/{habit}/restore', [HabitController::class, 'restore'])->name('habits.restore')->whereNumber('habit');
         Route::post('/habits/{habit}/log', [HabitLogController::class, 'store'])->name('habits.log');
+        Route::post('/rest-days', [RestDayController::class, 'store'])->name('rest-days.store');
+        Route::delete('/rest-days/{date}', [RestDayController::class, 'destroy'])->name('rest-days.destroy')->where('date', '\d{4}-\d{2}-\d{2}');
         Route::get('/reminders/today', [ReminderController::class, 'today'])->name('reminders.today');
         Route::post('/habits/{habit}/reminders', [ReminderController::class, 'store'])->name('reminders.store');
         Route::patch('/reminders/{reminder}', [ReminderController::class, 'update'])->name('reminders.update');

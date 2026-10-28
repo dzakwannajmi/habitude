@@ -15,6 +15,7 @@ import { initSteppers } from './ui/stepper.js';
 import { initSwipeRows } from './ui/swipe-row.js';
 import { flashToToasts, toast } from './ui/toast.js';
 import { initTodayLists } from './ui/today-list.js';
+import { initHistoryLists } from './ui/history-list.js';
 import { initTracker } from './ui/tracker.js';
 
 window.Habitude = { toast, counter: renderCounter };
@@ -103,6 +104,7 @@ initBellToggles();
 initSkylines();
 flashToToasts();
 initTodayLists();
+initHistoryLists();
 initTracker();
 initPwa();
 initNotifier();

@@ -30,9 +30,10 @@ class DashboardController extends Controller
             ->get()->keyBy('habit_id');
 
         $weekday = $date->isoWeekday();
+        $weekCounts = $streaks->weekCounts($habits, $date);
 
         // Ordered by the day: habits with a reminder come first by time (morning, afternoon, evening), the rest are "anytime".
-        $rows = $habits->map(function ($habit) use ($logs, $streaks, $today, $weekday) {
+        $rows = $habits->map(function ($habit) use ($logs, $streaks, $today, $weekday, $weekCounts) {
             $value = $logs[$habit->id]->value ?? 0;
             $time = $habit->reminders->filter(fn ($r) => $r->is_enabled && in_array($weekday, $r->days_of_week ?? [], true))
                 ->map(fn ($r) => substr($r->remind_at, 0, 5))->sort()->first();
@@ -43,6 +44,8 @@ class DashboardController extends Controller
                 'value' => $value,
                 'done' => $value >= $habit->target_count,
                 'streak' => $streaks->habitStreak($habit, $today),
+                'weekly' => $habit->isWeekly(),
+                'week_done' => $weekCounts[$habit->id] ?? 0,
                 'timed' => in_array($habit->unit, config('habitude.timed_units'), true),
                 'time' => $time,
                 'group' => $hour === null ? 'anytime' : ($hour < 12 ? 'morning' : ($hour < 18 ? 'afternoon' : 'evening')),
@@ -87,12 +90,14 @@ class DashboardController extends Controller
             ->values();
 
         $overall = $streaks->overall($user, $today);
+        $restDays = $streaks->restDates($user->id);
 
         // Yesterday had nothing checked, although at least one habit already existed: offer to fill it in
         $yesterday = $today->subDay();
         $missedYesterday = $date->equalTo($today)
             && $habits->contains(fn ($h) => $h->created_at->startOfDay() <= $yesterday)
-            && ! $activity->contains('date', $yesterday->toDateString());
+            && ! $activity->contains('date', $yesterday->toDateString())
+            && ! $restDays->contains($yesterday->toDateString());
 
         return view('dashboard', [
             'greeting' => Greeting::for($user, CarbonImmutable::now($user->profile?->timezone ?? config('app.timezone')), $rows, $overall),
@@ -105,6 +110,9 @@ class DashboardController extends Controller
             'rows' => $rows,
             'weeks' => $weeks,
             'streak' => $overall,
+            'restToday' => $restDays->contains($today->toDateString()),
+            'restThisWeek' => $user->restDayInWeekOf($today),
+            'restYesterdayFree' => ! $user->restDayInWeekOf($yesterday),
             'doneCount' => $rows->where('done', true)->count(),
             'monthRate' => $monthDays->sum('total') > 0 ? (int) round($monthDays->sum('done') / $monthDays->sum('total') * 100) : 0,
             'categoryProgress' => $categoryProgress,

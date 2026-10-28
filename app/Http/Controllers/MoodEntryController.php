@@ -16,7 +16,7 @@ class MoodEntryController extends Controller
         return view('mood.index', [
             'today' => $today,
             'todayMood' => $user->moodEntries()->whereDate('entry_date', $today->toDateString())->first(),
-            'entries' => $user->moodEntries()->with('journalEntry')->orderByDesc('entry_date')->limit(60)->get(),
+            'entries' => $user->moodEntries()->with('journalEntry')->orderByDesc('entry_date')->limit(365)->get(),
         ]);
     }
 

@@ -47,13 +47,13 @@
                                         @unless ($habit->is_active) <span class="badge">{{ __('Paused') }}</span> @endunless
                                     </span>
                                     <span class="block truncate text-caption text-pewter">
-                                        {{ __(':n a day', ['n' => $habit->target_label]) }}
+                                        {{ __(':n a day', ['n' => $habit->target_label]) }}@if ($habit->isWeekly()) · {{ trans_choice('{1} :n day a week|[2,*] :n days a week', $habit->weekly_goal, ['n' => $habit->weekly_goal]) }}@endif
                                         @if ($group !== 'category') · {{ $habit->category->name }} @endif
                                         @foreach ($habit->tags as $tag) · #{{ $tag->name }} @endforeach
                                     </span>
                                 </span>
                                 @if ($habit->streak > 0)
-                                    <span class="badge flex-none" title="{{ __('Current streak') }}"><x-icon name="flame" class="size-3.5" />{{ $habit->streak }}</span>
+                                    <span class="badge flex-none" title="{{ __('Current streak') }}"><x-icon name="flame" class="size-3.5" />{{ $habit->streak }}@if ($habit->isWeekly()) {{ __('wk') }}@endif</span>
                                 @endif
                             </a>
                         </x-swipe-row>
@@ -72,7 +72,7 @@
                                 <span class="block truncate text-caption text-pewter">{{ $habit->target_label }}@unless ($habit->is_active) · Paused @endunless</span>
                             </a>
                             @if ($habit->streak > 0)
-                                <span class="badge absolute left-2 top-2"><x-icon name="flame" class="size-3" />{{ $habit->streak }}</span>
+                                <span class="badge absolute left-2 top-2"><x-icon name="flame" class="size-3" />{{ $habit->streak }}@if ($habit->isWeekly()) {{ __('wk') }}@endif</span>
                             @endif
                             <button type="button" class="btn btn-ghost btn-icon btn-sm absolute right-1 top-1 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/tile:opacity-100"
                                 data-modal-open="delete-habit-{{ $habit->id }}" aria-label="{{ __('Delete :name', ['name' => $habit->name]) }}"><x-icon name="trash" class="size-4" /></button>

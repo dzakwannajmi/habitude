@@ -125,6 +125,7 @@ class HabitController extends Controller
             'description' => ['nullable', 'string', 'max:500'],
             'target_count' => ['nullable', 'integer', 'min:1', 'max:100000'],
             'unit' => ['nullable', 'string', Rule::in(config('habitude.units'))],
+            'weekly_goal' => ['nullable', 'integer', 'between:0,6'],
             'tags' => ['array'],
             'tags.*' => ['exists:tags,id'],
         ], [
@@ -132,12 +133,16 @@ class HabitController extends Controller
             'name.required' => __('Habit name is required.'),
             'target_count.min' => __('The target must be at least 1.'),
             'unit.in' => __('Choose one of the listed units.'),
+            'weekly_goal.between' => __('Choose every day, or 1 to 6 days a week.'),
         ]);
 
         // Quick add sends only a name and a category: fill the rest from what suits that category.
         $default = config('habitude.defaults.'.Category::find($data['category_id'])?->slug) ?? ['target' => 1, 'unit' => 'times'];
         $data['target_count'] ??= $default['target'];
         $data['unit'] ??= $default['unit'];
+
+        // 0 (or nothing) means every day; 1 to 6 is a weekly goal.
+        $data['weekly_goal'] = ((int) ($data['weekly_goal'] ?? 0)) ?: null;
 
         // An unchecked switch is not submitted, so read it as a boolean (quick add always starts active).
         $data['is_active'] = $request->boolean('quick') ? true : $request->boolean('is_active');

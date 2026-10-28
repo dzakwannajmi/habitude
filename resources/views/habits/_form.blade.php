@@ -3,6 +3,7 @@
     $selectedTags = collect(old('tags', $habit?->tags->pluck('id')->all() ?? []))->map(fn ($id) => (int) $id);
     $categoryOptions = $categories->map(fn ($c) => ['value' => $c->id, 'label' => trim($c->icon.' '.$c->display_name), 'dot' => $c->color])->values()->all();
     $unitOptions = collect($units)->map(fn ($u) => ['value' => $u, 'label' => __($u)])->all();
+    $frequencyOptions = collect(range(0, 6))->map(fn ($n) => ['value' => (string) $n, 'label' => $n === 0 ? __('Every day') : trans_choice('{1} :n day a week|[2,*] :n days a week', $n, ['n' => $n])])->all();
 @endphp
 
 <div class="space-y-5">
@@ -40,6 +41,13 @@
             <p class="help">{{ __('Habits in minutes get a timer on the dashboard.') }}</p>
             @error('unit') <p class="field-error">{{ $message }}</p> @enderror
         </div>
+    </div>
+
+    <div>
+        <label class="label">{{ __('How often') }}</label>
+        <x-select name="weekly_goal" :options="$frequencyOptions" :value="(string) old('weekly_goal', $habit?->weekly_goal ?? 0)" label="{{ __('How often') }}" />
+        <p class="help">{{ __('A weekly goal keeps your streak alive as long as you reach it each week (Monday to Sunday).') }}</p>
+        @error('weekly_goal') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
     <fieldset>

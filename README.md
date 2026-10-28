@@ -18,6 +18,7 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 - **Mood check-in** for each day (1–5 hearts)
 - **Daily journal** that can be linked to the day's mood
 - Habit reminders with custom time and weekdays, switched on and off with a ringing **bell toggle**, and listed on the dashboard
+- **Flexible schedule**: a habit can be daily or have a weekly goal ("3 days a week", counted in weeks), and one **rest day** a week keeps your streak safe
 - Tags for flexible habit organization
 - Achievements and badges (for example, a 7-day streak)
 - Dashboard with today's habits, streaks, and per-category progress (a Has-Many-Through query)
@@ -155,7 +156,7 @@ The interface is in English by default and fully available in Bahasa Indonesia. 
 ## Tests
 
 ```bash
-php artisan test   # 126 tests, in-memory SQLite (also verified on MySQL)
+php artisan test   # 153 tests, in-memory SQLite (also verified on MySQL)
 ```
 
 ## Contributing / Forking
@@ -191,6 +192,7 @@ docs/
 - [x] Reminders and achievements
 - [x] UI kit: branched menu, glide select, swipe row, spring check, peek rating, counter, stepper, dock
 - [x] Admin console and Beta release stage
+- [x] Flexible schedule: weekly goals and rest days
 - [x] Run and verify on MySQL
 
 ## Author
