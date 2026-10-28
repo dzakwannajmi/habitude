@@ -54,6 +54,18 @@ document.querySelectorAll('[data-color-input]').forEach((input) => {
     sync();
 });
 
+// Quick add: the name placeholder and the "what you get" hint follow the chosen category
+document.addEventListener('change', (e) => {
+    const form = e.target.closest('[data-quick-add]');
+    if (!form || e.target.name !== 'category_id') return;
+    const id = e.target.value;
+    const example = JSON.parse(form.dataset.examples)[id];
+    const summary = JSON.parse(form.dataset.summary)[id];
+    if (example) form.querySelector('[name=name]').placeholder = 'e.g. ' + example;
+    const hint = form.querySelector('[data-quick-summary]');
+    if (hint && summary) hint.textContent = `Starts at ${summary}. You can change it later.`;
+});
+
 // Submit the surrounding form when an [data-autosubmit] field changes (group-by select)
 document.addEventListener('change', (e) => {
     const field = e.target.closest('[data-autosubmit]') ?? e.target.closest('[data-glide-select][data-autosubmit]');

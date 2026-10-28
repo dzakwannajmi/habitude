@@ -22,6 +22,7 @@ class AchievementService
             'logs' => HabitLog::query()
                 ->join('habits', 'habits.id', '=', 'habit_logs.habit_id')
                 ->where('habits.user_id', $user->id)
+                ->whereNull('habits.deleted_at')
                 ->whereColumn('habit_logs.value', '>=', 'habits.target_count')
                 ->count(),
             'streak' => $this->streaks->overall($user, $user->today())['best'],

@@ -26,6 +26,7 @@ function applyResult(row, res) {
     const bar = row.querySelector('[data-progress-bar]');
     if (bar) bar.style.width = `${Math.min(100, (res.value / target) * 100)}%`;
     row.dataset.done = res.completed ? '1' : '0';
+    row.dataset.value = String(res.value);
     row.dispatchEvent(new CustomEvent('today:refresh', { bubbles: true }));
     const check = row.querySelector('[data-spring-check]');
     if (check && (check.getAttribute('aria-checked') === 'true') !== res.completed) setChecked(check, res.completed, { silent: true });
@@ -73,7 +74,17 @@ export function initTracker() {
         const row = e.target.closest('[data-habit-row]');
         if (!row) return;
         row.dataset.wasDone = e.detail.checked ? '0' : '1';
+        const before = Number(row.dataset.value || 0);
         send(row, { mode: 'set', value: e.detail.checked ? Number(row.dataset.target) : 0 });
+        // taking a check back is easy to do by accident, so offer to undo it
+        if (!e.detail.checked && before > 0) {
+            toast({
+                title: `Unchecked ${row.dataset.name}`,
+                icon: 'info',
+                duration: 5000,
+                action: { label: 'Undo', onClick: () => send(row, { mode: 'set', value: before }) },
+            });
+        }
     });
 
     document.addEventListener('click', (e) => {

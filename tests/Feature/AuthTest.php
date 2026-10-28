@@ -26,7 +26,7 @@ class AuthTest extends TestCase
 
     public function test_login_page_renders_for_guests(): void
     {
-        $this->get('/login')->assertOk()->assertSee('Welcome back!')->assertSee('Single sign-on (SSO)')->assertSee('Terms of Service');
+        $this->get('/login')->assertOk()->assertSee('Welcome back!')->assertDontSee('Single sign-on')->assertDontSee('magic link')->assertSee('Forgot password?')->assertSee('Terms of Service');
         $this->get('/register')->assertOk();
     }
 

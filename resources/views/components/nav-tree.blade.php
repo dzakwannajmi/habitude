@@ -18,7 +18,7 @@
         @else
             @php
                 $kids = $item['children'];
-                $open = collect($kids)->contains('active', true);
+                $open = $item['open'] ?? collect($kids)->contains('active', true);
                 $bodyH = $pad * 2 + count($kids) * $row;
             @endphp
             <div class="bm-section" data-bm-section @if ($open) data-open @endif>

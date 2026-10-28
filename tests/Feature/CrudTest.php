@@ -131,7 +131,7 @@ class CrudTest extends TestCase
 
     public function test_habit_validation(): void
     {
-        $this->post('/habits', [])->assertSessionHasErrors(['name', 'category_id', 'target_count', 'unit']);
+        $this->post('/habits', [])->assertSessionHasErrors(['name', 'category_id']);
         $this->post('/habits', ['name' => 'x', 'category_id' => 999, 'target_count' => 0, 'unit' => 'times'])
             ->assertSessionHasErrors(['category_id', 'target_count']);
         $this->post('/habits', ['name' => 'x', 'category_id' => Category::factory()->create()->id, 'target_count' => 1, 'unit' => 'bananas'])
@@ -160,15 +160,18 @@ class CrudTest extends TestCase
         $this->assertSame([$new->id], $habit->tags->pluck('id')->all());
     }
 
-    public function test_habit_can_be_deleted_with_its_logs(): void
+    public function test_habit_delete_is_soft_and_keeps_its_history_for_undo(): void
     {
         $habit = Habit::factory()->create(['user_id' => $this->user->id]);
         $habit->logs()->create(['logged_date' => now()->toDateString(), 'value' => 1]);
 
-        $this->delete("/habits/{$habit->id}")->assertSessionHas('success');
+        $this->delete("/habits/{$habit->id}")->assertSessionHas('success')->assertSessionHas('undo', route('habits.restore', $habit->id));
 
-        $this->assertModelMissing($habit);
-        $this->assertDatabaseCount('habit_logs', 0);
+        $this->assertSoftDeleted($habit);
+        $this->assertDatabaseCount('habit_logs', 1);
+
+        $this->postJson("/habits/{$habit->id}/restore")->assertOk();
+        $this->assertNotSoftDeleted($habit);
     }
 
     public function test_other_users_habits_are_not_accessible(): void

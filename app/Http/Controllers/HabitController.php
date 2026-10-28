@@ -45,6 +45,11 @@ class HabitController extends Controller
         $habit->tags()->sync($request->input('tags', []));
         $achievements->award($request->user());
 
+        // Quick add (just a name and a category) stays where you were; the full form goes on to reminders.
+        if ($request->boolean('quick')) {
+            return redirect($this->safeBack($request))->with('success', "\"{$habit->name}\" added.");
+        }
+
         return redirect()->route('habits.edit', $habit)
             ->with('success', 'Habit created. You can add reminders below.');
     }
@@ -71,10 +76,31 @@ class HabitController extends Controller
     {
         $this->authorizeOwner($request, $habit);
 
-        $habit->delete();
+        $habit->delete(); // soft delete: it can be restored for 30 days
 
         return redirect()->route('habits.index')
-            ->with('success', 'Habit deleted.');
+            ->with('success', "\"{$habit->name}\" deleted.")
+            ->with('undo', route('habits.restore', $habit->id));
+    }
+
+    public function restore(Request $request, int $habit)
+    {
+        $habit = $request->user()->habits()->onlyTrashed()->findOrFail($habit);
+        $habit->restore();
+
+        if ($request->expectsJson()) {
+            return response()->json(['restored' => $habit->id]);
+        }
+
+        return redirect()->route('habits.index')->with('success', "\"{$habit->name}\" restored.");
+    }
+
+    /** Only ever send people back to a page of this app. */
+    private function safeBack(Request $request): string
+    {
+        $back = (string) $request->input('back');
+
+        return str_starts_with($back, url('/')) ? $back : route('habits.index');
     }
 
     private function formData(): array
@@ -97,21 +123,24 @@ class HabitController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string', 'max:500'],
-            'target_count' => ['required', 'integer', 'min:1', 'max:100000'],
-            'unit' => ['required', 'string', Rule::in(config('habitude.units'))],
+            'target_count' => ['nullable', 'integer', 'min:1', 'max:100000'],
+            'unit' => ['nullable', 'string', Rule::in(config('habitude.units'))],
             'tags' => ['array'],
             'tags.*' => ['exists:tags,id'],
         ], [
             'category_id.required' => 'Choose a category.',
             'name.required' => 'Habit name is required.',
-            'target_count.required' => 'Set a daily target.',
             'target_count.min' => 'The target must be at least 1.',
-            'unit.required' => 'Choose a unit.',
             'unit.in' => 'Choose one of the listed units.',
         ]);
 
-        // An unchecked switch is not submitted, so read it as a boolean.
-        $data['is_active'] = $request->boolean('is_active');
+        // Quick add sends only a name and a category: fill the rest from what suits that category.
+        $default = config('habitude.defaults.'.Category::find($data['category_id'])?->slug) ?? ['target' => 1, 'unit' => 'times'];
+        $data['target_count'] ??= $default['target'];
+        $data['unit'] ??= $default['unit'];
+
+        // An unchecked switch is not submitted, so read it as a boolean (quick add always starts active).
+        $data['is_active'] = $request->boolean('quick') ? true : $request->boolean('is_active');
         unset($data['tags']);
 
         return $data;

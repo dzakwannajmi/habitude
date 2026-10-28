@@ -160,11 +160,36 @@ export function toast({ title, body = '', icon = 'trophy', duration = 4000, acti
     return { close: () => close('programmatic') };
 }
 
-// Server flash messages become toasts too.
+const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content;
+
+/** POST to a URL (used by "Undo") and say what happened. */
+export async function post(url, body = {}) {
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': csrf() },
+        body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error(String(res.status));
+    return res.json();
+}
+
+// Server flash messages become toasts too; some carry an Undo or a link.
 export function flashToToasts() {
     document.querySelectorAll('[data-flash]').forEach((n) => {
         const error = n.dataset.flash === 'error';
-        toast({ title: n.dataset.message, icon: error ? 'alert' : 'check', duration: error ? 7000 : 4500 });
+        let action = null;
+        if (n.dataset.undo) {
+            action = {
+                label: 'Undo',
+                onClick: async () => {
+                    try { await post(n.dataset.undo); location.reload(); }
+                    catch { toast({ title: 'Could not undo', body: 'It may already be gone.', icon: 'alert' }); }
+                },
+            };
+        } else if (n.dataset.link) {
+            action = { label: n.dataset.linkLabel || 'Open', onClick: () => { location.href = n.dataset.link; } };
+        }
+        toast({ title: n.dataset.message, icon: error ? 'alert' : 'check', duration: error ? 7000 : action ? 8000 : 4500, action });
         n.remove();
     });
 }

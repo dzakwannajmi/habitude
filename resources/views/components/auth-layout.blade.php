@@ -1,4 +1,4 @@
-@props(['title'])
+@props(['title', 'wide' => false])
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -20,7 +20,7 @@
 
     <main class="flex min-h-svh items-center justify-center px-4 py-12">
         {{-- Card follows the login-3 layout: big radius, centred logo, centred heading --}}
-        <div class="w-full max-w-sm rounded-[32px] border border-mist/60 bg-paper px-6 py-10 pt-14">
+        <div class="w-full {{ $wide ? 'max-w-2xl' : 'max-w-sm' }} rounded-[32px] border border-mist/60 bg-paper px-6 py-10 pt-14">
             <div class="flex flex-col items-center space-y-8">
                 <a href="{{ url('/') }}" aria-label="Habitude home"><x-logo :large="true" /></a>
                 {{ $slot }}

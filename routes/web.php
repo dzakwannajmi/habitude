@@ -11,16 +11,25 @@ use App\Http\Controllers\HabitLogController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\MoodEntryController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
+
+Route::view('/terms', 'legal.terms')->name('terms');
+Route::view('/privacy', 'legal.privacy')->name('privacy');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/forgot-password', [PasswordResetController::class, 'request'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'email'])->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'reset'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'update'])->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -42,6 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('habits', HabitController::class)->except('show');
+        Route::post('/habits/{habit}/restore', [HabitController::class, 'restore'])->name('habits.restore')->whereNumber('habit');
         Route::post('/habits/{habit}/log', [HabitLogController::class, 'store'])->name('habits.log');
         Route::post('/habits/{habit}/reminders', [ReminderController::class, 'store'])->name('reminders.store');
         Route::patch('/reminders/{reminder}', [ReminderController::class, 'update'])->name('reminders.update');

@@ -7,6 +7,10 @@
         </p>
     </div>
 
+    @if (session('status'))
+        <p role="status" class="w-full rounded-xl border border-mist/60 bg-fog px-4 py-3 text-center text-body-sm text-ink">{{ session('status') }}</p>
+    @endif
+
     <form action="{{ route('login') }}" method="POST" class="w-full space-y-4">
         @csrf
         <div>
@@ -22,28 +26,19 @@
             @error('password') <p class="field-error">{{ $message }}</p> @enderror
         </div>
 
-        <div class="flex justify-center">
+        <div class="flex items-center justify-between gap-3">
             <x-spring-check name="remember" label="Remember me" :checked="old('remember')" />
+            <a href="{{ route('password.request') }}" class="text-body-sm text-pewter underline-offset-4 hover:text-ink hover:underline">Forgot password?</a>
         </div>
 
-        <div class="flex flex-col gap-2">
-            <button type="submit" class="btn btn-primary btn-lg w-full">Log in</button>
-            <button type="button" class="btn btn-link w-full" data-soon="Magic link sign-in">Send me the magic link instead</button>
-        </div>
+        <button type="submit" class="btn btn-primary btn-lg w-full">Log in</button>
 
-        <div class="flex items-center gap-4 py-2" role="separator">
-            <span class="h-px flex-1 bg-mist/60"></span>
-            <span class="text-body-sm text-pewter">OR</span>
-            <span class="h-px flex-1 bg-mist/60"></span>
-        </div>
-
-        <button type="button" class="btn btn-outline btn-lg w-full" data-soon="Single sign-on">Single sign-on (SSO)</button>
     </form>
 
     <p class="w-11/12 text-center text-caption text-pewter">
         You acknowledge that you read, and agree, to our
-        <a href="#" class="underline hover:text-ink" data-soon="Terms of Service">Terms of Service</a>
+        <a href="{{ route('terms') }}" class="underline hover:text-ink">Terms of Service</a>
         and our
-        <a href="#" class="underline hover:text-ink" data-soon="Privacy Policy">Privacy Policy</a>.
+        <a href="{{ route('privacy') }}" class="underline hover:text-ink">Privacy Policy</a>.
     </p>
 </x-auth-layout>

@@ -28,8 +28,9 @@
                 </p>
             </div>
         @endif
-        <a href="{{ route('habits.create') }}" class="btn btn-primary"><x-icon name="plus" /> Add habit</a>
+        <button type="button" class="btn btn-primary" data-modal-open="quick-add"><x-icon name="plus" /> Add habit</button>
     </div>
+    <x-quick-add />
 
     {{-- Stats --}}
     <div class="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -93,10 +94,17 @@
 
             <ul class="divide-y divide-mist/40">
                 @forelse ($rows as $r)
-                    @php $h = $r['habit']; $multi = $h->target_count > 1; @endphp
-                    <li data-habit-row data-url="{{ route('habits.log', $h) }}" data-date="{{ $date->toDateString() }}"
+                    @php
+                        $h = $r['habit'];
+                        $multi = $h->target_count > 1;
+                        $firstOfGroup = $loop->first || $rows[$loop->index - 1]['group'] !== $r['group'];
+                    @endphp
+                    @if ($firstOfGroup)
+                        <li data-today-group="{{ $r['group'] }}" @class(['hidden' => $r['index'] >= 5, 'bg-fog/50 px-6 py-1.5 text-caption font-medium uppercase tracking-wide text-pewter'])>{{ ['morning' => 'Morning', 'afternoon' => 'Afternoon', 'evening' => 'Evening', 'anytime' => 'Anytime'][$r['group']] }}</li>
+                    @endif
+                    <li data-habit-row data-group="{{ $r['group'] }}" data-name="{{ $h->name }}" data-value="{{ $r['value'] }}" data-url="{{ route('habits.log', $h) }}" data-date="{{ $date->toDateString() }}"
                         data-target="{{ $h->target_count }}" data-unit="{{ $h->unit }}" data-done="{{ $r['done'] ? 1 : 0 }}"
-                        @class(['hidden' => $loop->index >= 5])>
+                        @class(['hidden' => $r['index'] >= 5])>
                         <div class="flex items-center gap-3 px-6 py-3">
                             <x-spring-check :checked="$r['done']" :aria-label="'Complete '.$h->name" />
                             <div class="min-w-0 flex-1">
@@ -113,6 +121,10 @@
                                     </div>
                                 @endif
                             </div>
+
+                            @if ($r['time'])
+                                <span class="badge" title="Reminder time"><x-icon name="clock" class="size-3" />{{ $r['time'] }}</span>
+                            @endif
 
                             <span data-streak-wrap class="badge" @if ($r['streak'] === 0) hidden @endif title="Habit streak">
                                 <x-icon name="flame" class="size-3.5 text-ember" /><x-counter data-streak :value="$r['streak']" />

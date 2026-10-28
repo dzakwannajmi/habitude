@@ -34,19 +34,12 @@
 
         <button type="submit" class="btn btn-primary btn-lg w-full">Create account</button>
 
-        <div class="flex items-center gap-4 py-2" role="separator">
-            <span class="h-px flex-1 bg-mist/60"></span>
-            <span class="text-body-sm text-pewter">OR</span>
-            <span class="h-px flex-1 bg-mist/60"></span>
-        </div>
-
-        <button type="button" class="btn btn-outline btn-lg w-full" data-soon="Single sign-on">Single sign-on (SSO)</button>
     </form>
 
     <p class="w-11/12 text-center text-caption text-pewter">
         You acknowledge that you read, and agree, to our
-        <a href="#" class="underline hover:text-ink" data-soon="Terms of Service">Terms of Service</a>
+        <a href="{{ route('terms') }}" class="underline hover:text-ink">Terms of Service</a>
         and our
-        <a href="#" class="underline hover:text-ink" data-soon="Privacy Policy">Privacy Policy</a>.
+        <a href="{{ route('privacy') }}" class="underline hover:text-ink">Privacy Policy</a>.
     </p>
 </x-auth-layout>

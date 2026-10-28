@@ -49,7 +49,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         // habits.category_id is restricted on delete, so explain instead of failing.
-        if ($category->habits()->exists()) {
+        if ($category->habits()->withTrashed()->exists()) {
             return redirect()->route('admin.categories.index')
                 ->with('error', "\"{$category->name}\" still has habits. Move or delete them first.");
         }

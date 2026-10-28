@@ -18,9 +18,10 @@
                 ['value' => 'list', 'label' => 'List', 'icon' => 'list', 'href' => $toggle('list')],
                 ['value' => 'grid', 'label' => 'Grid', 'icon' => 'layout-grid', 'href' => $toggle('grid')],
             ]" />
-            <a href="{{ route('habits.create') }}" class="btn btn-primary"><x-icon name="plus" /> Add habit</a>
+            <button type="button" class="btn btn-primary" data-modal-open="quick-add"><x-icon name="plus" /> Add habit</button>
         </div>
     </div>
+    <x-quick-add />
 
     @forelse ($groups as $name => $items)
         <details class="group mb-4" open>

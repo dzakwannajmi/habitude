@@ -26,6 +26,11 @@ function build(box) {
         all.forEach((row) => row.classList.add('hidden'));
         visible.forEach((row, i) => row.classList.toggle('hidden', i >= max));
 
+        // a day-part header is shown only while one of its rows is
+        box.querySelectorAll('[data-today-group]').forEach((h) => {
+            h.classList.toggle('hidden', !all.some((r) => r.dataset.group === h.dataset.todayGroup && !r.classList.contains('hidden')));
+        });
+
         const shown = Math.min(visible.length, max);
         if (empty) empty.hidden = visible.length > 0;
         if (more) {

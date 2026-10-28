@@ -30,7 +30,7 @@ class OverviewController extends Controller
             'stats' => [
                 'Users' => User::count(),
                 'Habits' => Habit::count(),
-                'Check-ins' => HabitLog::count(),
+                'Check-ins' => HabitLog::whereHas('habit')->count(),
                 'Moods' => MoodEntry::count(),
                 'Journals' => JournalEntry::count(),
                 'Unlocked' => DB::table('achievement_user')->count(),

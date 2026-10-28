@@ -24,13 +24,19 @@ class DashboardController extends Controller
         }
         $month = $this->parseDate($request->query('month'), 'Y-m')?->startOfMonth() ?? $date->startOfMonth();
 
-        $habits = $user->habits()->where('is_active', true)->with(['category', 'tags'])->orderBy('name')->get();
+        $habits = $user->habits()->where('is_active', true)->with(['category', 'tags', 'reminders'])->orderBy('name')->get();
         $logs = HabitLog::whereIn('habit_id', $habits->pluck('id'))
             ->whereDate('logged_date', $date->toDateString())
             ->get()->keyBy('habit_id');
 
-        $rows = $habits->map(function ($habit) use ($logs, $streaks, $today) {
+        $weekday = $date->isoWeekday();
+
+        // Ordered by the day: habits with a reminder come first by time (morning, afternoon, evening), the rest are "anytime".
+        $rows = $habits->map(function ($habit) use ($logs, $streaks, $today, $weekday) {
             $value = $logs[$habit->id]->value ?? 0;
+            $time = $habit->reminders->filter(fn ($r) => $r->is_enabled && in_array($weekday, $r->days_of_week ?? [], true))
+                ->map(fn ($r) => substr($r->remind_at, 0, 5))->sort()->first();
+            $hour = $time ? (int) substr($time, 0, 2) : null;
 
             return [
                 'habit' => $habit,
@@ -38,8 +44,14 @@ class DashboardController extends Controller
                 'done' => $value >= $habit->target_count,
                 'streak' => $streaks->habitStreak($habit, $today),
                 'timed' => in_array($habit->unit, config('habitude.timed_units'), true),
+                'time' => $time,
+                'group' => $hour === null ? 'anytime' : ($hour < 12 ? 'morning' : ($hour < 18 ? 'afternoon' : 'evening')),
             ];
-        });
+        })->sortBy([
+            fn ($a, $b) => array_search($a['group'], ['morning', 'afternoon', 'evening', 'anytime']) <=> array_search($b['group'], ['morning', 'afternoon', 'evening', 'anytime']),
+            fn ($a, $b) => ($a['time'] ?? '') <=> ($b['time'] ?? ''),
+            fn ($a, $b) => $a['habit']->name <=> $b['habit']->name,
+        ])->values()->map(fn ($row, $i) => $row + ['index' => $i]);
 
         $weeks = $calendar->month($user, $month, $today);
         $monthDays = collect($weeks)->flatten(1)->filter(fn ($d) => $d['in_month'] && ! $d['is_future'] && $d['total'] > 0);
@@ -56,8 +68,7 @@ class DashboardController extends Controller
             ->sortByDesc('completed')
             ->values();
 
-        $weekday = $date->isoWeekday();
-        $reminders = $habits->flatMap(fn ($h) => $h->reminders()->where('is_enabled', true)->get()->map(fn ($r) => [$h, $r]))
+        $reminders = $habits->flatMap(fn ($h) => $h->reminders->where('is_enabled', true)->map(fn ($r) => [$h, $r]))
             ->filter(fn ($pair) => in_array($weekday, $pair[1]->days_of_week ?? [], true))
             ->sortBy(fn ($pair) => $pair[1]->remind_at)
             ->values();
@@ -66,6 +77,7 @@ class DashboardController extends Controller
         $activity = HabitLog::query()
             ->join('habits', 'habits.id', '=', 'habit_logs.habit_id')
             ->where('habits.user_id', $user->id)
+            ->whereNull('habits.deleted_at')
             ->whereColumn('habit_logs.value', '>=', 'habits.target_count')
             ->whereBetween('habit_logs.logged_date', [$today->subDays(400)->toDateString(), $today->toDateString()])
             ->groupBy('habit_logs.logged_date')

@@ -25,11 +25,30 @@ return [
     // Units offered when creating a habit.
     'units' => ['times', 'glasses', 'pages', 'minutes', 'hours', 'steps', 'km', 'sessions'],
 
+    // Sensible target and unit for a habit created from just a name and a category (quick add).
+    'defaults' => [
+        'health-fitness' => ['target' => 1, 'unit' => 'sessions', 'example' => 'Go to the gym'],
+        'mindfulness' => ['target' => 10, 'unit' => 'minutes', 'example' => 'Meditate'],
+        'productivity' => ['target' => 60, 'unit' => 'minutes', 'example' => 'Deep work'],
+        'better-sleep' => ['target' => 1, 'unit' => 'times', 'example' => 'Sleep before 11 pm'],
+        'stay-hydrated' => ['target' => 8, 'unit' => 'glasses', 'example' => 'Drink water'],
+        'read-more' => ['target' => 10, 'unit' => 'pages', 'example' => 'Read a chapter'],
+        'social-connections' => ['target' => 1, 'unit' => 'times', 'example' => 'Message a friend'],
+        'self-care' => ['target' => 1, 'unit' => 'times', 'example' => 'Skincare routine'],
+    ],
+
     // Units that get a timer in the daily list.
     'timed_units' => ['minutes'],
 
     // Mood scale labels, 1 to 5.
     'moods' => [1 => 'Awful', 2 => 'Bad', 3 => 'Okay', 4 => 'Good', 5 => 'Great'],
+
+    // Journal prompts offered after a mood check-in, by how the day felt.
+    'prompts' => [
+        'low' => ['What made today hard, and what would help tomorrow?', 'What is one small thing that could make tomorrow gentler?', 'What do you need right now?'],
+        'mid' => ['What is one thing you noticed today?', 'What did you do today that you want to remember?', 'How would you describe today in one sentence?'],
+        'high' => ['What went well today?', 'What are you proud of today?', 'Who or what made today good?'],
+    ],
 
     // Achievement criteria types: key => label.
     'criteria' => [

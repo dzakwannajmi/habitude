@@ -3,18 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 #[Fillable(['user_id', 'category_id', 'name', 'description', 'target_count', 'unit', 'is_active'])]
 class Habit extends Model
 {
-    use HasFactory;
+    use HasFactory, MassPrunable, SoftDeletes;
 
     protected function casts(): array
     {
@@ -52,5 +55,13 @@ class Habit extends Model
     protected function targetLabel(): Attribute
     {
         return Attribute::get(fn () => $this->target_count.' '.($this->target_count === 1 ? Str::singular($this->unit) : $this->unit));
+    }
+
+    /**
+     * Habits deleted more than 30 days ago are removed for good (`model:prune`, scheduled daily).
+     */
+    public function prunable(): Builder
+    {
+        return static::onlyTrashed()->where('deleted_at', '<=', now()->subDays(30));
     }
 }

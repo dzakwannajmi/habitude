@@ -31,7 +31,7 @@
             $nav = [
                 ['label' => 'Overview', 'url' => route('admin.overview'), 'active' => request()->routeIs('admin.overview')],
                 ['label' => 'Users', 'url' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
-                ['label' => 'Master Data', 'children' => [
+                ['label' => 'Master Data', 'open' => true, 'children' => [
                     ['label' => 'Categories', 'icon' => 'folder', 'url' => route('admin.categories.index'), 'active' => request()->routeIs('admin.categories.*')],
                     ['label' => 'Tags', 'icon' => 'tag', 'url' => route('admin.tags.index'), 'active' => request()->routeIs('admin.tags.*')],
                     ['label' => 'Achievements', 'icon' => 'trophy', 'url' => route('admin.achievements.index'), 'active' => request()->routeIs('admin.achievements.*')],
@@ -48,7 +48,7 @@
         } else {
             $nav = [
                 ['label' => 'Dashboard', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-                ['label' => 'Track', 'children' => [
+                ['label' => 'Track', 'open' => true, 'children' => [
                     ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
                     ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
                     ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
