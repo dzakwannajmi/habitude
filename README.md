@@ -48,7 +48,7 @@ erDiagram
 - PHP 8.3+ and Laravel
 - Blade templates
 - Tailwind CSS v4 (via Vite) with the Brex-style design tokens, Inter font, and a shadcn sidebar-08 style layout
-- MySQL or SQLite
+- MySQL (SQLite is used for automated tests)
 - Laravel MCP for AI-assisted development
 
 ## Getting Started
@@ -66,7 +66,7 @@ npm install
 cp .env.example .env
 php artisan key:generate
 
-# Create the schema and seed the categories
+# Create the schema and seed the categories (see Database Setup below)
 php artisan migrate --seed
 
 # Start the development servers
@@ -75,6 +75,31 @@ php artisan serve
 ```
 
 Then open <http://localhost:8000>.
+
+## Database Setup
+
+The app uses **MySQL**, as in the course module.
+
+1. Start MySQL (XAMPP, Laragon, or Homebrew) and create an empty database:
+   ```sql
+   CREATE DATABASE habitude CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+2. In `.env`, check the connection (already the default in `.env.example`):
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=habitude
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+3. Create the tables and sample data, and re-run it any time to reset everything:
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+4. Inspect the tables and foreign keys in phpMyAdmin or HeidiSQL. The sample login user is `test@example.com`.
+
+Automated tests (`php artisan test`) use an in-memory SQLite database, so they never touch your MySQL data.
 
 ## Progress
 

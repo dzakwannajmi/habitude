@@ -1,4 +1,4 @@
-@props(['text' => true])
+@props(['text' => true, 'badge' => 'Admin'])
 
 <span {{ $attributes->merge(['class' => 'inline-flex items-center gap-2 text-ink']) }}>
     <svg class="h-8 w-auto shrink-0" viewBox="0 0 40 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -12,6 +12,11 @@
         <path d="M2.62269e-07 22.5L15 22.5V25.5L0 25.5L2.62269e-07 22.5Z"/>
     </svg>
     @if ($text)
-        <span class="text-subheading font-semibold tracking-tight">Habitude</span>
+        <span class="flex items-start gap-1">
+            <span class="text-subheading font-semibold leading-none tracking-tight">Habitude</span>
+            @if ($badge)
+                <span class="-mt-1.5 rounded-md bg-ink px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wide text-paper">{{ $badge }}</span>
+            @endif
+        </span>
     @endif
 </span>
