@@ -13,10 +13,11 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 - A month **calendar** that shades each day by completion
 - **Mood check-in** for each day (1–5 hearts)
 - **Daily journal** that can be linked to the day's mood
-- Habit reminders with custom time and weekdays, listed on the dashboard
+- Habit reminders with custom time and weekdays, switched on and off with a ringing **bell toggle**, and listed on the dashboard
 - Tags for flexible habit organization
 - Achievements and badges (for example, a 7-day streak)
 - Dashboard with today's habits, streaks, and per-category progress (a Has-Many-Through query)
+- **Today's habits** shows five rows by default (you can pick 5, 8, 10 or all, and it is remembered), with an All / To do / Done filter
 - Habits as a grouped **list or grid** (Finder style) with swipe-to-edit rows
 - Mobile **dock** navigation
 - Animated profile pictures: a unique drifting orange **waves** avatar per user, generated on the server (no upload needed)
@@ -131,7 +132,7 @@ Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status
 ## Tests
 
 ```bash
-php artisan test   # 70 tests, in-memory SQLite
+php artisan test   # 74 tests, in-memory SQLite
 ```
 
 ## Contributing / Forking

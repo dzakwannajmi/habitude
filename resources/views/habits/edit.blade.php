@@ -32,11 +32,8 @@
                                 {{ count($reminder->days_of_week) === 7 ? 'Every day' : collect($reminder->days_of_week)->map(fn ($d) => $days[$d])->implode(', ') }}
                             </p>
                         </div>
-                        <form action="{{ route('reminders.update', $reminder) }}" method="POST">
-                            @csrf @method('PATCH')
-                            <input type="hidden" name="is_enabled" value="{{ $reminder->is_enabled ? 0 : 1 }}">
-                            <button type="submit" class="btn btn-sm {{ $reminder->is_enabled ? 'btn-danger' : 'btn-outline' }}">{{ $reminder->is_enabled ? 'On' : 'Off' }}</button>
-                        </form>
+                        <span data-bell-toggle data-on="{{ $reminder->is_enabled ? 'true' : 'false' }}" data-url="{{ route('reminders.update', $reminder) }}"
+                            data-off-label="Off" data-on-label="Reminder on" data-label="Toggle reminder at {{ \Carbon\Carbon::parse($reminder->remind_at)->format('H:i') }}"></span>
                         <form action="{{ route('reminders.destroy', $reminder) }}" method="POST">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-ghost btn-icon" aria-label="Delete reminder"><x-icon name="trash" /></button>

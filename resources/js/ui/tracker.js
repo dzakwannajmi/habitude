@@ -25,6 +25,8 @@ function applyResult(row, res) {
     if (text) text.textContent = target > 1 ? `${res.value} / ${target} ${unit}` : res.completed ? 'Done' : 'Not yet';
     const bar = row.querySelector('[data-progress-bar]');
     if (bar) bar.style.width = `${Math.min(100, (res.value / target) * 100)}%`;
+    row.dataset.done = res.completed ? '1' : '0';
+    row.dispatchEvent(new CustomEvent('today:refresh', { bubbles: true }));
     const check = row.querySelector('[data-spring-check]');
     if (check && (check.getAttribute('aria-checked') === 'true') !== res.completed) setChecked(check, res.completed, { silent: true });
     const streak = row.querySelector('[data-streak]');
@@ -49,7 +51,7 @@ function applyResult(row, res) {
         cell.toggleAttribute('data-high', ratio > 0.55);
     }
 
-    res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '' }));
+    res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '', icon: 'trophy', duration: 6000 }));
 }
 
 async function send(row, data) {
@@ -57,7 +59,7 @@ async function send(row, data) {
     try {
         applyResult(row, await post(row.dataset.url, { date: row.dataset.date, ...data }));
     } catch (e) {
-        toast({ title: 'Could not save', body: 'Check your connection and try again.' });
+        toast({ title: 'Could not save', body: 'Check your connection and try again.', icon: 'alert' });
         row.querySelector('[data-spring-check]') && setChecked(row.querySelector('[data-spring-check]'), row.dataset.wasDone === '1', { silent: true });
     } finally {
         row.removeAttribute('aria-busy');
@@ -117,7 +119,7 @@ export function initTracker() {
         try {
             const res = await post(box.dataset.url, { entry_date: box.dataset.date, mood_level: e.detail.value });
             if (out) out.textContent = `Saved: ${res.label}`;
-            res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '' }));
+            res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '', icon: 'trophy', duration: 6000 }));
         } catch {
             if (out) out.textContent = 'Could not save, try again.';
         }

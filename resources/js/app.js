@@ -1,13 +1,16 @@
+import { initBellToggles } from './ui/bell-toggle.js';
 import { initBranchedMenus } from './ui/branched-menu.js';
 import { initCounters, renderCounter } from './ui/counter.js';
 import { initDocks } from './ui/dock.js';
 import { initGlideSelects } from './ui/glide-select.js';
 import { initPeekRatings } from './ui/peek-rating.js';
+import { initRubberSegments } from './ui/rubber-segment.js';
 import { initSkylines } from './ui/skyline.js';
 import { initSpringChecks } from './ui/spring-check.js';
 import { initSteppers } from './ui/stepper.js';
 import { initSwipeRows } from './ui/swipe-row.js';
-import { toast } from './ui/toast.js';
+import { flashToToasts, toast } from './ui/toast.js';
+import { initTodayLists } from './ui/today-list.js';
 import { initTracker } from './ui/tracker.js';
 
 window.Habitude = { toast, counter: renderCounter };
@@ -69,5 +72,9 @@ initCounters();
 initSteppers();
 initSwipeRows();
 initDocks();
+initRubberSegments();
+initBellToggles();
 initSkylines();
+flashToToasts();
+initTodayLists();
 initTracker();

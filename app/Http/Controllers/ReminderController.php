@@ -35,6 +35,10 @@ class ReminderController extends Controller
 
         $reminder->update(['is_enabled' => $request->boolean('is_enabled')]);
 
+        if ($request->expectsJson()) {
+            return response()->json(['is_enabled' => $reminder->is_enabled]);
+        }
+
         return redirect()->route('habits.edit', $reminder->habit_id)->with('success', 'Reminder updated.');
     }
 

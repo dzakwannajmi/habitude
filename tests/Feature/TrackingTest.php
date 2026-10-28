@@ -195,6 +195,57 @@ class TrackingTest extends TestCase
         $response->assertSee('&quot;unit&quot;:&quot;check-in&quot;', false)->assertSee('&quot;#ff5900&quot;', false)->assertSee('2026-10-28', false);
     }
 
+    public function test_todays_habits_list_starts_with_five_rows_and_a_filter(): void
+    {
+        foreach (range(1, 8) as $i) {
+            $this->habit(['name' => "Habit number {$i}"]);
+        }
+        $done = $this->habit(['name' => 'Already done']);
+        $this->logDays($done, [0]);
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertSame(4, $this->hiddenRows($html));          // 9 habits, 5 shown
+        $this->assertStringContainsString('Show 4 more', $html);
+        $this->assertStringContainsString('data-rubber-segment', $html);
+        $this->assertStringContainsString('data-today-limit', $html);
+        $this->assertMatchesRegularExpression('/data-done="1"/', $html); // the filter reads this
+    }
+
+    private function hiddenRows(string $html): int
+    {
+        return preg_match_all('/<li data-habit-row[^>]*class="hidden"/s', $html);
+    }
+
+    public function test_list_and_grid_switches_are_rubber_segments_that_link_to_the_views(): void
+    {
+        $this->get('/habits')->assertOk()->assertSee('data-rubber-segment', false)->assertSee('data-href', false)->assertSee('view=grid', false);
+        $this->get('/journal?view=grid')->assertOk()->assertSee('data-rubber-segment', false)->assertSee('data-value="grid"', false);
+    }
+
+    public function test_flash_messages_are_delivered_to_the_toast_script(): void
+    {
+        $this->post('/habits/'.$this->habit()->id.'/reminders', ['remind_at' => '07:00', 'days_of_week' => [1]])
+            ->assertRedirect();
+
+        $this->get('/habits/'.Habit::first()->id.'/edit')
+            ->assertSee('data-flash="success"', false)
+            ->assertSee('data-message="Reminder added."', false);
+    }
+
+    public function test_the_bell_toggle_saves_over_json(): void
+    {
+        $reminder = $this->habit()->reminders()->create(['remind_at' => '08:00', 'days_of_week' => [1, 2]]);
+
+        $this->get("/habits/{$reminder->habit_id}/edit")->assertSee('data-bell-toggle', false)->assertSee('data-on="true"', false);
+
+        $this->patchJson("/reminders/{$reminder->id}", ['is_enabled' => false])->assertOk()->assertJson(['is_enabled' => false]);
+        $this->assertFalse($reminder->fresh()->is_enabled);
+
+        $this->patchJson("/reminders/{$reminder->id}", ['is_enabled' => true])->assertJson(['is_enabled' => true]);
+        $this->assertTrue($reminder->fresh()->is_enabled);
+    }
+
     // ---- achievements ----
 
     public function test_achievements_unlock_from_check_ins(): void

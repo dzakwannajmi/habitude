@@ -165,6 +165,7 @@ function build(root) {
     document.addEventListener('pointerdown', (e) => { if (phase === 'open' && !root.contains(e.target)) close(); }, true);
     document.addEventListener('gs:open', (e) => { if (e.detail !== root) close(true); });
 
+    root.glideSet = (v) => { value = v; root.dataset.value = String(v); paintTrigger(false); };
     paintTrigger();
 }
 

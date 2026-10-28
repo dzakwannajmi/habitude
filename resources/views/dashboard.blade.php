@@ -68,21 +68,35 @@
     </section>
 
     <div class="grid gap-6 lg:grid-cols-3">
-        {{-- Today's habits --}}
-        <section class="card lg:col-span-2" aria-labelledby="habits-title">
+        {{-- Today's habits: filter, and a row limit the user can change --}}
+        <section class="card lg:col-span-2" aria-labelledby="habits-title" data-today>
             <div class="card-header">
                 <div>
                     <h2 id="habits-title" class="text-subheading">{{ $isToday ? "Today's habits" : 'Habits' }}</h2>
                     <p class="text-body-sm text-pewter">Tap the box to complete a habit.</p>
                 </div>
-                <a href="{{ route('habits.index') }}" class="btn btn-outline btn-sm">Manage</a>
+                <div class="flex flex-wrap items-center gap-2">
+                    <x-rubber-segment size="sm" value="all" label="Filter habits" :items="[
+                        ['value' => 'all', 'label' => 'All', 'count' => $rows->count()],
+                        ['value' => 'todo', 'label' => 'To do', 'count' => $rows->where('done', false)->count()],
+                        ['value' => 'done', 'label' => 'Done', 'count' => $rows->where('done', true)->count()],
+                    ]" />
+                    <div class="w-28" data-today-limit>
+                        <x-select name="rows" label="Rows to show" value="5" :compact="true" :options="[
+                            ['value' => '5', 'label' => '5 rows'], ['value' => '8', 'label' => '8 rows'],
+                            ['value' => '10', 'label' => '10 rows'], ['value' => 'all', 'label' => 'All rows'],
+                        ]" />
+                    </div>
+                    <a href="{{ route('habits.index') }}" class="btn btn-outline btn-sm">Manage</a>
+                </div>
             </div>
 
             <ul class="divide-y divide-mist/40">
                 @forelse ($rows as $r)
                     @php $h = $r['habit']; $multi = $h->target_count > 1; @endphp
                     <li data-habit-row data-url="{{ route('habits.log', $h) }}" data-date="{{ $date->toDateString() }}"
-                        data-target="{{ $h->target_count }}" data-unit="{{ $h->unit }}">
+                        data-target="{{ $h->target_count }}" data-unit="{{ $h->unit }}" data-done="{{ $r['done'] ? 1 : 0 }}"
+                        @class(['hidden' => $loop->index >= 5])>
                         <div class="flex items-center gap-3 px-6 py-3">
                             <x-spring-check :checked="$r['done']" :aria-label="'Complete '.$h->name" />
                             <div class="min-w-0 flex-1">
@@ -121,7 +135,15 @@
                         No active habits yet. <a href="{{ route('habits.create') }}" class="font-semibold text-ink underline">Create one</a>.
                     </li>
                 @endforelse
+                <li data-today-empty hidden class="px-6 py-10 text-center text-pewter">Nothing in this view.</li>
             </ul>
+
+            @if ($rows->isNotEmpty())
+                <div class="flex items-center justify-between gap-3 border-t border-mist/60 px-6 py-3 text-caption text-pewter">
+                    <span data-today-summary>Showing {{ min(5, $rows->count()) }} of {{ $rows->count() }}</span>
+                    <button type="button" data-today-more @if ($rows->count() <= 5) hidden @endif class="btn btn-ghost btn-sm" aria-expanded="false">Show {{ max(0, $rows->count() - 5) }} more</button>
+                </div>
+            @endif
         </section>
 
         {{-- Calendar + mood --}}

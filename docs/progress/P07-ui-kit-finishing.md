@@ -39,10 +39,21 @@ React Bits is written for React, so each effect is re-implemented in plain JavaS
 | Peek Rating | Mood hearts with a label tooltip |
 | Counter | Odometer digits for streaks, stats, and the habit timer |
 | Stepper | First-run onboarding |
+| Swipe Toast | Every notification (flash messages included): slides in, burns an orange fuse, pauses on hover, swipe down to dismiss |
+| Bell Toggle | Reminder switch: the bell rings and the label swaps when turned on |
+| Rubber Segment | Today's habits filter (All / To do / Done) and the List / Grid switches: stretchy, draggable thumb |
 | Dock | Bottom navigation on mobile, magnifies under the finger |
 
+### J5b: Toast, bell, segment, five-row list
+- **Swipe Toast** replaces the inline banners: server flash messages and achievements are toasts now (a `<noscript>` copy remains). The card is Carbon with an Ember fuse; hover, focus or dragging pauses the fuse; a downward swipe or flick throws it away, an upward drag resists like rubber, Esc closes it.
+- **Bell Toggle** saves over JSON (`PATCH /reminders/{id}`) and reverts with a toast if the request fails.
+- **Rubber Segment** is draggable and flickable; the List / Grid switches use its link mode, so the URL still carries the view.
+- **Today's habits** shows 5 rows with "Show N more"; the row count (5, 8, 10, all) is a Glide Select remembered in the browser; All / To do / Done counts update as you check habits, and a checked row leaves the "To do" view after its spring has played.
+- A small spring solver (`spring.js`) replaces the `motion` library these components use.
+- **Bugs found while testing:** the saved row limit was not shown in its select after a reload, and the counters inside the segment's clipped second copy of its labels were not updated.
+
 ### J6: Verification
-- `php artisan test`: 47 tests pass (SQLite in memory).
+- `php artisan test`: 74 tests pass (SQLite in memory).
 - Browser run with Chrome: login, check-in and uncheck, +1, timer, mood rating, menu fold, swipe, delete dialog, select with auto-submit, onboarding, mobile dock, with no console errors.
 - **Bugs found and fixed while verifying:** invalid dates caused a 500; the mobile dock showed on desktop because custom CSS outranked `lg:hidden` (UI CSS now lives in the components layer); the calendar and monthly percentage ignored habits whose history predates their creation date.
 

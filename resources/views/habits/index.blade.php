@@ -14,10 +14,10 @@
                 <input type="hidden" name="view" value="{{ $view }}">
                 <x-select name="group" :options="$groupOptions" :value="$group" label="Group habits" :compact="true" :autosubmit="true" />
             </form>
-            <div class="inline-flex rounded-xl bg-fog p-1" role="group" aria-label="View">
-                <a href="{{ $toggle('list') }}" class="btn btn-sm {{ $view === 'list' ? 'bg-paper text-ink' : 'btn-ghost text-pewter' }}" aria-pressed="{{ $view === 'list' ? 'true' : 'false' }}"><x-icon name="list" class="size-3.5" /> List</a>
-                <a href="{{ $toggle('grid') }}" class="btn btn-sm {{ $view === 'grid' ? 'bg-paper text-ink' : 'btn-ghost text-pewter' }}" aria-pressed="{{ $view === 'grid' ? 'true' : 'false' }}"><x-icon name="layout-grid" class="size-3.5" /> Grid</a>
-            </div>
+            <x-rubber-segment :value="$view" label="View" :items="[
+                ['value' => 'list', 'label' => 'List', 'icon' => 'list', 'href' => $toggle('list')],
+                ['value' => 'grid', 'label' => 'Grid', 'icon' => 'layout-grid', 'href' => $toggle('grid')],
+            ]" />
             <a href="{{ route('habits.create') }}" class="btn btn-primary"><x-icon name="plus" /> Add habit</a>
         </div>
     </div>

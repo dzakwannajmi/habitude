@@ -10,10 +10,10 @@
             <p class="text-body-sm text-pewter">Entries written on a day you rated your mood are linked to it.</p>
         </div>
         <div class="flex items-center gap-2">
-            <div class="inline-flex rounded-xl bg-fog p-1" role="group" aria-label="View">
-                <a href="{{ route('journal.index', ['view' => 'list']) }}" class="btn btn-sm {{ $view === 'list' ? 'bg-paper text-ink' : 'btn-ghost text-pewter' }}"><x-icon name="list" class="size-3.5" /> List</a>
-                <a href="{{ route('journal.index', ['view' => 'grid']) }}" class="btn btn-sm {{ $view === 'grid' ? 'bg-paper text-ink' : 'btn-ghost text-pewter' }}"><x-icon name="layout-grid" class="size-3.5" /> Grid</a>
-            </div>
+            <x-rubber-segment :value="$view" label="View" :items="[
+                ['value' => 'list', 'label' => 'List', 'icon' => 'list', 'href' => route('journal.index', ['view' => 'list'])],
+                ['value' => 'grid', 'label' => 'Grid', 'icon' => 'layout-grid', 'href' => route('journal.index', ['view' => 'grid'])],
+            ]" />
             <a href="{{ route('journal.create') }}" class="btn btn-primary"><x-icon name="plus" /> New entry</a>
         </div>
     </div>
