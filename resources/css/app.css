@@ -772,8 +772,8 @@
 
 /* ---------- Rubber segment (swipeable segmented control) ---------- */
 .rs {
-    --rs-inset: 3px;
-    --rs-radius: 12px;
+    --rs-inset: 0px; /* the white thumb fills the grey track edge to edge */
+    --rs-radius: 10px;
     --rs-h: 36px;
     --rs-font: 13px;
     --rs-pad: 14px;
@@ -789,7 +789,7 @@
     vertical-align: middle;
     -webkit-tap-highlight-color: transparent;
 }
-.rs[data-size='sm'] { --rs-h: 30px; --rs-font: 12px; --rs-pad: 10px; --rs-radius: 10px; }
+.rs[data-size='sm'] { --rs-h: 30px; --rs-font: 12px; --rs-pad: 10px; --rs-radius: 9px; }
 .rs[data-held] { cursor: grabbing; }
 .rs-item, .rs-copy {
     display: inline-flex;
@@ -823,7 +823,6 @@
     grid-auto-columns: minmax(0, 1fr);
     background: var(--color-paper);
     color: var(--color-ink);
-    box-shadow: inset 0 0 0 1px rgb(185 187 198 / 0.7);
     pointer-events: none;
 }
 .rs-copy { color: inherit; cursor: default; }

@@ -37,8 +37,8 @@ const nearestSlot = (slots, x) => {
 
 function build(root) {
     const items = [...root.querySelectorAll('.rs-item')];
-    const inset = 3;
-    const radius = root.dataset.size === 'sm' ? 10 : 12;
+    const inset = 0; // keep in step with --rs-inset in the CSS
+    const radius = root.dataset.size === 'sm' ? 9 : 10;
     const thumbRadius = Math.max(0, radius - inset);
 
     root.setAttribute('role', 'radiogroup');
