@@ -48,17 +48,10 @@
                     @endphp
 
                     <li>
-                        <details class="group" @if ($habitsOpen) open @endif>
-                            <summary class="menu-item cursor-pointer list-none [&::-webkit-details-marker]:hidden" @if ($habitsOpen) aria-current="page" @endif>
-                                <x-icon name="target" />
-                                <span class="flex-1">Habits</span>
-                                <x-icon name="chevron-right" class="size-4 transition-transform group-open:rotate-90" />
-                            </summary>
-                            <ul class="ml-4 mt-1 space-y-0.5 border-l border-mist/60 pl-3">
-                                <li><a href="{{ route('habits.index') }}" class="menu-sub" @if (request()->routeIs('habits.index', 'habits.edit')) aria-current="page" @endif>All habits</a></li>
-                                <li><a href="{{ route('habits.create') }}" class="menu-sub" @if (request()->routeIs('habits.create')) aria-current="page" @endif>Add habit</a></li>
-                            </ul>
-                        </details>
+                        <a href="{{ route('habits.index') }}" class="menu-item" @if ($habitsOpen) aria-current="page" @endif>
+                            <x-icon name="target" />
+                            Habits
+                        </a>
                     </li>
 
                     <li>
