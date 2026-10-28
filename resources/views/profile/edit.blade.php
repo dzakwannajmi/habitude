@@ -43,6 +43,19 @@
                     @error('daily_goal') <p class="field-error">{{ $message }}</p> @enderror
                 </div>
             </div>
+            <fieldset class="space-y-3 border-t border-mist/60 pt-5">
+                <legend class="text-body-sm font-semibold">Reminders</legend>
+                <div>
+                    <x-spring-check name="email_reminders" label="Email me my reminders" :checked="old('email_reminders', $profile?->email_reminders ?? true)" />
+                    <p class="help">One email at the time you set on a habit, only if it is not done yet.</p>
+                </div>
+                <div data-notify-setting class="rounded-xl border border-mist/60 p-4">
+                    <p class="text-body-sm font-medium text-ink">Browser notifications</p>
+                    <p class="help" data-notify-status>Checking this browser…</p>
+                    <button type="button" class="btn btn-outline btn-sm mt-3" data-notify-toggle hidden><x-icon name="bell" class="size-3.5" /> <span>Allow notifications</span></button>
+                    <p class="help mt-2">They appear while Habitude is open in a tab or installed as an app. Emails work even when it is closed.</p>
+                </div>
+            </fieldset>
             <fieldset class="space-y-5 border-t border-mist/60 pt-5">
                 <legend class="text-body-sm font-semibold">Change password <span class="font-normal text-pewter">(leave empty to keep it)</span></legend>
                 <div class="grid gap-5 sm:grid-cols-2">
@@ -57,7 +70,10 @@
                     </div>
                 </div>
             </fieldset>
-            <div class="flex justify-end"><button type="submit" class="btn btn-primary"><x-icon name="save" /> Save changes</button></div>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <button type="button" class="btn btn-outline" data-install hidden><x-icon name="plus" /> Install Habitude as an app</button>
+                <button type="submit" class="btn btn-primary ml-auto"><x-icon name="save" /> Save changes</button>
+            </div>
         </form>
     </div>
 </x-app-layout>

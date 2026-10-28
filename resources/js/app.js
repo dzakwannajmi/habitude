@@ -1,4 +1,7 @@
 import { initBellToggles } from './ui/bell-toggle.js';
+import { initNotifier, initNotifySetting } from './ui/notifier.js';
+import { initPalette } from './ui/palette.js';
+import { initPwa } from './ui/pwa.js';
 import { initBranchedMenus } from './ui/branched-menu.js';
 import { initCounters, renderCounter } from './ui/counter.js';
 import { initDocks } from './ui/dock.js';
@@ -100,3 +103,13 @@ initSkylines();
 flashToToasts();
 initTodayLists();
 initTracker();
+initPwa();
+initNotifier();
+initNotifySetting();
+initPalette();
+
+// the key hint follows the platform
+document.querySelectorAll('[data-palette-key]').forEach((k) => { if (/Mac|iPhone|iPad/.test(navigator.platform)) k.textContent = '⌘ K'; });
+
+// "Add a habit" shortcuts (the app icon menu and the palette) land on a page with ?add=1
+if (new URLSearchParams(location.search).get('add') === '1') document.getElementById('quick-add')?.showModal();

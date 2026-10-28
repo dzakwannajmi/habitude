@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }} · {{ config('app.name') }}</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#ff5900">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

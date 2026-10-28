@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('habits', HabitController::class)->except('show');
         Route::post('/habits/{habit}/restore', [HabitController::class, 'restore'])->name('habits.restore')->whereNumber('habit');
         Route::post('/habits/{habit}/log', [HabitLogController::class, 'store'])->name('habits.log');
+        Route::get('/reminders/today', [ReminderController::class, 'today'])->name('reminders.today');
         Route::post('/habits/{habit}/reminders', [ReminderController::class, 'store'])->name('reminders.store');
         Route::patch('/reminders/{reminder}', [ReminderController::class, 'update'])->name('reminders.update');
         Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy');

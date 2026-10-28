@@ -7,6 +7,9 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 - Sign up, log in, and a first-run **stepper** that sets your timezone and picks starter habits
 - Track daily habits grouped into eight life categories:
   Health & Fitness, Mindfulness, Productivity, Better Sleep, Stay Hydrated, Read More, Social Connections, and Self Care
+- **Reminders that reach you**: an email at the time you set (sent by the scheduler, with a switch in your profile) and browser notifications while the app is open or installed
+- **Installable app (PWA)**, works as a standalone window with an offline page, and a **command palette** (Cmd/Ctrl + K) to jump anywhere or add things by typing
+- Gentle flow helpers: undo after deleting a habit or unchecking one, quick add from just a name and a category, a journal prompt after you rate your mood, a celebration when the day is done, and a nudge to log a missed day
 - A friendly, random **greeting** on the dashboard that follows your open habits ("Ready to hit the gym?", "Ready to read a few pages?"), the time of day, and your streak
 - Daily check-ins with a spring checkbox, +1 progress, and a **timer** for habits measured in minutes
 - A year **skyline** on the home page: a GitHub-style heat map of your check-ins that folds into a 3D city (one orange, fainter when you did less), with year total, busiest day, and longest and current **streaks**; click a day to open it
@@ -97,6 +100,21 @@ php artisan serve
 
 Then open <http://localhost:8000>.
 
+## Reminders, scheduler and email
+
+Reminder emails are sent by a command that must run every minute:
+
+```bash
+php artisan schedule:work          # local development
+* * * * * cd /path-to-app && php artisan schedule:run >> /dev/null 2>&1    # production cron
+```
+
+- By default `MAIL_MAILER=log`, so emails are written to `storage/logs/laravel.log` instead of being delivered. To send real mail, fill in `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` in `.env` (any SMTP service works).
+- Set `APP_URL` in `.env` to your real address, because the "Open Habitude" button in the email uses it.
+- Try it by hand: `php artisan habitude:send-reminders` (it only sends reminders that are due in the last five minutes, once per day).
+- Deleted habits are kept for 30 days (so Undo works) and then removed by `model:prune`, also run by the scheduler.
+- Browser notifications are switched on per browser in your profile. They need the app to be open (in a tab or installed); real background push would need a push service and is not included.
+
 ## Database Setup
 
 The app uses **MySQL**, as in the course module.
@@ -132,7 +150,7 @@ Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status
 ## Tests
 
 ```bash
-php artisan test   # 74 tests, in-memory SQLite
+php artisan test   # 113 tests, in-memory SQLite
 ```
 
 ## Contributing / Forking

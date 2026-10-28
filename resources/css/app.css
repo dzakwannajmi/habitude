@@ -828,4 +828,19 @@
 .rs-copy { color: inherit; cursor: default; }
 .rs-count { min-width: 18px; padding: 2px 5px; border-radius: 6px; background: var(--color-fog); color: var(--color-graphite); font-size: 11px; font-variant-numeric: tabular-nums; text-align: center; }
 
+/* ---------- Command palette ---------- */
+.pal { width: min(34rem, calc(100vw - 32px)); margin: 12vh auto auto; padding: 0; border: 1px solid rgb(185 187 198 / 0.6); border-radius: 16px; background: var(--color-paper); color: var(--color-ink); box-shadow: 0 24px 60px -16px rgb(0 0 0 / 0.3); overflow: hidden; }
+.pal::backdrop { background: rgb(0 7 16 / 0.4); }
+.pal-input { display: block; width: 100%; padding: 16px 20px; border: 0; border-bottom: 1px solid rgb(185 187 198 / 0.6); background: transparent; color: inherit; font: inherit; font-size: 16px; outline: none; }
+.pal-input::placeholder { color: var(--color-steel); }
+.pal-list { max-height: 22rem; margin: 0; padding: 8px; overflow-y: auto; list-style: none; }
+.pal-group { padding: 10px 12px 4px; color: var(--color-pewter); font-size: 12px; font-weight: 500; }
+.pal-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 10px; font-size: 14px; cursor: pointer; }
+.pal-item[aria-selected='true'] { background: var(--color-fog); }
+.pal-label { overflow: hidden; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.pal-hint { flex: none; color: var(--color-pewter); font-size: 12px; }
+.pal-empty { padding: 28px 16px; text-align: center; color: var(--color-pewter); font-size: 14px; }
+.pal-foot { display: flex; gap: 16px; padding: 10px 16px; border-top: 1px solid rgb(185 187 198 / 0.6); color: var(--color-pewter); font-size: 12px; }
+.kbd { display: inline-block; min-width: 20px; padding: 1px 6px; border: 1px solid var(--color-mist); border-radius: 6px; background: var(--color-paper); font-size: 11px; line-height: 1.5; text-align: center; }
+
 }

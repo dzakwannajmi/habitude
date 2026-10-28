@@ -17,10 +17,15 @@
         } catch (e) {}
     </script>
 
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#ff5900">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Habitude">
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-svh antialiased" style="--bar-h: {{ request()->routeIs('admin.*') || config('habitude.stage') !== 'production' ? '1.75rem' : '0px' }}">
+<body class="min-h-svh antialiased" data-reminders-url="{{ route('reminders.today') }}" style="--bar-h: {{ request()->routeIs('admin.*') || config('habitude.stage') !== 'production' ? '1.75rem' : '0px' }}">
     @php
         $user = auth()->user();
         $admin = request()->routeIs('admin.*');
@@ -62,6 +67,34 @@
                 ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
                 ['label' => 'Menu', 'icon' => 'menu', 'toggle' => true],
             ];
+        }
+
+        // Everything the command palette can do or open
+        $palette = [
+            ['group' => 'Go to', 'label' => 'Dashboard', 'url' => route('dashboard'), 'keywords' => 'home today'],
+            ['group' => 'Go to', 'label' => 'Habits', 'url' => route('habits.index'), 'keywords' => 'list manage'],
+            ['group' => 'Go to', 'label' => 'Mood', 'url' => route('mood.index'), 'keywords' => 'feelings history'],
+            ['group' => 'Go to', 'label' => 'Journal', 'url' => route('journal.index'), 'keywords' => 'diary entries'],
+            ['group' => 'Go to', 'label' => 'Achievements', 'url' => route('achievements.index'), 'keywords' => 'badges trophies'],
+            ['group' => 'Go to', 'label' => 'Profile', 'url' => route('profile.edit'), 'keywords' => 'account settings password reminders notifications'],
+            ['group' => 'Actions', 'label' => 'Add a habit', 'action' => 'quick-add', 'fallback' => route('habits.index', ['add' => 1]), 'keywords' => 'new create'],
+            ['group' => 'Actions', 'label' => 'Log my mood', 'url' => route('mood.index'), 'keywords' => 'feel rate'],
+            ['group' => 'Actions', 'label' => 'Write in my journal', 'url' => route('journal.create'), 'keywords' => 'diary new entry'],
+            ['group' => 'Actions', 'label' => 'Toggle the sidebar', 'action' => 'sidebar', 'keywords' => 'menu navigation'],
+            ['group' => 'Actions', 'label' => 'Install Habitude as an app', 'action' => 'install', 'keywords' => 'pwa phone home screen'],
+            ['group' => 'Actions', 'label' => 'Log out', 'action' => 'logout', 'keywords' => 'sign out'],
+        ];
+        if ($user->isAdmin()) {
+            array_push($palette,
+                ['group' => 'Admin', 'label' => 'Admin overview', 'url' => route('admin.overview')],
+                ['group' => 'Admin', 'label' => 'Manage users', 'url' => route('admin.users.index')],
+                ['group' => 'Admin', 'label' => 'Categories', 'url' => route('admin.categories.index'), 'hint' => 'Master data'],
+                ['group' => 'Admin', 'label' => 'Tags', 'url' => route('admin.tags.index'), 'hint' => 'Master data'],
+                ['group' => 'Admin', 'label' => 'Manage achievements', 'url' => route('admin.achievements.index'), 'hint' => 'Master data'],
+            );
+        }
+        foreach ($user->habits()->orderBy('name')->get(['id', 'name']) as $habit) {
+            $palette[] = ['group' => 'Your habits', 'label' => $habit->name, 'hint' => 'Edit habit', 'url' => route('habits.edit', $habit)];
         }
     @endphp
 
@@ -155,6 +188,11 @@
                         @endforeach
                     </ol>
                 </nav>
+                <button type="button" data-palette-open class="btn btn-outline btn-sm ml-auto max-sm:size-8 max-sm:p-0" aria-label="Search and commands">
+                    <x-icon name="search" class="size-3.5" />
+                    <span class="max-sm:hidden">Search</span>
+                    <span class="kbd max-sm:hidden" data-palette-key>Ctrl K</span>
+                </button>
             </header>
 
             <main class="mx-auto w-full max-w-(--page-max-width) flex-1 p-4 pb-28 sm:p-6 lg:pb-6">
@@ -163,6 +201,16 @@
             </main>
         </div>
     </div>
+
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" hidden>@csrf</form>
+
+    <dialog id="palette" class="pal" aria-label="Command palette">
+        <input type="text" class="pal-input" data-palette-input role="combobox" aria-expanded="true" aria-controls="palette-list" autocomplete="off" spellcheck="false" placeholder="Type a page, a habit, or an action…">
+        <ul id="palette-list" class="pal-list" role="listbox" data-palette-list></ul>
+        <p class="pal-empty" data-palette-empty hidden>Nothing matches that.</p>
+        <p class="pal-foot"><span><span class="kbd">↑</span> <span class="kbd">↓</span> to move</span><span><span class="kbd">Enter</span> to open</span><span><span class="kbd">Esc</span> to close</span></p>
+        <script type="application/json" id="palette-data">{!! json_encode($palette, JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    </dialog>
 
     <x-dock :items="$dock" />
     <div id="toasts" class="toasts" aria-live="polite"></div>

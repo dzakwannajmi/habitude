@@ -162,7 +162,8 @@ class TrackingTest extends TestCase
         $this->habit(['name' => 'Visible habit']);
         $this->habit(['name' => 'Paused habit', 'is_active' => false]);
 
-        $this->get('/')->assertSee('Visible habit')->assertDontSee('Paused habit');
+        // the day's list only has active habits (the command palette still lets you find a paused one to edit)
+        $this->assertSame(['Visible habit'], $this->get('/')->viewData('rows')->pluck('habit.name')->all());
     }
 
     public function test_calendar_counts_back_filled_days_even_for_new_habits(): void

@@ -3,11 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\Habit;
+use App\Models\HabitLog;
 use App\Models\Reminder;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 
 class ReminderController extends Controller
 {
+    /**
+     * What is still to do today, for the browser notifier: enabled reminders of
+     * active habits that are not finished yet, with the time in the user's own clock.
+     */
+    public function today(Request $request)
+    {
+        $user = $request->user();
+        $today = $user->today();
+        $weekday = $today->isoWeekday();
+        $now = CarbonImmutable::now($user->profile?->timezone ?? config('app.timezone'));
+
+        $habits = $user->habits()->where('is_active', true)->with('reminders')->get();
+        $done = HabitLog::whereIn('habit_id', $habits->pluck('id'))->whereDate('logged_date', $today->toDateString())->get()->keyBy('habit_id');
+
+        $items = $habits->flatMap(fn ($h) => $h->reminders
+            ->filter(fn ($r) => $r->is_enabled && in_array($weekday, $r->days_of_week ?? [], true))
+            ->reject(fn () => ($done[$h->id]->value ?? 0) >= $h->target_count)
+            ->map(fn ($r) => ['id' => $r->id, 'habit' => $h->name, 'detail' => $h->target_label, 'time' => substr($r->remind_at, 0, 5)]))
+            ->sortBy('time')->values();
+
+        return response()->json(['now' => $now->format('H:i'), 'date' => $today->toDateString(), 'items' => $items]);
+    }
+
     public function store(Request $request, Habit $habit)
     {
         abort_unless($habit->user_id === $request->user()->id, 404);

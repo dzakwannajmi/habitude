@@ -35,7 +35,7 @@ class ProfileController extends Controller
         }
         $user->save();
 
-        $user->profile()->updateOrCreate([], collect($data)->only(['bio', 'timezone', 'daily_goal'])->all());
+        $user->profile()->updateOrCreate([], collect($data)->only(['bio', 'timezone', 'daily_goal'])->all() + ['email_reminders' => $request->boolean('email_reminders')]);
 
         return redirect()->route('profile.edit')->with('success', 'Profile updated.');
     }
