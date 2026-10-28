@@ -241,4 +241,85 @@ class UxFlowTest extends TestCase
         $this->get('/login')->assertSee(route('password.request'), false);
         $this->get('/forgot-password')->assertOk()->assertSee('Forgot your password?');
     }
+
+    // ---- daily check-in: mood leads to a journal prompt ----
+
+    public function test_saving_a_mood_offers_a_journal_prompt_that_fits_the_day(): void
+    {
+        $json = $this->postJson('/mood', ['mood_level' => 2])->assertOk()->json();
+
+        $this->assertSame(route('journal.create', ['mood' => 2, 'date' => '2026-10-28']), $json['journal_url']);
+        $this->assertFalse($json['has_journal']);
+
+        $low = $this->get($json['journal_url'])->assertOk()->viewData('prompt');
+        $this->assertContains($low, config('habitude.prompts.low'));
+        $this->assertContains($this->get('/journal/create?mood=5')->viewData('prompt'), config('habitude.prompts.high'));
+        $this->assertContains($this->get('/journal/create?mood=3')->viewData('prompt'), config('habitude.prompts.mid'));
+    }
+
+    public function test_the_journal_form_ignores_bad_prompt_and_date_input(): void
+    {
+        $this->assertNull($this->get('/journal/create')->viewData('prompt'));
+        $this->assertNull($this->get('/journal/create?mood=9')->viewData('prompt'));
+        $this->assertSame('2026-10-28', $this->get('/journal/create?date=garbage')->assertOk()->viewData('date')->toDateString());
+        $this->assertSame('2026-10-28', $this->get('/journal/create?date=2027-01-01')->viewData('date')->toDateString()); // not the future
+        $this->assertSame('2026-10-20', $this->get('/journal/create?date=2026-10-20')->viewData('date')->toDateString());
+    }
+
+    public function test_the_mood_page_redirect_carries_a_write_about_it_link_until_a_journal_exists(): void
+    {
+        $this->post('/mood', ['mood_level' => 4])
+            ->assertSessionHas('action_url', route('journal.create', ['mood' => 4, 'date' => '2026-10-28']))
+            ->assertSessionHas('action_label', 'Write about it');
+
+        $this->post('/journal', ['entry_date' => '2026-10-28', 'title' => 'Done', 'content' => 'Written']);
+        $this->post('/mood', ['mood_level' => 5])->assertSessionMissing('action_url');
+        $this->postJson('/mood', ['mood_level' => 5])->assertJson(['has_journal' => true]);
+    }
+
+    public function test_the_prompt_shows_on_the_form_and_prefills_the_title(): void
+    {
+        $this->get('/journal/create?mood=4&date=2026-10-27')
+            ->assertOk()
+            ->assertSee('A question to start with')
+            ->assertSee('Tuesday, 27 October');
+    }
+
+    // ---- nudge for a missed day ----
+
+    private function oldHabit(): Habit
+    {
+        $habit = $this->habit();
+        $habit->forceFill(['created_at' => CarbonImmutable::now()->subDays(10)])->save();
+
+        return $habit;
+    }
+
+    public function test_it_nudges_when_yesterday_has_no_check_ins(): void
+    {
+        $this->oldHabit();
+
+        $this->get('/')->assertOk()->assertSee('data-nudge="missed-2026-10-27"', false)->assertSee('Log yesterday');
+        $this->assertTrue($this->get('/')->viewData('missedYesterday'));
+    }
+
+    public function test_it_does_not_nudge_when_yesterday_is_logged_or_the_habit_is_new_or_you_look_at_a_past_day(): void
+    {
+        $habit = $this->oldHabit();
+        $habit->logs()->create(['logged_date' => '2026-10-27', 'value' => 1]);
+        $this->assertFalse($this->get('/')->viewData('missedYesterday'));
+
+        $habit->logs()->delete();
+        $this->assertFalse($this->get('/?date=2026-10-20')->viewData('missedYesterday'));
+
+        $habit->forceFill(['created_at' => CarbonImmutable::now()])->save();  // created today: nothing to miss
+        $this->assertFalse($this->get('/')->viewData('missedYesterday'));
+    }
+
+    public function test_the_celebration_has_what_it_needs(): void
+    {
+        $this->habit();
+
+        $this->get('/')->assertSee('data-today-date="2026-10-28"', false);
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\JournalEntry;
 use App\Services\AchievementService;
+use Carbon\CarbonImmutable;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\Request;
 
 class JournalEntryController extends Controller
@@ -19,7 +21,29 @@ class JournalEntryController extends Controller
 
     public function create(Request $request)
     {
-        return view('journal.create', ['today' => $request->user()->today()]);
+        $today = $request->user()->today();
+        $date = $this->validDate($request->query('date'), $today);
+        $level = (int) $request->query('mood');
+
+        // A gentle question that fits how the day felt, when we arrive from a mood check-in
+        $prompt = null;
+        if ($level >= 1 && $level <= 5) {
+            $band = $level <= 2 ? 'low' : ($level === 3 ? 'mid' : 'high');
+            $prompt = collect(config("habitude.prompts.{$band}"))->random();
+        }
+
+        return view('journal.create', ['today' => $today, 'date' => $date, 'prompt' => $prompt]);
+    }
+
+    private function validDate(?string $value, CarbonImmutable $today): CarbonImmutable
+    {
+        try {
+            $date = $value ? CarbonImmutable::createFromFormat('!Y-m-d', $value) : $today;
+        } catch (InvalidFormatException) {
+            return $today;
+        }
+
+        return $date && $date->format('Y-m-d') === $value && $date <= $today ? $date : $today;
     }
 
     public function store(Request $request, AchievementService $achievements)

@@ -1,6 +1,7 @@
 // Dashboard behaviour: check-ins, +1 progress, timers and the quick mood
 // rating. Everything updates in place from the JSON the server returns.
 import { renderCounter } from './counter.js';
+import { celebrate } from './celebrate.js';
 import { setChecked } from './spring-check.js';
 import { toast } from './toast.js';
 
@@ -25,6 +26,8 @@ function applyResult(row, res) {
     if (text) text.textContent = target > 1 ? `${res.value} / ${target} ${unit}` : res.completed ? 'Done' : 'Not yet';
     const bar = row.querySelector('[data-progress-bar]');
     if (bar) bar.style.width = `${Math.min(100, (res.value / target) * 100)}%`;
+    const list = row.closest('[data-today]');
+    const wasAllDone = allDone(list);
     row.dataset.done = res.completed ? '1' : '0';
     row.dataset.value = String(res.value);
     row.dispatchEvent(new CustomEvent('today:refresh', { bubbles: true }));
@@ -53,7 +56,18 @@ function applyResult(row, res) {
     }
 
     res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '', icon: 'trophy', duration: 6000 }));
+
+    // every habit of today is done: celebrate once
+    if (!wasAllDone && allDone(list) && list?.dataset.todayDate === res.date) {
+        celebrate(row.querySelector('[data-spring-check]'));
+        toast({ title: 'All done for today', body: 'Every habit is checked off. Nice work!', icon: 'trophy', duration: 6000 });
+    }
 }
+
+const allDone = (list) => {
+    const rows = list ? [...list.querySelectorAll('[data-habit-row]')] : [];
+    return rows.length > 0 && rows.every((r) => r.dataset.done === '1');
+};
 
 async function send(row, data) {
     row.setAttribute('aria-busy', 'true');
@@ -130,6 +144,9 @@ export function initTracker() {
         try {
             const res = await post(box.dataset.url, { entry_date: box.dataset.date, mood_level: e.detail.value });
             if (out) out.textContent = `Saved: ${res.label}`;
+            if (!res.has_journal) {
+                toast({ title: `Feeling ${res.label.toLowerCase()} today`, body: 'Want to write a few lines about it?', icon: 'info', duration: 8000, action: { label: 'Write', onClick: () => { location.href = res.journal_url; } } });
+            }
             res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '', icon: 'trophy', duration: 6000 }));
         } catch {
             if (out) out.textContent = 'Could not save, try again.';

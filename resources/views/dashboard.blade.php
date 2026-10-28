@@ -32,6 +32,15 @@
     </div>
     <x-quick-add />
 
+    @if ($missedYesterday)
+        <div data-nudge="missed-{{ $yesterday->toDateString() }}" class="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-mist/60 bg-fog px-4 py-3 text-body-sm">
+            <x-icon name="calendar" class="size-4 flex-none text-ember" />
+            <p class="flex-1 text-graphite">Nothing was checked off on <strong class="text-ink">{{ $yesterday->format('l, j F') }}</strong>. Want to log it?</p>
+            <a href="{{ route('dashboard', ['date' => $yesterday->toDateString()]) }}" class="btn btn-outline btn-sm">Log yesterday</a>
+            <button type="button" class="btn btn-ghost btn-sm" data-nudge-dismiss>Not now</button>
+        </div>
+    @endif
+
     {{-- Stats --}}
     <div class="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <div class="card p-5">
@@ -70,7 +79,7 @@
 
     <div class="grid gap-6 lg:grid-cols-3">
         {{-- Today's habits: filter, and a row limit the user can change --}}
-        <section class="card lg:col-span-2" aria-labelledby="habits-title" data-today>
+        <section class="card lg:col-span-2" aria-labelledby="habits-title" data-today data-today-date="{{ $today->toDateString() }}">
             <div class="card-header">
                 <div>
                     <h2 id="habits-title" class="text-subheading">{{ $isToday ? "Today's habits" : 'Habits' }}</h2>

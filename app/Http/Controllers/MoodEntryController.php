@@ -50,15 +50,22 @@ class MoodEntryController extends Controller
 
         $earned = $achievements->award($user);
 
+        $journalUrl = route('journal.create', ['mood' => $mood->mood_level, 'date' => $date]);
+
         if ($request->expectsJson()) {
             return response()->json([
                 'mood_level' => $mood->mood_level,
                 'label' => config('habitude.moods')[$mood->mood_level],
+                'journal_url' => $journalUrl,
+                'has_journal' => $mood->journalEntry()->exists(),
                 'earned' => $earned->map(fn ($a) => ['name' => $a->name, 'description' => $a->description])->all(),
             ]);
         }
 
-        return redirect()->route('mood.index')->with('success', 'Mood saved.');
+        $redirect = redirect()->route('mood.index')->with('success', 'Mood saved.');
+
+        // Close the loop: offer to write about it, unless a journal already exists for that day
+        return $mood->journalEntry()->exists() ? $redirect : $redirect->with('action_url', $journalUrl)->with('action_label', 'Write about it');
     }
 
     public function destroy(Request $request, MoodEntry $mood)

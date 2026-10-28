@@ -88,9 +88,17 @@ class DashboardController extends Controller
 
         $overall = $streaks->overall($user, $today);
 
+        // Yesterday had nothing checked, although at least one habit already existed: offer to fill it in
+        $yesterday = $today->subDay();
+        $missedYesterday = $date->equalTo($today)
+            && $habits->contains(fn ($h) => $h->created_at->startOfDay() <= $yesterday)
+            && ! $activity->contains('date', $yesterday->toDateString());
+
         return view('dashboard', [
             'greeting' => Greeting::for($user, CarbonImmutable::now($user->profile?->timezone ?? config('app.timezone')), $rows, $overall),
             'activity' => $activity,
+            'missedYesterday' => $missedYesterday,
+            'yesterday' => $yesterday,
             'date' => $date,
             'today' => $today,
             'month' => $month,

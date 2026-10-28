@@ -76,6 +76,16 @@ document.addEventListener('pointerdown', (e) => {
     document.querySelectorAll('details[data-menu][open]').forEach((d) => { if (!d.contains(e.target)) d.removeAttribute('open'); });
 });
 
+// "Not now" on a nudge hides it for the rest of this browser session
+document.querySelectorAll('[data-nudge]').forEach((n) => {
+    const key = 'habitude.' + n.dataset.nudge;
+    try { if (sessionStorage.getItem(key)) n.remove(); } catch { /* storage unavailable */ }
+    n.querySelector('[data-nudge-dismiss]')?.addEventListener('click', () => {
+        try { sessionStorage.setItem(key, '1'); } catch { /* ignore */ }
+        n.remove();
+    });
+});
+
 initBranchedMenus();
 initGlideSelects();
 initSpringChecks();

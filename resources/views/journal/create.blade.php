@@ -7,7 +7,7 @@
         <form action="{{ route('journal.store') }}" method="POST" class="card-body">
             @csrf
             
-            @include('journal._form')
+            @include('journal._form', ['prompt' => $prompt ?? null, 'date' => $date ?? null])
             <div class="mt-8 flex justify-end gap-2">
                 <a href="{{ route('journal.index') }}" class="btn btn-outline">Cancel</a>
                 <button type="submit" class="btn btn-primary"><x-icon name="save" /> Save</button>
