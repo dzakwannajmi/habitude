@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\CarbonImmutable;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -62,5 +63,13 @@ class User extends Authenticatable
     public function achievements(): BelongsToMany
     {
         return $this->belongsToMany(Achievement::class)->withPivot('earned_at');
+    }
+
+    /**
+     * Today's date in the user's own timezone (falls back to the app timezone).
+     */
+    public function today(): CarbonImmutable
+    {
+        return CarbonImmutable::now($this->profile?->timezone ?? config('app.timezone'))->startOfDay();
     }
 }

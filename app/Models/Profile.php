@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['user_id', 'bio', 'avatar', 'timezone', 'daily_goal'])]
+#[Fillable(['user_id', 'bio', 'avatar', 'timezone', 'daily_goal', 'onboarded_at'])]
 class Profile extends Model
 {
     use HasFactory;
+
+    protected function casts(): array
+    {
+        return ['onboarded_at' => 'datetime'];
+    }
 
     public function user(): BelongsTo
     {

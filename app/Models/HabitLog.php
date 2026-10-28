@@ -14,7 +14,7 @@ class HabitLog extends Model
 
     protected function casts(): array
     {
-        return ['logged_date' => 'date'];
+        return ['logged_date' => 'date:Y-m-d'];
     }
 
     public function habit(): BelongsTo

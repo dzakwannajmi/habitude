@@ -15,7 +15,7 @@ class MoodEntry extends Model
 
     protected function casts(): array
     {
-        return ['entry_date' => 'date'];
+        return ['entry_date' => 'date:Y-m-d'];
     }
 
     public function user(): BelongsTo

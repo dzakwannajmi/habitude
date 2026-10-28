@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 #[Fillable(['user_id', 'category_id', 'name', 'description', 'target_count', 'unit', 'is_active'])]
 class Habit extends Model
@@ -42,5 +44,13 @@ class Habit extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    /**
+     * "1 session" / "8 glasses": the unit follows the number.
+     */
+    protected function targetLabel(): Attribute
+    {
+        return Attribute::get(fn () => $this->target_count.' '.($this->target_count === 1 ? Str::singular($this->unit) : $this->unit));
     }
 }

@@ -25,7 +25,7 @@ class HabitFactory extends Factory
             'name' => fake()->words(3, true),
             'description' => fake()->sentence(),
             'target_count' => fake()->numberBetween(1, 8),
-            'unit' => fake()->randomElement(['times', 'glasses', 'pages', 'minutes']),
+            'unit' => fake()->randomElement(config('habitude.units')),
             'is_active' => true,
         ];
     }

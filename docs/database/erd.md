@@ -34,6 +34,7 @@ erDiagram
         string avatar
         string timezone
         int daily_goal
+        timestamp onboarded_at "nullable"
     }
     CATEGORIES {
         bigint id PK
@@ -140,4 +141,7 @@ The `categories` table is populated by a seeder with the eight built-in themes:
 - **Daily mood:** (`mood_entries.user_id`, `mood_entries.entry_date`) is unique, giving one mood per user per day.
 - **Journal ↔ mood link:** `journal_entries.mood_entry_id` is nullable and unique, so a journal entry can exist without a mood check-in, but a mood has at most one journal entry.
 - **Cascade rules:** deleting a user cascades to their profile, habits, logs, reminders, moods, journals, and achievement links. Deleting a category is restricted while habits still use it.
-- **Streaks** are computed from `habit_logs` and are not stored.
+- **Streaks** are computed from `habit_logs` and are not stored. A day counts for a habit when `habit_logs.value >= habits.target_count`; the overall streak counts days with at least one completed habit.
+- **Dates** in `habit_logs`, `mood_entries`, and `journal_entries` are stored as plain `Y-m-d` strings (`date:Y-m-d` cast), so equality queries and unique indexes behave the same on SQLite and MySQL.
+- **Onboarding:** `profiles.onboarded_at` is `NULL` until the user finishes the first-run stepper.
+- **Achievement criteria** are stored as `type:threshold` (for example `streak:7`). Types: `logs`, `streak`, `moods`, `journals`, `habits`.
