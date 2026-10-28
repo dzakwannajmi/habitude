@@ -5,19 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Habit;
 use App\Models\Tag;
-use App\Support\CurrentUser;
+use App\Services\AchievementService;
+use App\Services\StreakService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class HabitController extends Controller
 {
-    public function index()
+    public function index(Request $request, StreakService $streaks)
     {
-        $habits = CurrentUser::get()->habits()
-            ->with(['category', 'tags'])
-            ->latest()
-            ->get();
+        $user = $request->user();
+        $today = $user->today();
 
-        return view('habits.index', compact('habits'));
+        $group = in_array($request->query('group'), ['category', 'status', 'none'], true) ? $request->query('group') : 'category';
+        $view = $request->query('view') === 'grid' ? 'grid' : 'list';
+
+        $habits = $user->habits()->with(['category', 'tags'])->orderBy('name')->get()
+            ->each(fn ($h) => $h->streak = $streaks->habitStreak($h, $today));
+
+        $groups = match ($group) {
+            'category' => $habits->groupBy(fn ($h) => $h->category->name)->sortKeys(),
+            'status' => $habits->groupBy(fn ($h) => $h->is_active ? 'Active' : 'Paused'),
+            default => collect(['All habits' => $habits]),
+        };
+
+        return view('habits.index', compact('groups', 'group', 'view', 'habits'));
     }
 
     public function create()
@@ -25,27 +37,28 @@ class HabitController extends Controller
         return view('habits.create', $this->formData());
     }
 
-    public function store(Request $request)
+    public function store(Request $request, AchievementService $achievements)
     {
         $data = $this->validated($request);
 
-        $habit = CurrentUser::get()->habits()->create($data);
+        $habit = $request->user()->habits()->create($data);
         $habit->tags()->sync($request->input('tags', []));
+        $achievements->award($request->user());
 
-        return redirect()->route('habits.index')
-            ->with('success', 'Habit created.');
+        return redirect()->route('habits.edit', $habit)
+            ->with('success', 'Habit created. You can add reminders below.');
     }
 
-    public function edit(Habit $habit)
+    public function edit(Request $request, Habit $habit)
     {
-        $this->authorizeOwner($habit);
+        $this->authorizeOwner($request, $habit);
 
-        return view('habits.edit', ['habit' => $habit->load('tags')] + $this->formData());
+        return view('habits.edit', ['habit' => $habit->load(['tags', 'reminders'])] + $this->formData());
     }
 
     public function update(Request $request, Habit $habit)
     {
-        $this->authorizeOwner($habit);
+        $this->authorizeOwner($request, $habit);
 
         $habit->update($this->validated($request));
         $habit->tags()->sync($request->input('tags', []));
@@ -54,9 +67,9 @@ class HabitController extends Controller
             ->with('success', 'Habit updated.');
     }
 
-    public function destroy(Habit $habit)
+    public function destroy(Request $request, Habit $habit)
     {
-        $this->authorizeOwner($habit);
+        $this->authorizeOwner($request, $habit);
 
         $habit->delete();
 
@@ -69,12 +82,13 @@ class HabitController extends Controller
         return [
             'categories' => Category::orderBy('name')->get(),
             'tags' => Tag::orderBy('name')->get(),
+            'units' => config('habitude.units'),
         ];
     }
 
-    private function authorizeOwner(Habit $habit): void
+    private function authorizeOwner(Request $request, Habit $habit): void
     {
-        abort_unless($habit->user_id === CurrentUser::get()->id, 404);
+        abort_unless($habit->user_id === $request->user()->id, 404);
     }
 
     private function validated(Request $request): array
@@ -83,8 +97,8 @@ class HabitController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string', 'max:500'],
-            'target_count' => ['required', 'integer', 'min:1', 'max:1000'],
-            'unit' => ['required', 'string', 'max:20'],
+            'target_count' => ['required', 'integer', 'min:1', 'max:100000'],
+            'unit' => ['required', 'string', Rule::in(config('habitude.units'))],
             'tags' => ['array'],
             'tags.*' => ['exists:tags,id'],
         ], [
@@ -92,7 +106,8 @@ class HabitController extends Controller
             'name.required' => 'Habit name is required.',
             'target_count.required' => 'Set a daily target.',
             'target_count.min' => 'The target must be at least 1.',
-            'unit.required' => 'Unit is required, for example glasses or pages.',
+            'unit.required' => 'Choose a unit.',
+            'unit.in' => 'Choose one of the listed units.',
         ]);
 
         // An unchecked switch is not submitted, so read it as a boolean.
