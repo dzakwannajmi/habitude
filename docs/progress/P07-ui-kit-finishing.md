@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Status** | 🚧 In progress (J7 waits for a MySQL run) |
+| **Status** | ✅ Done |
 | **Started** | 2026-10-28 |
-| **Completed** | - |
+| **Completed** | 2026-10-29 |
 | **Branch** | `feature/crud-ui` |
 | **Module** | [Laravel 5: CRUD Periode dengan Template AdminLTE](https://mirzayogy.github.io/blog/2026-10-13-laravel-simtikum-5/) |
 
@@ -21,7 +21,7 @@ Apply the design system and the React Bits micro-interactions across the app, th
 | J4 | Spring check, peek rating, counter | ✅ Done | 2026-10-28 | [`resources/js/ui`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui) |
 | J5 | Stepper (onboarding) and dock (mobile) | ✅ Done | 2026-10-28 | [`stepper.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/stepper.js), [`dock.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/dock.js) |
 | J6 | Tests and browser verification | ✅ Done | 2026-10-28 | [`tests/Feature`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/tests/Feature) |
-| J7 | MySQL run on the lecturer's setup | ⏳ Planned | - | needs a MySQL server (see README) |
+| J7 | MySQL run on the lecturer's setup | ✅ Done | 2026-10-29 | 19 migrations, 20 tables, 12 foreign keys; 126 tests pass on MySQL (see J7) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 
@@ -58,7 +58,10 @@ React Bits is written for React, so each effect is re-implemented in plain JavaS
 - **Bugs found and fixed while verifying:** invalid dates caused a 500; the mobile dock showed on desktop because custom CSS outranked `lg:hidden` (UI CSS now lives in the components layer); the calendar and monthly percentage ignored habits whose history predates their creation date.
 
 ### J7: MySQL
-- Everything was developed on SQLite. The migrations use standard column types, but they have not been run against MySQL yet. Run `php artisan migrate:fresh --seed` on MySQL and check the tables in phpMyAdmin.
+- Ran `php artisan migrate:fresh --seed` on a local MySQL (Homebrew, database `habitude`): all 19 migrations and the seeders succeeded.
+- Checked in MySQL: 20 tables and 12 foreign keys (`CASCADE`, `habits.category_id` `RESTRICT`, `journal_entries.mood_entry_id` `SET NULL`); demo data present (2 users, 13 habits, 1,592 check-ins, 25 mood entries).
+- The full suite (126 tests, 879 assertions) also passes against MySQL, using a separate `habitude_test` database so the demo data is untouched.
+- Browser run on MySQL: every user and admin page returns 200 with no console errors; check-ins, mood and quick add save correctly. Requests answer in 15 to 65 ms locally.
 
 ## Credits
 Interaction designs are ports of [React Bits](https://reactbits.dev) micro-interactions. Check its license terms before publishing the project publicly.

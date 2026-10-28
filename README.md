@@ -155,7 +155,7 @@ The interface is in English by default and fully available in Bahasa Indonesia. 
 ## Tests
 
 ```bash
-php artisan test   # 126 tests, in-memory SQLite
+php artisan test   # 126 tests, in-memory SQLite (also verified on MySQL)
 ```
 
 ## Contributing / Forking
@@ -191,7 +191,7 @@ docs/
 - [x] Reminders and achievements
 - [x] UI kit: branched menu, glide select, swipe row, spring check, peek rating, counter, stepper, dock
 - [x] Admin console and Beta release stage
-- [ ] Run and verify on MySQL
+- [x] Run and verify on MySQL
 
 ## Author
 
