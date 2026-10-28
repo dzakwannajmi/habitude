@@ -47,6 +47,7 @@ A home page where the day is tracked: check-ins, timers, a calendar, and streaks
 
 ### J6: Greeting
 - `App\Support\Greeting` writes a different welcome on every visit, such as "Good evening, Ayu. Ready to hit the gym?". The question comes from the category of a habit that is still open today (gym, read, water, self-care, ...), or from the streak ("Keep your 19-day streak alive?") or progress ("1 of 13 done"). Bedtime habits are only suggested in the evening; when everything is done it celebrates, and with no habits it invites you to add one. The opener follows the user's local time. Past days keep the plain date header.
+- The profile picture (animated waves avatar) sits next to the greeting.
 - **Verified:** 8 tests with a seeded random engine (name, line per category, finished habits not repeated, evening-only, time of day, variety).
 
 ## Next

@@ -113,7 +113,7 @@ class GreetingTest extends TestCase
 
         $greeting = $this->get('/')->assertOk()->viewData('greeting');
         $this->assertStringEndsWith(', Ayu', $greeting['hello']);
-        $this->get('/')->assertSee('Wednesday, 28 October 2026');
+        $this->get('/')->assertSee('Wednesday, 28 October 2026')->assertSee('greet', false)->assertSee('Avatar of Ayu Lestari', false);
 
         $this->get('/?date=2026-10-20')->assertOk()->assertSee('Back to today');
     }

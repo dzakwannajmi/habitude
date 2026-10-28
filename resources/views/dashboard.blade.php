@@ -12,7 +12,7 @@
         @if ($isToday)
             {{-- A different welcome on every visit, built from today's open habits --}}
             <div class="greet flex items-center gap-4">
-                <x-logo :text="false" :large="true" class="text-ember" />
+                <x-avatar :user="auth()->user()" size="size-14 sm:size-16" />
                 <div>
                     <h1 class="text-[28px] font-semibold leading-tight tracking-tight sm:text-[34px]">{{ $greeting['hello'] }}</h1>
                     <p class="text-subheading text-graphite">{{ $greeting['line'] }}</p>
