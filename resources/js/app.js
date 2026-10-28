@@ -1,14 +1,21 @@
+import { initBranchedMenus } from './ui/branched-menu.js';
+import { initCounters, renderCounter } from './ui/counter.js';
+import { initDocks } from './ui/dock.js';
+import { initGlideSelects } from './ui/glide-select.js';
+import { initPeekRatings } from './ui/peek-rating.js';
+import { initSpringChecks } from './ui/spring-check.js';
+import { initSteppers } from './ui/stepper.js';
+import { initSwipeRows } from './ui/swipe-row.js';
+import { toast } from './ui/toast.js';
+import { initTracker } from './ui/tracker.js';
+
+window.Habitude = { toast, counter: renderCounter };
+
 // Sidebar open/close (shadcn sidebar-08 "inset" behaviour), remembered per browser.
 const root = document.documentElement;
 const KEY = 'habitude.sidebar';
-
-const read = () => {
-    try { return localStorage.getItem(KEY); } catch { return null; }
-};
-const write = (value) => {
-    try { localStorage.setItem(KEY, value); } catch { /* storage unavailable */ }
-};
-
+const read = () => { try { return localStorage.getItem(KEY); } catch { return null; } };
+const write = (value) => { try { localStorage.setItem(KEY, value); } catch { /* storage unavailable */ } };
 const desktop = window.matchMedia('(min-width: 1024px)');
 root.dataset.sidebar = desktop.matches && read() !== 'closed' ? 'open' : 'closed';
 
@@ -18,9 +25,7 @@ document.addEventListener('click', (event) => {
         root.dataset.sidebar = next;
         if (desktop.matches) write(next);
     }
-    if (event.target.closest('[data-sidebar-overlay]')) {
-        root.dataset.sidebar = 'closed';
-    }
+    if (event.target.closest('[data-sidebar-overlay]')) root.dataset.sidebar = 'closed';
 
     // Delete confirmation modal (native <dialog>)
     const opener = event.target.closest('[data-modal-open]');
@@ -37,3 +42,23 @@ document.querySelectorAll('[data-color-input]').forEach((input) => {
     input.addEventListener('input', sync);
     sync();
 });
+
+// Submit the surrounding form when an [data-autosubmit] field changes (group-by select)
+document.addEventListener('change', (e) => {
+    const field = e.target.closest('[data-autosubmit]') ?? e.target.closest('[data-glide-select][data-autosubmit]');
+    if (field) field.closest('form')?.requestSubmit();
+});
+
+document.addEventListener('pointerdown', (e) => {
+    document.querySelectorAll('details[data-menu][open]').forEach((d) => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+});
+
+initBranchedMenus();
+initGlideSelects();
+initSpringChecks();
+initPeekRatings();
+initCounters();
+initSteppers();
+initSwipeRows();
+initDocks();
+initTracker();

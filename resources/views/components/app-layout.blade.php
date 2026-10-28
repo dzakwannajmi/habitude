@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title }} · {{ config("app.name") }}</title>
+    <title>{{ $title }} · {{ config('app.name') }}</title>
 
     {{-- Set the sidebar state before first paint to avoid a flash --}}
     <script>
@@ -22,54 +22,47 @@
 </head>
 <body class="min-h-svh antialiased">
     @php
-        $user = \App\Support\CurrentUser::get();
+        $user = auth()->user();
         $initials = collect(explode(' ', $user->name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('');
+
+        $nav = [
+            ['label' => 'Dashboard', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+            ['label' => 'Track', 'children' => [
+                ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
+                ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
+                ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
+                ['label' => 'Achievements', 'icon' => 'trophy', 'url' => route('achievements.index'), 'active' => request()->routeIs('achievements.*')],
+            ]],
+            ['label' => 'Master Data', 'children' => [
+                ['label' => 'Categories', 'icon' => 'folder', 'url' => route('categories.index'), 'active' => request()->routeIs('categories.*')],
+                ['label' => 'Tags', 'icon' => 'tag', 'url' => route('tags.index'), 'active' => request()->routeIs('tags.*')],
+            ]],
+        ];
+
+        $dock = [
+            ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+            ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
+            ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
+            ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
+            ['label' => 'Menu', 'icon' => 'menu', 'toggle' => true],
+        ];
     @endphp
 
     {{-- Mobile overlay --}}
     <div data-sidebar-overlay class="fixed inset-0 z-30 hidden bg-ink/40 in-data-[sidebar=open]:block lg:hidden!"></div>
 
     {{-- Sidebar (shadcn sidebar-08, inset variant) --}}
-    <aside aria-label="Main navigation"
-        class="fixed inset-y-0 left-0 z-40 flex w-(--sidebar-width) -translate-x-full flex-col bg-fog transition-transform duration-200 in-data-[sidebar=open]:translate-x-0 max-lg:bg-paper max-lg:border-r max-lg:border-mist/60">
+    <aside aria-label="Sidebar"
+        class="fixed inset-y-0 left-0 z-40 flex w-(--sidebar-width) -translate-x-full flex-col bg-fog transition-transform duration-200 in-data-[sidebar=open]:translate-x-0 max-lg:border-r max-lg:border-mist/60 max-lg:bg-paper">
         <div class="p-4 pb-2">
-            <a href="{{ route('habits.index') }}" class="flex items-center rounded-xl px-1 py-1" aria-label="Habitude home">
+            <a href="{{ route('dashboard') }}" class="flex items-center rounded-xl px-1 py-1" aria-label="Habitude Admin home">
                 <x-logo />
             </a>
         </div>
 
-        <nav class="flex-1 space-y-6 overflow-y-auto px-3 py-2">
-            <div>
-                <p class="px-2 pb-2 text-caption font-medium text-pewter">Platform</p>
-                <ul class="space-y-1">
-                    @php
-                        $habitsOpen = request()->routeIs('habits.*');
-                        $masterOpen = request()->routeIs('categories.*', 'tags.*');
-                    @endphp
-
-                    <li>
-                        <a href="{{ route('habits.index') }}" class="menu-item" @if ($habitsOpen) aria-current="page" @endif>
-                            <x-icon name="target" />
-                            Habits
-                        </a>
-                    </li>
-
-                    <li>
-                        <details class="group" @if ($masterOpen) open @endif>
-                            <summary class="menu-item cursor-pointer list-none [&::-webkit-details-marker]:hidden" @if ($masterOpen) aria-current="page" @endif>
-                                <x-icon name="folder" />
-                                <span class="flex-1">Master Data</span>
-                                <x-icon name="chevron-right" class="size-4 transition-transform group-open:rotate-90" />
-                            </summary>
-                            <ul class="ml-4 mt-1 space-y-0.5 border-l border-mist/60 pl-3">
-                                <li><a href="{{ route('categories.index') }}" class="menu-sub" @if (request()->routeIs('categories.*')) aria-current="page" @endif>Categories</a></li>
-                                <li><a href="{{ route('tags.index') }}" class="menu-sub" @if (request()->routeIs('tags.*')) aria-current="page" @endif>Tags</a></li>
-                            </ul>
-                        </details>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <div class="flex-1 overflow-y-auto px-4 py-4">
+            <x-nav-tree :items="$nav" />
+        </div>
 
         <div class="px-3 pb-2">
             <a href="https://github.com/dzakwannajmi/PBO2_LARAVEL_5C" target="_blank" rel="noopener" class="menu-item">
@@ -79,15 +72,24 @@
         </div>
 
         {{-- User card (nav-user) --}}
-        <div class="border-t border-mist/60 p-3">
-            <div class="flex items-center gap-2 rounded-xl p-2">
-                <span class="flex size-8 shrink-0 items-center justify-center rounded-md bg-ink text-caption font-semibold text-paper">{{ $initials }}</span>
-                <span class="grid flex-1 text-left leading-tight">
-                    <span class="truncate text-body-sm font-semibold">{{ $user->name }}</span>
-                    <span class="truncate text-caption text-pewter">{{ $user->email }}</span>
-                </span>
-                <x-icon name="chevrons-up-down" class="size-4 text-steel" />
-            </div>
+        <div class="relative border-t border-mist/60 p-3">
+            <details class="group" data-menu>
+                <summary class="flex cursor-pointer list-none items-center gap-2 rounded-xl p-2 hover:bg-paper [&::-webkit-details-marker]:hidden">
+                    <span class="flex size-8 shrink-0 items-center justify-center rounded-md bg-ink text-caption font-semibold text-paper">{{ $initials }}</span>
+                    <span class="grid flex-1 text-left leading-tight">
+                        <span class="truncate text-body-sm font-semibold">{{ $user->name }}</span>
+                        <span class="truncate text-caption text-pewter">{{ $user->email }}</span>
+                    </span>
+                    <x-icon name="chevrons-up-down" class="size-4 text-steel" />
+                </summary>
+                <div class="absolute inset-x-3 bottom-full mb-2 rounded-xl border border-mist/60 bg-paper p-1 shadow-[0_8px_24px_-8px_rgb(0_0_0/0.18)]">
+                    <a href="{{ route('profile.edit') }}" class="menu-item"><x-icon name="user" /> Profile</a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="menu-item"><x-icon name="log-out" /> Log out</button>
+                    </form>
+                </div>
+            </details>
         </div>
     </aside>
 
@@ -118,11 +120,14 @@
                 </nav>
             </header>
 
-            <main class="mx-auto w-full max-w-(--page-max-width) flex-1 p-4 sm:p-6">
+            <main class="mx-auto w-full max-w-(--page-max-width) flex-1 p-4 pb-28 sm:p-6 lg:pb-6">
                 <x-flash />
                 {{ $slot }}
             </main>
         </div>
     </div>
+
+    <x-dock :items="$dock" />
+    <div id="toasts" class="toasts" aria-live="polite"></div>
 </body>
 </html>

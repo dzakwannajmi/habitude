@@ -44,7 +44,7 @@ Apply the module's CRUD pattern (resource controller, validation, success messag
 - **Status:** ✅ Done, 2026-10-28
 - **What:** Index shows category, daily target, tags, and status using eager loading. The form has a category select, tag chips (`belongsToMany` with `sync`), and an active switch (read with `boolean()`, like the module's status checkbox). Habits are scoped to the current user.
 - **Proof:** [`HabitController`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Controllers/HabitController.php), [`resources/views/habits`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/habits)
-- **Not done:** the current user is the first seeded user (`App\Support\CurrentUser`) until authentication exists.
+- **Update:** the temporary `CurrentUser` stand-in was replaced by real authentication in [P03](P03-authentication-onboarding.md).
 
 ### J5: Feature tests
 - **Status:** ✅ Done, 2026-10-28

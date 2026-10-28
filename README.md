@@ -4,15 +4,19 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 
 ## Features
 
+- Sign up, log in, and a first-run **stepper** that sets your timezone and picks starter habits
 - Track daily habits grouped into eight life categories:
   Health & Fitness, Mindfulness, Productivity, Better Sleep, Stay Hydrated, Read More, Social Connections, and Self Care
-- Daily progress logging with a numeric value and optional note
-- **Mood check-in** for each day (1–5 scale)
+- Daily check-ins with a spring checkbox, +1 progress, and a **timer** for habits measured in minutes
+- **Calendar** on the home page that shades each day by completion, plus current and best **streaks**
+- **Mood check-in** for each day (1–5 hearts)
 - **Daily journal** that can be linked to the day's mood
-- Habit reminders with custom time and weekdays
+- Habit reminders with custom time and weekdays, listed on the dashboard
 - Tags for flexible habit organization
 - Achievements and badges (for example, a 7-day streak)
-- Dashboard with today's habits, streaks, and per-category progress
+- Dashboard with today's habits, streaks, and per-category progress (a Has-Many-Through query)
+- Habits as a grouped **list or grid** (Finder style) with swipe-to-edit rows
+- Mobile **dock** navigation
 
 ## Database Design
 
@@ -47,7 +51,7 @@ erDiagram
 
 - PHP 8.3+ and Laravel
 - Blade templates
-- Tailwind CSS v4 (via Vite) with the Brex-style design tokens, Inter font, and a shadcn sidebar-08 style layout
+- Tailwind CSS v4 (via Vite) with the Brex-style design tokens, Inter font, a shadcn sidebar-08 style layout, and plain JavaScript ports of React Bits micro-interactions (no frontend framework)
 - MySQL (SQLite is used for automated tests)
 - Laravel MCP for AI-assisted development
 
@@ -97,13 +101,20 @@ The app uses **MySQL**, as in the course module.
    ```bash
    php artisan migrate:fresh --seed
    ```
-4. Inspect the tables and foreign keys in phpMyAdmin or HeidiSQL. The sample login user is `test@example.com`.
+4. Inspect the tables and foreign keys in phpMyAdmin or HeidiSQL.
+5. Log in with the demo account **`test@example.com` / `password`** (it already finished onboarding), or register a new one to see the stepper.
 
 Automated tests (`php artisan test`) use an in-memory SQLite database, so they never touch your MySQL data.
 
 ## Progress
 
 Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status, and completion dates: [`docs/progress`](docs/progress/P01-database-design.md).
+
+## Tests
+
+```bash
+php artisan test   # 47 tests, in-memory SQLite
+```
 
 ## Contributing / Forking
 
@@ -113,12 +124,14 @@ New to forking the course repository? See the step-by-step guide for Windows and
 
 ```
 app/Models/        Eloquent models and relationships
-app/Http/Controllers/  Resource controllers (habits, categories, tags)
+app/Http/Controllers/  Controllers (dashboard, habits, mood, journal, achievements, auth, ...)
+app/Services/      Streaks, calendar, and achievement rules
 database/
   migrations/      Table definitions
   factories/       Fake data generators
   seeders/         Categories and sample data
 resources/views/   Blade templates (components/app-layout is the sidebar layout)
+resources/js/ui/   Vanilla ports of the React Bits interactions
 docs/
   database/        ERD and relationship documentation
   guides/          Fork and Git workflow guide
@@ -130,10 +143,12 @@ docs/
 - [x] Database design and documentation
 - [x] Migrations, models, factories, and seeders
 - [x] CRUD pages for categories, tags, and habits (Blade + Tailwind, sidebar layout)
-- [ ] Authentication
-- [ ] Mood and journal CRUD
-- [ ] Dashboard with streaks and category progress
-- [ ] Reminders and achievements
+- [x] Authentication and onboarding stepper
+- [x] Dashboard with calendar, streaks, and category progress
+- [x] Mood and journal
+- [x] Reminders and achievements
+- [x] UI kit: branched menu, glide select, swipe row, spring check, peek rating, counter, stepper, dock
+- [ ] Run and verify on MySQL
 
 ## Author
 
@@ -142,3 +157,5 @@ Muhammad Dzakwan Najmi — NPM 2410010454 — TI 5C REG BJB
 ## License
 
 Released under the [MIT License](https://opensource.org/licenses/MIT).
+
+Interaction designs are ports of [React Bits](https://reactbits.dev) micro-interactions; check its license terms before publishing the project publicly.

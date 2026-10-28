@@ -21,17 +21,12 @@ class CrudTest extends TestCase
 
         $this->withoutVite();
 
-        $this->user = User::factory()->create();
-    }
-
-    public function test_root_redirects_to_habits(): void
-    {
-        $this->get('/')->assertRedirect('/habits');
+        $this->user = $this->signIn();
     }
 
     public function test_all_index_pages_render(): void
     {
-        foreach (['/habits', '/categories', '/tags', '/habits/create', '/categories/create', '/tags/create'] as $url) {
+        foreach (['/', '/habits', '/categories', '/tags', '/habits/create', '/categories/create', '/tags/create', '/mood', '/journal', '/journal/create', '/achievements', '/achievements/create', '/profile'] as $url) {
             $this->get($url)->assertOk()->assertSee('Habitude');
         }
     }
@@ -126,7 +121,7 @@ class CrudTest extends TestCase
             'unit' => 'glasses',
             'is_active' => '1',
             'tags' => $tags->pluck('id')->all(),
-        ])->assertRedirect('/habits')->assertSessionHas('success');
+        ])->assertSessionHas('success');
 
         $habit = Habit::firstWhere('name', 'Drink water');
         $this->assertSame($this->user->id, $habit->user_id);
@@ -139,6 +134,8 @@ class CrudTest extends TestCase
         $this->post('/habits', [])->assertSessionHasErrors(['name', 'category_id', 'target_count', 'unit']);
         $this->post('/habits', ['name' => 'x', 'category_id' => 999, 'target_count' => 0, 'unit' => 'times'])
             ->assertSessionHasErrors(['category_id', 'target_count']);
+        $this->post('/habits', ['name' => 'x', 'category_id' => Category::factory()->create()->id, 'target_count' => 1, 'unit' => 'bananas'])
+            ->assertSessionHasErrors('unit');
     }
 
     public function test_habit_update_syncs_tags_and_unchecked_switch_pauses_it(): void
