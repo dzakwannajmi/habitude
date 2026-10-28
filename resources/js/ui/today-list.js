@@ -1,5 +1,7 @@
 // "Today's habits": filter (All / To do / Done) through the rubber segment and
 // show only a few rows, with a per-person row limit remembered in the browser.
+import { t } from './i18n.js';
+
 const KEY = 'habitude.todayRows';
 const DEFAULT = '5';
 
@@ -36,10 +38,10 @@ function build(box) {
         if (more) {
             const rest = visible.length - shown;
             more.hidden = rest <= 0 && !expanded;
-            more.textContent = expanded ? 'Show fewer' : `Show ${rest} more`;
+            more.textContent = expanded ? t('Show fewer') : t('Show :n more', { n: rest });
             more.setAttribute('aria-expanded', String(expanded));
         }
-        if (summary) summary.textContent = visible.length ? `Showing ${shown} of ${visible.length}` : '';
+        if (summary) summary.textContent = visible.length ? t('Showing :shown of :total', { shown, total: visible.length }) : '';
 
         const counts = { all: all.length, todo: all.filter((r) => r.dataset.done !== '1').length, done: all.filter((r) => r.dataset.done === '1').length };
         Object.entries(counts).forEach(([k, n]) => box.querySelectorAll(`[data-count="${k}"]`).forEach((c) => (c.textContent = n)));

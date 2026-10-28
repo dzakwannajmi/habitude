@@ -64,7 +64,7 @@ export function initPalette() {
             li.setAttribute('aria-selected', String(i === active));
             li.innerHTML = '<span class="pal-label"></span><span class="pal-hint"></span>';
             li.querySelector('.pal-label').textContent = it.label;
-            li.querySelector('.pal-hint').textContent = it.hint ?? it.group;
+            li.querySelector('.pal-hint').textContent = it.hint ?? (q ? it.group : '');
             list.append(li);
         });
         empty.hidden = shown.length > 0;

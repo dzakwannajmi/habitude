@@ -32,7 +32,7 @@ class AchievementController extends Controller
         Achievement::create($this->validated($request));
         $service->award($request->user());
 
-        return redirect()->route('admin.achievements.index')->with('success', 'Achievement created.');
+        return redirect()->route('admin.achievements.index')->with('success', __('Achievement created.'));
     }
 
     public function edit(Achievement $achievement)
@@ -46,14 +46,14 @@ class AchievementController extends Controller
     {
         $achievement->update($this->validated($request, $achievement));
 
-        return redirect()->route('admin.achievements.index')->with('success', 'Achievement updated.');
+        return redirect()->route('admin.achievements.index')->with('success', __('Achievement updated.'));
     }
 
     public function destroy(Achievement $achievement)
     {
         $achievement->delete(); // achievement_user rows go with it (cascade)
 
-        return redirect()->route('admin.achievements.index')->with('success', 'Achievement deleted.');
+        return redirect()->route('admin.achievements.index')->with('success', __('Achievement deleted.'));
     }
 
     private function validated(Request $request, ?Achievement $achievement = null): array
@@ -64,9 +64,9 @@ class AchievementController extends Controller
             'criteria_type' => ['required', Rule::in(array_keys(config('habitude.criteria')))],
             'criteria_threshold' => ['required', 'integer', 'min:1', 'max:100000'],
         ], [
-            'name.unique' => 'This achievement name is already used.',
-            'criteria_type.required' => 'Choose what unlocks it.',
-            'criteria_threshold.required' => 'Set how many are needed.',
+            'name.unique' => __('This achievement name is already used.'),
+            'criteria_type.required' => __('Choose what unlocks it.'),
+            'criteria_threshold.required' => __('Set how many are needed.'),
         ]);
 
         return [

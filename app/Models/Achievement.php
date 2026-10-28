@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,6 +12,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Achievement extends Model
 {
     use HasFactory;
+
+    public function displayName(): Attribute
+    {
+        return Attribute::get(fn () => __($this->name));
+    }
+
+    public function displayDescription(): Attribute
+    {
+        return Attribute::get(fn () => $this->description ? __($this->description) : null);
+    }
 
     public function users(): BelongsToMany
     {

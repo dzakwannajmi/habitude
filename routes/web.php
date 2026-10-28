@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\HabitLogController;
 use App\Http\Controllers\JournalEntryController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MoodEntryController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PasswordResetController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/locale/{locale}', [LocaleController::class, 'update'])->name('locale.switch');
 Route::view('/terms', 'legal.terms')->name('terms');
 Route::view('/privacy', 'legal.privacy')->name('privacy');
 

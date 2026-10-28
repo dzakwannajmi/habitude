@@ -3,18 +3,18 @@
     $count = $entries->flatten(1)->count();
 @endphp
 
-<x-app-layout title="Journal" :crumbs="[['Track'], ['Journal']]">
+<x-app-layout title="{{ __('Journal') }}" :crumbs="[[__('Track')], [__('Journal')]]">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-            <h1 class="text-heading-sm">Journal <span class="font-normal text-pewter">({{ $count }})</span></h1>
-            <p class="text-body-sm text-pewter">Entries written on a day you rated your mood are linked to it.</p>
+            <h1 class="text-heading-sm">{{ __('Journal') }} <span class="font-normal text-pewter">({{ $count }})</span></h1>
+            <p class="text-body-sm text-pewter">{{ __('Entries written on a day you rated your mood are linked to it.') }}</p>
         </div>
         <div class="flex items-center gap-2">
-            <x-rubber-segment :value="$view" label="View" :items="[
-                ['value' => 'list', 'label' => 'List', 'icon' => 'list', 'href' => route('journal.index', ['view' => 'list'])],
-                ['value' => 'grid', 'label' => 'Grid', 'icon' => 'layout-grid', 'href' => route('journal.index', ['view' => 'grid'])],
+            <x-rubber-segment :value="$view" label="{{ __('View') }}" :items="[
+                ['value' => 'list', 'label' => __('List'), 'icon' => 'list', 'href' => route('journal.index', ['view' => 'list'])],
+                ['value' => 'grid', 'label' => __('Grid'), 'icon' => 'layout-grid', 'href' => route('journal.index', ['view' => 'grid'])],
             ]" />
-            <a href="{{ route('journal.create') }}" class="btn btn-primary"><x-icon name="plus" /> New entry</a>
+            <a href="{{ route('journal.create') }}" class="btn btn-primary"><x-icon name="plus" /> {{ __('New entry') }}</a>
         </div>
     </div>
 
@@ -31,7 +31,7 @@
                         <x-swipe-row :edit-url="route('journal.edit', $entry)" :delete-id="'delete-journal-'.$entry->id">
                             <a href="{{ route('journal.edit', $entry) }}" class="flex min-w-0 flex-1 items-center gap-3 px-6 py-3">
                                 <span class="flex size-10 flex-none flex-col items-center justify-center rounded-xl bg-fog leading-none">
-                                    <span class="text-caption text-pewter">{{ $entry->entry_date->format('M') }}</span>
+                                    <span class="text-caption text-pewter">{{ $entry->entry_date->translatedFormat('M') }}</span>
                                     <span class="text-body-sm font-semibold">{{ $entry->entry_date->format('j') }}</span>
                                 </span>
                                 <span class="min-w-0 flex-1">
@@ -39,7 +39,7 @@
                                     <span class="block truncate text-caption text-pewter">{{ \Illuminate\Support\Str::limit($entry->content, 90) }}</span>
                                 </span>
                                 @if ($entry->moodEntry)
-                                    <span class="badge flex-none"><x-icon name="smile" class="size-3" />{{ config('habitude.moods')[$entry->moodEntry->mood_level] }}</span>
+                                    <span class="badge flex-none"><x-icon name="smile" class="size-3" />{{ __(config('habitude.moods')[$entry->moodEntry->mood_level]) }}</span>
                                 @endif
                             </a>
                         </x-swipe-row>
@@ -50,8 +50,8 @@
                     @foreach ($items as $entry)
                         <a href="{{ route('journal.edit', $entry) }}" class="card tile block p-5 hover:bg-fog">
                             <span class="flex items-center justify-between text-caption text-pewter">
-                                {{ $entry->entry_date->format('D, j M') }}
-                                @if ($entry->moodEntry) <span class="badge">{{ config('habitude.moods')[$entry->moodEntry->mood_level] }}</span> @endif
+                                {{ $entry->entry_date->translatedFormat('D, j M') }}
+                                @if ($entry->moodEntry) <span class="badge">{{ __(config('habitude.moods')[$entry->moodEntry->mood_level]) }}</span> @endif
                             </span>
                             <span class="mt-2 block truncate text-body font-semibold">{{ $entry->title }}</span>
                             <span class="mt-1 line-clamp-3 text-body-sm text-graphite">{{ $entry->content }}</span>
@@ -61,13 +61,13 @@
             @endif
 
             @foreach ($items as $entry)
-                <x-delete-modal id="delete-journal-{{ $entry->id }}" :action="route('journal.destroy', $entry)" title="Delete journal entry"
-                    :message="'Delete &quot;'.$entry->title.'&quot;?'" />
+                <x-delete-modal id="delete-journal-{{ $entry->id }}" :action="route('journal.destroy', $entry)" title="{{ __('Delete journal entry') }}"
+                    :message="__('Delete “:name”?', ['name' => $entry->title])" />
             @endforeach
         </details>
     @empty
         <div class="card px-6 py-16 text-center text-pewter">
-            Nothing written yet. <a href="{{ route('journal.create') }}" class="font-semibold text-ink underline">Start your first entry</a>.
+            {{ __('Nothing written yet.') }} <a href="{{ route('journal.create') }}" class="font-semibold text-ink underline">{{ __('Start your first entry') }}</a>.
         </div>
     @endforelse
 </x-app-layout>

@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }} · {{ config('app.name') }}</title>
+    @if (app()->getLocale() !== 'en')
+        <script>window.I18N = {!! json_encode(app('translator')->getLoader()->load(app()->getLocale(), '*', '*'), JSON_HEX_TAG | JSON_UNESCAPED_UNICODE) !!};</script>
+    @endif
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#ff5900">
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
@@ -15,7 +18,7 @@
 </head>
 <body class="min-h-svh antialiased">
     <main class="mx-auto flex min-h-svh w-full flex-col items-center justify-center px-4 py-10 {{ $wide ? 'max-w-3xl' : 'max-w-md' }}">
-        <a href="{{ url('/') }}" class="mb-8" aria-label="Habitude Admin"><x-logo /></a>
+        <a href="{{ url('/') }}" class="mb-8" aria-label="{{ __('Habitude Admin') }}"><x-logo /></a>
         <div class="card w-full">
             <div class="card-body sm:p-8">
                 {{ $slot }}

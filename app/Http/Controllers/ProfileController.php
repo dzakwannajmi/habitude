@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -23,10 +24,11 @@ class ProfileController extends Controller
             'bio' => ['nullable', 'string', 'max:500'],
             'timezone' => ['required', Rule::in(array_keys(config('habitude.timezones')))],
             'daily_goal' => ['required', 'integer', 'min:1', 'max:20'],
+            'locale' => ['nullable', Rule::in(array_keys(config('habitude.locales')))],
             'password' => ['nullable', 'confirmed', Password::min(8)],
         ], [
-            'email.unique' => 'This email is already registered.',
-            'password.confirmed' => 'The password confirmation does not match.',
+            'email.unique' => __('This email is already registered.'),
+            'password.confirmed' => __('The password confirmation does not match.'),
         ]);
 
         $user->fill(collect($data)->only(['name', 'email'])->all());
@@ -35,8 +37,13 @@ class ProfileController extends Controller
         }
         $user->save();
 
-        $user->profile()->updateOrCreate([], collect($data)->only(['bio', 'timezone', 'daily_goal'])->all() + ['email_reminders' => $request->boolean('email_reminders')]);
+        $user->profile()->updateOrCreate([], collect($data)->only(['bio', 'timezone', 'daily_goal', 'locale'])->filter()->all() + ['email_reminders' => $request->boolean('email_reminders')]);
 
-        return redirect()->route('profile.edit')->with('success', 'Profile updated.');
+        if (! empty($data['locale'])) {
+            $request->session()->put('locale', $data['locale']);
+            App::setLocale($data['locale']);
+        }
+
+        return redirect()->route('profile.edit')->with('success', __('Profile updated.'));
     }
 }

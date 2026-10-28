@@ -1,4 +1,5 @@
 import { initBellToggles } from './ui/bell-toggle.js';
+import { t } from './ui/i18n.js';
 import { initNotifier, initNotifySetting } from './ui/notifier.js';
 import { initPalette } from './ui/palette.js';
 import { initPwa } from './ui/pwa.js';
@@ -38,7 +39,7 @@ document.addEventListener('click', (event) => {
     const soon = event.target.closest('[data-soon]');
     if (soon) {
         event.preventDefault();
-        toast({ title: soon.dataset.soon || 'Coming soon', body: 'This is not available in the beta yet.', icon: 'info' });
+        toast({ title: soon.dataset.soon || t('Coming soon'), body: t('Not available in the beta yet.'), icon: 'info' });
     }
 
     // Delete confirmation modal (native <dialog>)
@@ -64,9 +65,9 @@ document.addEventListener('change', (e) => {
     const id = e.target.value;
     const example = JSON.parse(form.dataset.examples)[id];
     const summary = JSON.parse(form.dataset.summary)[id];
-    if (example) form.querySelector('[name=name]').placeholder = 'e.g. ' + example;
+    if (example) form.querySelector('[name=name]').placeholder = example;
     const hint = form.querySelector('[data-quick-summary]');
-    if (hint && summary) hint.textContent = `Starts at ${summary}. You can change it later.`;
+    if (hint && summary) hint.textContent = t('Starts at :summary. You can change it later.', { summary });
 });
 
 // Submit the surrounding form when an [data-autosubmit] field changes (group-by select)

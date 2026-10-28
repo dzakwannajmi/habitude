@@ -1,4 +1,4 @@
-@props(['name' => null, 'value' => 0, 'count' => 5, 'labels' => [], 'shape' => 'star', 'clear' => false, 'label' => 'Rating'])
+@props(['name' => null, 'value' => 0, 'count' => 5, 'labels' => [], 'shape' => 'star', 'clear' => false, 'label' => __('Rating')])
 
 <div data-peek-rating data-count="{{ $count }}" data-value="{{ $value }}" data-shape="{{ $shape }}"
     data-clear="{{ $clear ? 'true' : 'false' }}" data-label="{{ $label }}"

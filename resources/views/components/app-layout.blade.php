@@ -17,6 +17,9 @@
         } catch (e) {}
     </script>
 
+    @if (app()->getLocale() !== 'en')
+        <script>window.I18N = {!! json_encode(app('translator')->getLoader()->load(app()->getLocale(), '*', '*'), JSON_HEX_TAG | JSON_UNESCAPED_UNICODE) !!};</script>
+    @endif
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#ff5900">
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
@@ -34,67 +37,67 @@
 
         if ($admin) {
             $nav = [
-                ['label' => 'Overview', 'url' => route('admin.overview'), 'active' => request()->routeIs('admin.overview')],
-                ['label' => 'Users', 'url' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
-                ['label' => 'Master Data', 'open' => true, 'children' => [
-                    ['label' => 'Categories', 'icon' => 'folder', 'url' => route('admin.categories.index'), 'active' => request()->routeIs('admin.categories.*')],
-                    ['label' => 'Tags', 'icon' => 'tag', 'url' => route('admin.tags.index'), 'active' => request()->routeIs('admin.tags.*')],
-                    ['label' => 'Achievements', 'icon' => 'trophy', 'url' => route('admin.achievements.index'), 'active' => request()->routeIs('admin.achievements.*')],
+                ['label' => __('Overview'), 'url' => route('admin.overview'), 'active' => request()->routeIs('admin.overview')],
+                ['label' => __('Users'), 'url' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
+                ['label' => __('Master Data'), 'open' => true, 'children' => [
+                    ['label' => __('Categories'), 'icon' => 'folder', 'url' => route('admin.categories.index'), 'active' => request()->routeIs('admin.categories.*')],
+                    ['label' => __('Tags'), 'icon' => 'tag', 'url' => route('admin.tags.index'), 'active' => request()->routeIs('admin.tags.*')],
+                    ['label' => __('Achievements'), 'icon' => 'trophy', 'url' => route('admin.achievements.index'), 'active' => request()->routeIs('admin.achievements.*')],
                 ]],
-                ['label' => 'Back to app', 'url' => route('dashboard'), 'active' => false],
+                ['label' => __('Back to app'), 'url' => route('dashboard'), 'active' => false],
             ];
             $dock = [
-                ['label' => 'Overview', 'icon' => 'layout-grid', 'url' => route('admin.overview'), 'active' => request()->routeIs('admin.overview')],
-                ['label' => 'Users', 'icon' => 'users', 'url' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
-                ['label' => 'Categories', 'icon' => 'folder', 'url' => route('admin.categories.index'), 'active' => request()->routeIs('admin.categories.*', 'admin.tags.*', 'admin.achievements.*')],
-                ['label' => 'Back to app', 'icon' => 'arrow-left', 'url' => route('dashboard'), 'active' => false],
-                ['label' => 'Menu', 'icon' => 'menu', 'toggle' => true],
+                ['label' => __('Overview'), 'icon' => 'layout-grid', 'url' => route('admin.overview'), 'active' => request()->routeIs('admin.overview')],
+                ['label' => __('Users'), 'icon' => 'users', 'url' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*')],
+                ['label' => __('Categories'), 'icon' => 'folder', 'url' => route('admin.categories.index'), 'active' => request()->routeIs('admin.categories.*', 'admin.tags.*', 'admin.achievements.*')],
+                ['label' => __('Back to app'), 'icon' => 'arrow-left', 'url' => route('dashboard'), 'active' => false],
+                ['label' => __('Menu'), 'icon' => 'menu', 'toggle' => true],
             ];
         } else {
             $nav = [
-                ['label' => 'Dashboard', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-                ['label' => 'Track', 'open' => true, 'children' => [
-                    ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
-                    ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
-                    ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
-                    ['label' => 'Achievements', 'icon' => 'trophy', 'url' => route('achievements.index'), 'active' => request()->routeIs('achievements.*')],
+                ['label' => __('Dashboard'), 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+                ['label' => __('Track'), 'open' => true, 'children' => [
+                    ['label' => __('Habits'), 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
+                    ['label' => __('Mood'), 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
+                    ['label' => __('Journal'), 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
+                    ['label' => __('Achievements'), 'icon' => 'trophy', 'url' => route('achievements.index'), 'active' => request()->routeIs('achievements.*')],
                 ]],
             ];
             $dock = [
-                ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-                ['label' => 'Habits', 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
-                ['label' => 'Mood', 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
-                ['label' => 'Journal', 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
-                ['label' => 'Menu', 'icon' => 'menu', 'toggle' => true],
+                ['label' => __('Dashboard'), 'icon' => 'home', 'url' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+                ['label' => __('Habits'), 'icon' => 'target', 'url' => route('habits.index'), 'active' => request()->routeIs('habits.*')],
+                ['label' => __('Mood'), 'icon' => 'smile', 'url' => route('mood.index'), 'active' => request()->routeIs('mood.*')],
+                ['label' => __('Journal'), 'icon' => 'book-open', 'url' => route('journal.index'), 'active' => request()->routeIs('journal.*')],
+                ['label' => __('Menu'), 'icon' => 'menu', 'toggle' => true],
             ];
         }
 
         // Everything the command palette can do or open
         $palette = [
-            ['group' => 'Go to', 'label' => 'Dashboard', 'url' => route('dashboard'), 'keywords' => 'home today'],
-            ['group' => 'Go to', 'label' => 'Habits', 'url' => route('habits.index'), 'keywords' => 'list manage'],
-            ['group' => 'Go to', 'label' => 'Mood', 'url' => route('mood.index'), 'keywords' => 'feelings history'],
-            ['group' => 'Go to', 'label' => 'Journal', 'url' => route('journal.index'), 'keywords' => 'diary entries'],
-            ['group' => 'Go to', 'label' => 'Achievements', 'url' => route('achievements.index'), 'keywords' => 'badges trophies'],
-            ['group' => 'Go to', 'label' => 'Profile', 'url' => route('profile.edit'), 'keywords' => 'account settings password reminders notifications'],
-            ['group' => 'Actions', 'label' => 'Add a habit', 'action' => 'quick-add', 'fallback' => route('habits.index', ['add' => 1]), 'keywords' => 'new create'],
-            ['group' => 'Actions', 'label' => 'Log my mood', 'url' => route('mood.index'), 'keywords' => 'feel rate'],
-            ['group' => 'Actions', 'label' => 'Write in my journal', 'url' => route('journal.create'), 'keywords' => 'diary new entry'],
-            ['group' => 'Actions', 'label' => 'Toggle the sidebar', 'action' => 'sidebar', 'keywords' => 'menu navigation'],
-            ['group' => 'Actions', 'label' => 'Install Habitude as an app', 'action' => 'install', 'keywords' => 'pwa phone home screen'],
-            ['group' => 'Actions', 'label' => 'Log out', 'action' => 'logout', 'keywords' => 'sign out'],
+            ['group' => __('Go to'), 'label' => __('Dashboard'), 'url' => route('dashboard'), 'keywords' => 'home today'],
+            ['group' => __('Go to'), 'label' => __('Habits'), 'url' => route('habits.index'), 'keywords' => 'list manage'],
+            ['group' => __('Go to'), 'label' => __('Mood'), 'url' => route('mood.index'), 'keywords' => 'feelings history'],
+            ['group' => __('Go to'), 'label' => __('Journal'), 'url' => route('journal.index'), 'keywords' => 'diary entries'],
+            ['group' => __('Go to'), 'label' => __('Achievements'), 'url' => route('achievements.index'), 'keywords' => 'badges trophies'],
+            ['group' => __('Go to'), 'label' => __('Profile'), 'url' => route('profile.edit'), 'keywords' => 'account settings password reminders notifications'],
+            ['group' => __('Actions'), 'label' => __('Add a habit'), 'action' => 'quick-add', 'fallback' => route('habits.index', ['add' => 1]), 'keywords' => 'new create'],
+            ['group' => __('Actions'), 'label' => __('Log my mood'), 'url' => route('mood.index'), 'keywords' => 'feel rate'],
+            ['group' => __('Actions'), 'label' => __('Write in my journal'), 'url' => route('journal.create'), 'keywords' => 'diary new entry'],
+            ['group' => __('Actions'), 'label' => __('Toggle the sidebar'), 'action' => 'sidebar', 'keywords' => 'menu navigation'],
+            ['group' => __('Actions'), 'label' => __('Install Habitude as an app'), 'action' => 'install', 'keywords' => 'pwa phone home screen'],
+            ['group' => __('Actions'), 'label' => __('Log out'), 'action' => 'logout', 'keywords' => 'sign out'],
         ];
         if ($user->isAdmin()) {
             array_push($palette,
-                ['group' => 'Admin', 'label' => 'Admin overview', 'url' => route('admin.overview')],
-                ['group' => 'Admin', 'label' => 'Manage users', 'url' => route('admin.users.index')],
-                ['group' => 'Admin', 'label' => 'Categories', 'url' => route('admin.categories.index'), 'hint' => 'Master data'],
-                ['group' => 'Admin', 'label' => 'Tags', 'url' => route('admin.tags.index'), 'hint' => 'Master data'],
-                ['group' => 'Admin', 'label' => 'Manage achievements', 'url' => route('admin.achievements.index'), 'hint' => 'Master data'],
+                ['group' => __('Admin'), 'label' => __('Admin overview'), 'url' => route('admin.overview')],
+                ['group' => __('Admin'), 'label' => __('Manage users'), 'url' => route('admin.users.index')],
+                ['group' => __('Admin'), 'label' => __('Categories'), 'url' => route('admin.categories.index'), 'hint' => __('Master data')],
+                ['group' => __('Admin'), 'label' => __('Tags'), 'url' => route('admin.tags.index'), 'hint' => __('Master data')],
+                ['group' => __('Admin'), 'label' => __('Manage achievements'), 'url' => route('admin.achievements.index'), 'hint' => __('Master data')],
             );
         }
         foreach ($user->habits()->orderBy('name')->get(['id', 'name']) as $habit) {
-            $palette[] = ['group' => 'Your habits', 'label' => $habit->name, 'hint' => 'Edit habit', 'url' => route('habits.edit', $habit)];
+            $palette[] = ['group' => __('Your habits'), 'label' => $habit->name, 'hint' => __('Edit habit'), 'url' => route('habits.edit', $habit)];
         }
     @endphp
 
@@ -103,12 +106,12 @@
         <div class="fixed inset-x-0 top-0 z-50 flex h-7 items-center justify-center gap-2 bg-carbon px-3 text-caption font-medium text-paper" role="note">
             @if ($admin)
                 <x-icon name="shield" class="size-3.5" />
-                <span>Admin console. Changes here affect every user.</span>
-                <a href="{{ route('dashboard') }}" class="font-semibold text-ember underline-offset-2 hover:underline">Back to app</a>
+                <span>{{ __('Admin console. Changes here affect every user.') }}</span>
+                <a href="{{ route('dashboard') }}" class="font-semibold text-ember underline-offset-2 hover:underline">{{ __('Back to app') }}</a>
             @else
-                <span class="max-sm:hidden">Beta preview, not production. Data may be reset.</span>
-                <span class="sm:hidden">Beta preview, not production.</span>
-                <a href="{{ config('habitude.feedback_url') }}" target="_blank" rel="noopener" class="font-semibold text-ember underline-offset-2 hover:underline">Send feedback</a>
+                <span class="max-sm:hidden">{{ __('Beta preview, not production. Data may be reset.') }}</span>
+                <span class="sm:hidden">{{ __('Beta preview, not production.') }}</span>
+                <a href="{{ config('habitude.feedback_url') }}" target="_blank" rel="noopener" class="font-semibold text-ember underline-offset-2 hover:underline">{{ __('Send feedback') }}</a>
             @endif
         </div>
     @endif
@@ -117,10 +120,10 @@
     <div data-sidebar-overlay class="fixed inset-0 z-30 hidden bg-ink/40 in-data-[sidebar=open]:block lg:hidden!"></div>
 
     {{-- Sidebar (shadcn sidebar-08, inset variant) --}}
-    <aside aria-label="Sidebar"
+    <aside aria-label="{{ __('Sidebar') }}"
         class="fixed bottom-0 left-0 top-(--bar-h) z-40 flex w-(--sidebar-width) -translate-x-full flex-col bg-fog transition-transform duration-200 in-data-[sidebar=open]:translate-x-0 max-lg:border-r max-lg:border-mist/60 max-lg:bg-paper">
         <div class="p-4 pb-2">
-            <a href="{{ $admin ? route('admin.overview') : route('dashboard') }}" class="flex items-center rounded-xl px-1 py-1" aria-label="Habitude home">
+            <a href="{{ $admin ? route('admin.overview') : route('dashboard') }}" class="flex items-center rounded-xl px-1 py-1" aria-label="{{ __('Habitude home') }}">
                 <x-logo :badge="$admin ? 'Admin' : null" />
             </a>
         </div>
@@ -132,7 +135,7 @@
         <div class="px-3 pb-2">
             <a href="https://github.com/dzakwannajmi/PBO2_LARAVEL_5C" target="_blank" rel="noopener" class="menu-item">
                 <x-icon name="external-link" />
-                Repository
+                {{ __('Repository') }}
             </a>
         </div>
 
@@ -148,15 +151,15 @@
                     <x-icon name="chevrons-up-down" class="size-4 text-steel" />
                 </summary>
                 <div class="absolute inset-x-3 bottom-full mb-2 rounded-xl border border-mist/60 bg-paper p-1 shadow-[0_8px_24px_-8px_rgb(0_0_0/0.18)]">
-                    <a href="{{ route('profile.edit') }}" class="menu-item"><x-icon name="user" /> Profile</a>
+                    <a href="{{ route('profile.edit') }}" class="menu-item"><x-icon name="user" /> {{ __('Profile') }}</a>
                     @if ($user->isAdmin())
                         <a href="{{ $admin ? route('dashboard') : route('admin.overview') }}" class="menu-item">
-                            <x-icon name="{{ $admin ? 'arrow-left' : 'shield' }}" /> {{ $admin ? 'Back to app' : 'Admin console' }}
+                            <x-icon name="{{ $admin ? 'arrow-left' : 'shield' }}" /> {{ $admin ? __('Back to app') : __('Admin console') }}
                         </a>
                     @endif
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="menu-item"><x-icon name="log-out" /> Log out</button>
+                        <button type="submit" class="menu-item"><x-icon name="log-out" /> {{ __('Log out') }}</button>
                     </form>
                 </div>
             </details>
@@ -167,11 +170,11 @@
     <div class="p-0 pt-(--bar-h) transition-[padding] duration-200 lg:p-2 lg:pt-[calc(var(--bar-h)+0.5rem)] lg:in-data-[sidebar=open]:pl-(--sidebar-width)">
         <div class="flex min-h-[calc(100svh-var(--bar-h))] flex-col bg-paper lg:min-h-[calc(100svh-1rem-var(--bar-h))] lg:rounded-xl lg:border lg:border-mist/60">
             <header class="flex h-14 shrink-0 items-center gap-2 border-b border-mist/60 px-4">
-                <button type="button" data-sidebar-toggle class="btn btn-ghost btn-icon" aria-label="Toggle sidebar">
+                <button type="button" data-sidebar-toggle class="btn btn-ghost btn-icon" aria-label="{{ __('Toggle sidebar') }}">
                     <x-icon name="panel-left" />
                 </button>
                 <span class="mx-1 h-4 w-px bg-mist/60" aria-hidden="true"></span>
-                <nav aria-label="Breadcrumb">
+                <nav aria-label="{{ __('Breadcrumb') }}">
                     <ol class="flex items-center gap-1.5 text-body-sm text-pewter">
                         @foreach ($crumbs as $crumb)
                             @php [$label, $url] = array_pad((array) $crumb, 2, null); @endphp
@@ -188,10 +191,10 @@
                         @endforeach
                     </ol>
                 </nav>
-                <button type="button" data-palette-open class="btn btn-outline btn-sm ml-auto max-sm:size-8 max-sm:p-0" aria-label="Search and commands">
+                <button type="button" data-palette-open class="btn btn-outline btn-sm ml-auto max-sm:size-8 max-sm:p-0" aria-label="{{ __('Search and commands') }}">
                     <x-icon name="search" class="size-3.5" />
-                    <span class="max-sm:hidden">Search</span>
-                    <span class="kbd max-sm:hidden" data-palette-key>Ctrl K</span>
+                    <span class="max-sm:hidden">{{ __('Search') }}</span>
+                    <span class="kbd max-sm:hidden" data-palette-key>{{ __('Ctrl K') }}</span>
                 </button>
             </header>
 
@@ -204,11 +207,11 @@
 
     <form id="logout-form" action="{{ route('logout') }}" method="POST" hidden>@csrf</form>
 
-    <dialog id="palette" class="pal" aria-label="Command palette">
-        <input type="text" class="pal-input" data-palette-input role="combobox" aria-expanded="true" aria-controls="palette-list" autocomplete="off" spellcheck="false" placeholder="Type a page, a habit, or an action…">
+    <dialog id="palette" class="pal" aria-label="{{ __('Command palette') }}">
+        <input type="text" class="pal-input" data-palette-input role="combobox" aria-expanded="true" aria-controls="palette-list" autocomplete="off" spellcheck="false" placeholder="{{ __('Type a page, a habit, or an action…') }}">
         <ul id="palette-list" class="pal-list" role="listbox" data-palette-list></ul>
-        <p class="pal-empty" data-palette-empty hidden>Nothing matches that.</p>
-        <p class="pal-foot"><span><span class="kbd">↑</span> <span class="kbd">↓</span> to move</span><span><span class="kbd">Enter</span> to open</span><span><span class="kbd">Esc</span> to close</span></p>
+        <p class="pal-empty" data-palette-empty hidden>{{ __('Nothing matches that.') }}</p>
+        <p class="pal-foot"><span><span class="kbd">↑</span> <span class="kbd">↓</span> {{ __('to move') }}</span><span><span class="kbd">{{ __('Enter') }}</span> {{ __('to open') }}</span><span><span class="kbd">{{ __('Esc') }}</span> {{ __('to close') }}</span></p>
         <script type="application/json" id="palette-data">{!! json_encode($palette, JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
     </dialog>
 

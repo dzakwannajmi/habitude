@@ -29,7 +29,7 @@ class JournalEntryController extends Controller
         $prompt = null;
         if ($level >= 1 && $level <= 5) {
             $band = $level <= 2 ? 'low' : ($level === 3 ? 'mid' : 'high');
-            $prompt = collect(config("habitude.prompts.{$band}"))->random();
+            $prompt = __(collect(config("habitude.prompts.{$band}"))->random());
         }
 
         return view('journal.create', ['today' => $today, 'date' => $date, 'prompt' => $prompt]);
@@ -57,7 +57,7 @@ class JournalEntryController extends Controller
         $user->journalEntries()->create($data + ['mood_entry_id' => $mood?->id]);
         $achievements->award($user);
 
-        return redirect()->route('journal.index')->with('success', 'Journal entry saved.');
+        return redirect()->route('journal.index')->with('success', __('Journal entry saved.'));
     }
 
     public function edit(Request $request, JournalEntry $journal)
@@ -73,7 +73,7 @@ class JournalEntryController extends Controller
 
         $journal->update($this->validated($request));
 
-        return redirect()->route('journal.index')->with('success', 'Journal entry updated.');
+        return redirect()->route('journal.index')->with('success', __('Journal entry updated.'));
     }
 
     public function destroy(Request $request, JournalEntry $journal)
@@ -82,7 +82,7 @@ class JournalEntryController extends Controller
 
         $journal->delete();
 
-        return redirect()->route('journal.index')->with('success', 'Journal entry deleted.');
+        return redirect()->route('journal.index')->with('success', __('Journal entry deleted.'));
     }
 
     private function authorizeOwner(Request $request, JournalEntry $journal): void
@@ -97,8 +97,8 @@ class JournalEntryController extends Controller
             'title' => ['required', 'string', 'max:120'],
             'content' => ['required', 'string', 'max:5000'],
         ], [
-            'title.required' => 'Give your entry a title.',
-            'content.required' => 'Write something first.',
+            'title.required' => __('Give your entry a title.'),
+            'content.required' => __('Write something first.'),
         ]);
     }
 }

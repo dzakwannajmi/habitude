@@ -47,11 +47,11 @@ class HabitController extends Controller
 
         // Quick add (just a name and a category) stays where you were; the full form goes on to reminders.
         if ($request->boolean('quick')) {
-            return redirect($this->safeBack($request))->with('success', "\"{$habit->name}\" added.");
+            return redirect($this->safeBack($request))->with('success', __('":name" added.', ['name' => $habit->name]));
         }
 
         return redirect()->route('habits.edit', $habit)
-            ->with('success', 'Habit created. You can add reminders below.');
+            ->with('success', __('Habit created. You can add reminders below.'));
     }
 
     public function edit(Request $request, Habit $habit)
@@ -69,7 +69,7 @@ class HabitController extends Controller
         $habit->tags()->sync($request->input('tags', []));
 
         return redirect()->route('habits.index')
-            ->with('success', 'Habit updated.');
+            ->with('success', __('Habit updated.'));
     }
 
     public function destroy(Request $request, Habit $habit)
@@ -79,7 +79,7 @@ class HabitController extends Controller
         $habit->delete(); // soft delete: it can be restored for 30 days
 
         return redirect()->route('habits.index')
-            ->with('success', "\"{$habit->name}\" deleted.")
+            ->with('success', __('":name" deleted.', ['name' => $habit->name]))
             ->with('undo', route('habits.restore', $habit->id));
     }
 
@@ -92,7 +92,7 @@ class HabitController extends Controller
             return response()->json(['restored' => $habit->id]);
         }
 
-        return redirect()->route('habits.index')->with('success', "\"{$habit->name}\" restored.");
+        return redirect()->route('habits.index')->with('success', __('":name" restored.', ['name' => $habit->name]));
     }
 
     /** Only ever send people back to a page of this app. */
@@ -128,10 +128,10 @@ class HabitController extends Controller
             'tags' => ['array'],
             'tags.*' => ['exists:tags,id'],
         ], [
-            'category_id.required' => 'Choose a category.',
-            'name.required' => 'Habit name is required.',
-            'target_count.min' => 'The target must be at least 1.',
-            'unit.in' => 'Choose one of the listed units.',
+            'category_id.required' => __('Choose a category.'),
+            'name.required' => __('Habit name is required.'),
+            'target_count.min' => __('The target must be at least 1.'),
+            'unit.in' => __('Choose one of the listed units.'),
         ]);
 
         // Quick add sends only a name and a category: fill the rest from what suits that category.

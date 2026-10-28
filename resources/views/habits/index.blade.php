@@ -1,24 +1,24 @@
 @php
-    $groupOptions = [['value' => 'category', 'label' => 'Group by category'], ['value' => 'status', 'label' => 'Group by status'], ['value' => 'none', 'label' => 'No grouping']];
+    $groupOptions = [['value' => 'category', 'label' => __('Group by category')], ['value' => 'status', 'label' => __('Group by status')], ['value' => 'none', 'label' => __('No grouping')]];
     $toggle = fn ($v) => route('habits.index', ['group' => $group, 'view' => $v]);
 @endphp
 
-<x-app-layout title="Habits" :crumbs="[['Track'], ['Habits']]">
+<x-app-layout title="{{ __('Habits') }}" :crumbs="[[__('Track')], [__('Habits')]]">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-            <h1 class="text-heading-sm">Habits <span class="font-normal text-pewter">({{ $habits->count() }})</span></h1>
-            <p class="text-body-sm text-pewter">Swipe a row, or press the dots, to edit or delete. Switch to grid for a Finder-style view.</p>
+            <h1 class="text-heading-sm">{{ __('Habits') }} <span class="font-normal text-pewter">({{ $habits->count() }})</span></h1>
+            <p class="text-body-sm text-pewter">{{ __('Swipe a row, or press the dots, to edit or delete. Switch to grid for a Finder-style view.') }}</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
             <form action="{{ route('habits.index') }}" method="GET" class="w-48">
                 <input type="hidden" name="view" value="{{ $view }}">
-                <x-select name="group" :options="$groupOptions" :value="$group" label="Group habits" :compact="true" :autosubmit="true" />
+                <x-select name="group" :options="$groupOptions" :value="$group" label="{{ __('Group habits') }}" :compact="true" :autosubmit="true" />
             </form>
-            <x-rubber-segment :value="$view" label="View" :items="[
-                ['value' => 'list', 'label' => 'List', 'icon' => 'list', 'href' => $toggle('list')],
-                ['value' => 'grid', 'label' => 'Grid', 'icon' => 'layout-grid', 'href' => $toggle('grid')],
+            <x-rubber-segment :value="$view" label="{{ __('View') }}" :items="[
+                ['value' => 'list', 'label' => __('List'), 'icon' => 'list', 'href' => $toggle('list')],
+                ['value' => 'grid', 'label' => __('Grid'), 'icon' => 'layout-grid', 'href' => $toggle('grid')],
             ]" />
-            <button type="button" class="btn btn-primary" data-modal-open="quick-add"><x-icon name="plus" /> Add habit</button>
+            <button type="button" class="btn btn-primary" data-modal-open="quick-add"><x-icon name="plus" /> {{ __('Add habit') }}</button>
         </div>
     </div>
     <x-quick-add />
@@ -31,7 +31,7 @@
                     <span class="size-3 rounded-md" style="background: {{ $items->first()->category->color }}"></span>
                     {{ $items->first()->category->icon }}
                 @endif
-                {{ $name }}
+                {{ __($name) }}
                 <span class="font-normal text-pewter">{{ $items->count() }}</span>
             </summary>
 
@@ -44,16 +44,16 @@
                                 <span class="min-w-0 flex-1">
                                     <span class="flex items-center gap-2">
                                         <span class="truncate font-medium text-ink">{{ $habit->name }}</span>
-                                        @unless ($habit->is_active) <span class="badge">Paused</span> @endunless
+                                        @unless ($habit->is_active) <span class="badge">{{ __('Paused') }}</span> @endunless
                                     </span>
                                     <span class="block truncate text-caption text-pewter">
-                                        {{ $habit->target_label }} a day
+                                        {{ __(':n a day', ['n' => $habit->target_label]) }}
                                         @if ($group !== 'category') · {{ $habit->category->name }} @endif
                                         @foreach ($habit->tags as $tag) · #{{ $tag->name }} @endforeach
                                     </span>
                                 </span>
                                 @if ($habit->streak > 0)
-                                    <span class="badge flex-none" title="Current streak"><x-icon name="flame" class="size-3.5" />{{ $habit->streak }}</span>
+                                    <span class="badge flex-none" title="{{ __('Current streak') }}"><x-icon name="flame" class="size-3.5" />{{ $habit->streak }}</span>
                                 @endif
                             </a>
                         </x-swipe-row>
@@ -75,20 +75,20 @@
                                 <span class="badge absolute left-2 top-2"><x-icon name="flame" class="size-3" />{{ $habit->streak }}</span>
                             @endif
                             <button type="button" class="btn btn-ghost btn-icon btn-sm absolute right-1 top-1 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/tile:opacity-100"
-                                data-modal-open="delete-habit-{{ $habit->id }}" aria-label="Delete {{ $habit->name }}"><x-icon name="trash" class="size-4" /></button>
+                                data-modal-open="delete-habit-{{ $habit->id }}" aria-label="{{ __('Delete :name', ['name' => $habit->name]) }}"><x-icon name="trash" class="size-4" /></button>
                         </div>
                     @endforeach
                 </div>
             @endif
 
             @foreach ($items as $habit)
-                <x-delete-modal id="delete-habit-{{ $habit->id }}" :action="route('habits.destroy', $habit)" title="Delete habit"
-                    :message="'Delete &quot;'.$habit->name.'&quot; and all of its logs and reminders?'" />
+                <x-delete-modal id="delete-habit-{{ $habit->id }}" :action="route('habits.destroy', $habit)" title="{{ __('Delete habit') }}"
+                    :message="__('Delete “:name” and all of its logs and reminders?', ['name' => $habit->name])" />
             @endforeach
         </details>
     @empty
         <div class="card px-6 py-16 text-center text-pewter">
-            No habits yet. <a href="{{ route('habits.create') }}" class="font-semibold text-ink underline">Add your first one</a>.
+            {{ __('No habits yet.') }} <a href="{{ route('habits.create') }}" class="font-semibold text-ink underline">{{ __('Add your first one') }}</a>.
         </div>
     @endforelse
 </x-app-layout>

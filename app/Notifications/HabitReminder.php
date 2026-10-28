@@ -27,16 +27,16 @@ class HabitReminder extends Notification
         $first = explode(' ', trim($notifiable->name))[0];
 
         $mail = (new MailMessage)
-            ->subject($count === 1 ? "Time for {$this->habits->first()->name}" : "{$count} habits are waiting for you")
-            ->greeting("Hi {$first},")
-            ->line($count === 1 ? 'A habit is due now:' : 'These habits are due now:');
+            ->subject($count === 1 ? __('Time for :habit', ['habit' => $this->habits->first()->name]) : __(':n habits are waiting for you', ['n' => $count]))
+            ->greeting(__('Hi :name,', ['name' => $first]))
+            ->line($count === 1 ? __('A habit is due now:') : __('These habits are due now:'));
 
         foreach ($this->habits as $habit) {
             $mail->line("• {$habit->name} ({$habit->target_label})");
         }
 
         return $mail
-            ->action('Open Habitude', route('dashboard'))
-            ->line('You get this email because reminders are on for these habits. You can turn emails off in your profile.');
+            ->action(__('Open Habitude'), route('dashboard'))
+            ->line(__('You get this email because reminders are on for these habits. You can turn emails off in your profile.'));
     }
 }

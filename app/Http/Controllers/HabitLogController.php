@@ -69,7 +69,7 @@ class HabitLogController extends Controller
             'streak' => $streaks->overall($user, $today),
             'done' => $doneToday,
             'total' => $habits->count(),
-            'earned' => $earned->map(fn ($a) => ['name' => $a->name, 'description' => $a->description])->all(),
+            'earned' => $earned->map(fn ($a) => ['name' => $a->display_name, 'description' => $a->display_description])->all(),
         ]);
     }
 }

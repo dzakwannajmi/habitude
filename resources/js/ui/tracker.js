@@ -2,6 +2,7 @@
 // rating. Everything updates in place from the JSON the server returns.
 import { renderCounter } from './counter.js';
 import { celebrate } from './celebrate.js';
+import { t } from './i18n.js';
 import { setChecked } from './spring-check.js';
 import { toast } from './toast.js';
 
@@ -23,7 +24,7 @@ function applyResult(row, res) {
     const target = Number(row.dataset.target);
     const unit = row.dataset.unit;
     const text = row.querySelector('[data-progress-text]');
-    if (text) text.textContent = target > 1 ? `${res.value} / ${target} ${unit}` : res.completed ? 'Done' : 'Not yet';
+    if (text) text.textContent = target > 1 ? `${res.value} / ${target} ${t(unit)}` : res.completed ? t('Done') : t('Not yet');
     const bar = row.querySelector('[data-progress-bar]');
     if (bar) bar.style.width = `${Math.min(100, (res.value / target) * 100)}%`;
     const list = row.closest('[data-today]');
@@ -55,12 +56,12 @@ function applyResult(row, res) {
         cell.toggleAttribute('data-high', ratio > 0.55);
     }
 
-    res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '', icon: 'trophy', duration: 6000 }));
+    res.earned.forEach((a) => toast({ title: t('Achievement unlocked: :name', { name: a.name }), body: a.description ?? '', icon: 'trophy', duration: 6000 }));
 
     // every habit of today is done: celebrate once
     if (!wasAllDone && allDone(list) && list?.dataset.todayDate === res.date) {
         celebrate(row.querySelector('[data-spring-check]'));
-        toast({ title: 'All done for today', body: 'Every habit is checked off. Nice work!', icon: 'trophy', duration: 6000 });
+        toast({ title: t('All done for today'), body: t('Every habit is checked off. Nice work!'), icon: 'trophy', duration: 6000 });
     }
 }
 
@@ -74,7 +75,7 @@ async function send(row, data) {
     try {
         applyResult(row, await post(row.dataset.url, { date: row.dataset.date, ...data }));
     } catch (e) {
-        toast({ title: 'Could not save', body: 'Check your connection and try again.', icon: 'alert' });
+        toast({ title: t('Could not save'), body: t('Check your connection and try again.'), icon: 'alert' });
         row.querySelector('[data-spring-check]') && setChecked(row.querySelector('[data-spring-check]'), row.dataset.wasDone === '1', { silent: true });
     } finally {
         row.removeAttribute('aria-busy');
@@ -93,10 +94,10 @@ export function initTracker() {
         // taking a check back is easy to do by accident, so offer to undo it
         if (!e.detail.checked && before > 0) {
             toast({
-                title: `Unchecked ${row.dataset.name}`,
+                title: t('Unchecked :name', { name: row.dataset.name }),
                 icon: 'info',
                 duration: 5000,
-                action: { label: 'Undo', onClick: () => send(row, { mode: 'set', value: before }) },
+                action: { label: t('Undo'), onClick: () => send(row, { mode: 'set', value: before }) },
             });
         }
     });
@@ -143,13 +144,13 @@ export function initTracker() {
         const out = box.querySelector('[data-mood-label]');
         try {
             const res = await post(box.dataset.url, { entry_date: box.dataset.date, mood_level: e.detail.value });
-            if (out) out.textContent = `Saved: ${res.label}`;
+            if (out) out.textContent = t('Saved: :label', { label: res.label });
             if (!res.has_journal) {
-                toast({ title: `Feeling ${res.label.toLowerCase()} today`, body: 'Want to write a few lines about it?', icon: 'info', duration: 8000, action: { label: 'Write', onClick: () => { location.href = res.journal_url; } } });
+                toast({ title: t('Feeling :label today', { label: res.label.toLowerCase() }), body: t('Want to write a few lines about it?'), icon: 'info', duration: 8000, action: { label: t('Write'), onClick: () => { location.href = res.journal_url; } } });
             }
-            res.earned.forEach((a) => toast({ title: `Achievement unlocked: ${a.name}`, body: a.description ?? '', icon: 'trophy', duration: 6000 }));
+            res.earned.forEach((a) => toast({ title: t('Achievement unlocked: :name', { name: a.name }), body: a.description ?? '', icon: 'trophy', duration: 6000 }));
         } catch {
-            if (out) out.textContent = 'Could not save, try again.';
+            if (out) out.textContent = t('Could not save, try again.');
         }
     });
 }

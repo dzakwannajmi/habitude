@@ -1,9 +1,9 @@
-<x-auth-layout title="Log in">
+<x-auth-layout title="{{ __('Log in') }}">
     <div class="space-y-2 text-center">
-        <h1 class="text-3xl font-semibold text-ink">Welcome back!</h1>
+        <h1 class="text-3xl font-semibold text-ink">{{ __('Welcome back!') }}</h1>
         <p class="text-body-sm text-pewter">
-            First time here?
-            <a href="{{ route('register') }}" class="text-ink hover:underline">Sign up for free</a>
+            {{ __('First time here?') }}
+            <a href="{{ route('register') }}" class="text-ink hover:underline">{{ __('Sign up for free') }}</a>
         </p>
     </div>
 
@@ -14,31 +14,31 @@
     <form action="{{ route('login') }}" method="POST" class="w-full space-y-4">
         @csrf
         <div>
-            <label for="email" class="sr-only">Email</label>
-            <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="Your email" autocomplete="email" autofocus
+            <label for="email" class="sr-only">{{ __('Email') }}</label>
+            <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('Your email') }}" autocomplete="email" autofocus
                 class="input @error('email') input-error @enderror" required>
             @error('email') <p class="field-error">{{ $message }}</p> @enderror
         </div>
         <div>
-            <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" name="password" placeholder="Your password" autocomplete="current-password"
+            <label for="password" class="sr-only">{{ __('Password') }}</label>
+            <input type="password" id="password" name="password" placeholder="{{ __('Your password') }}" autocomplete="current-password"
                 class="input @error('password') input-error @enderror" required>
             @error('password') <p class="field-error">{{ $message }}</p> @enderror
         </div>
 
         <div class="flex items-center justify-between gap-3">
-            <x-spring-check name="remember" label="Remember me" :checked="old('remember')" />
-            <a href="{{ route('password.request') }}" class="text-body-sm text-pewter underline-offset-4 hover:text-ink hover:underline">Forgot password?</a>
+            <x-spring-check name="remember" label="{{ __('Remember me') }}" :checked="old('remember')" />
+            <a href="{{ route('password.request') }}" class="text-body-sm text-pewter underline-offset-4 hover:text-ink hover:underline">{{ __('Forgot password?') }}</a>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-full">Log in</button>
+        <button type="submit" class="btn btn-primary btn-lg w-full">{{ __('Log in') }}</button>
 
     </form>
 
     <p class="w-11/12 text-center text-caption text-pewter">
-        You acknowledge that you read, and agree, to our
-        <a href="{{ route('terms') }}" class="underline hover:text-ink">Terms of Service</a>
-        and our
-        <a href="{{ route('privacy') }}" class="underline hover:text-ink">Privacy Policy</a>.
+        {{ __('You acknowledge that you read, and agree, to our') }}
+        <a href="{{ route('terms') }}" class="underline hover:text-ink">{{ __('Terms of Service') }}</a>
+        {{ __('and our') }}
+        <a href="{{ route('privacy') }}" class="underline hover:text-ink">{{ __('Privacy Policy') }}</a>.
     </p>
 </x-auth-layout>

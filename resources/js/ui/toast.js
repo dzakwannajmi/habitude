@@ -1,6 +1,7 @@
 // Swipe toast (port of React Bits "SwipeToast"): slides up from the corner,
 // burns a fuse while it waits, pauses while you look at it, and can be thrown
 // away by swiping it down. Upward drags resist like a rubber band.
+import { t } from './i18n.js';
 import { reducedMotion, springTo } from './spring.js';
 
 const FLICK = 0.11;       // px per ms
@@ -43,7 +44,7 @@ export function toast({ title, body = '', icon = 'trophy', duration = 4000, acti
                 <span class="toast-icon">${svg(icon)}</span>
                 <span class="toast-text"><span class="toast-title"></span><span class="toast-desc"></span></span>
                 ${action ? '<button type="button" class="toast-btn toast-action"></button>' : ''}
-                ${closeButton ? `<button type="button" class="toast-btn toast-close" aria-label="Close">${CLOSE}</button>` : ''}
+                ${closeButton ? `<button type="button" class="toast-btn toast-close" aria-label="${t('Close')}">${CLOSE}</button>` : ''}
                 <i class="toast-fuse" aria-hidden="true"></i>
             </div>
         </div></div>`;
@@ -180,10 +181,10 @@ export function flashToToasts() {
         let action = null;
         if (n.dataset.undo) {
             action = {
-                label: 'Undo',
+                label: t('Undo'),
                 onClick: async () => {
                     try { await post(n.dataset.undo); location.reload(); }
-                    catch { toast({ title: 'Could not undo', body: 'It may already be gone.', icon: 'alert' }); }
+                    catch { toast({ title: t('Could not undo'), body: t('It may already be gone.'), icon: 'alert' }); }
                 },
             };
         } else if (n.dataset.link) {

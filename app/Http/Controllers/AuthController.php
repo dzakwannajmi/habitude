@@ -23,8 +23,8 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ], [
-            'email.required' => 'Enter your email address.',
-            'password.required' => 'Enter your password.',
+            'email.required' => __('Enter your email address.'),
+            'password.required' => __('Enter your password.'),
         ]);
 
         $key = Str::lower($credentials['email']).'|'.$request->ip();
@@ -33,7 +33,7 @@ class AuthController extends Controller
             $seconds = RateLimiter::availableIn($key);
 
             throw ValidationException::withMessages([
-                'email' => "Too many attempts. Try again in {$seconds} seconds.",
+                'email' => __('Too many attempts. Try again in :seconds seconds.', ['seconds' => $seconds]),
             ]);
         }
 
@@ -41,7 +41,7 @@ class AuthController extends Controller
             RateLimiter::hit($key);
 
             throw ValidationException::withMessages([
-                'email' => 'These credentials do not match our records.',
+                'email' => __('These credentials do not match our records.'),
             ]);
         }
 
@@ -63,9 +63,9 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(8)],
         ], [
-            'name.required' => 'Tell us your name.',
-            'email.unique' => 'This email is already registered.',
-            'password.confirmed' => 'The password confirmation does not match.',
+            'name.required' => __('Tell us your name.'),
+            'email.unique' => __('This email is already registered.'),
+            'password.confirmed' => __('The password confirmation does not match.'),
         ]);
 
         $user = User::create($data);

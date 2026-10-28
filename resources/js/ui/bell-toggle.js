@@ -1,5 +1,6 @@
 // Bell toggle (port of React Bits "BellToggle"): a pill whose label swaps
 // between off and on while the bell rings. Used for reminders.
+import { t } from './i18n.js';
 import { reducedMotion } from './spring.js';
 import { toast } from './toast.js';
 
@@ -87,7 +88,7 @@ function build(root) {
             if (!res.ok) throw new Error(String(res.status));
         } catch {
             apply(!next, { animate: false });
-            toast({ title: 'Could not update the reminder', body: 'Check your connection and try again.', icon: 'alert' });
+            toast({ title: t('Could not update the reminder'), body: t('Check your connection and try again.'), icon: 'alert' });
         } finally {
             btn.disabled = false;
         }

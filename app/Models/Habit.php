@@ -54,7 +54,7 @@ class Habit extends Model
      */
     protected function targetLabel(): Attribute
     {
-        return Attribute::get(fn () => $this->target_count.' '.($this->target_count === 1 ? Str::singular($this->unit) : $this->unit));
+        return Attribute::get(fn () => $this->target_count.' '.__($this->target_count === 1 ? Str::singular($this->unit) : $this->unit));
     }
 
     /**

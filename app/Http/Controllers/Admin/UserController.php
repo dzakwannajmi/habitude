@@ -41,12 +41,12 @@ class UserController extends Controller
             'role' => ['required', Rule::in([User::ROLE_USER, User::ROLE_ADMIN])],
             'password' => ['nullable', Password::min(8)],
         ], [
-            'email.unique' => 'This email is already registered.',
+            'email.unique' => __('This email is already registered.'),
         ]);
 
         // Nobody can lock themselves out of the console.
         if ($user->is($request->user()) && $data['role'] !== $user->role) {
-            return back()->withInput()->withErrors(['role' => 'You cannot change your own role.']);
+            return back()->withInput()->withErrors(['role' => __('You cannot change your own role.')]);
         }
 
         $user->fill(['name' => $data['name'], 'email' => $data['email']]);
@@ -56,18 +56,18 @@ class UserController extends Controller
         }
         $user->save();
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated.');
+        return redirect()->route('admin.users.index')->with('success', __('User updated.'));
     }
 
     public function destroy(Request $request, User $user)
     {
         if ($user->is($request->user())) {
-            return redirect()->route('admin.users.index')->with('error', 'You cannot delete your own account here.');
+            return redirect()->route('admin.users.index')->with('error', __('You cannot delete your own account here.'));
         }
 
         // Habits, logs, moods, journals and reminders are removed by the cascade rules.
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'User deleted together with all of their data.');
+        return redirect()->route('admin.users.index')->with('success', __('User deleted together with all of their data.'));
     }
 }

@@ -42,8 +42,8 @@ class ReminderController extends Controller
             'days_of_week' => ['required', 'array', 'min:1'],
             'days_of_week.*' => ['integer', 'between:1,7'],
         ], [
-            'remind_at.required' => 'Pick a time.',
-            'days_of_week.required' => 'Pick at least one day.',
+            'remind_at.required' => __('Pick a time.'),
+            'days_of_week.required' => __('Pick at least one day.'),
         ]);
 
         $habit->reminders()->create([
@@ -51,7 +51,7 @@ class ReminderController extends Controller
             'days_of_week' => collect($data['days_of_week'])->map(fn ($d) => (int) $d)->unique()->sort()->values()->all(),
         ]);
 
-        return redirect()->route('habits.edit', $habit)->with('success', 'Reminder added.');
+        return redirect()->route('habits.edit', $habit)->with('success', __('Reminder added.'));
     }
 
     public function update(Request $request, Reminder $reminder)
@@ -64,7 +64,7 @@ class ReminderController extends Controller
             return response()->json(['is_enabled' => $reminder->is_enabled]);
         }
 
-        return redirect()->route('habits.edit', $reminder->habit_id)->with('success', 'Reminder updated.');
+        return redirect()->route('habits.edit', $reminder->habit_id)->with('success', __('Reminder updated.'));
     }
 
     public function destroy(Request $request, Reminder $reminder)
@@ -74,6 +74,6 @@ class ReminderController extends Controller
         $habitId = $reminder->habit_id;
         $reminder->delete();
 
-        return redirect()->route('habits.edit', $habitId)->with('success', 'Reminder deleted.');
+        return redirect()->route('habits.edit', $habitId)->with('success', __('Reminder deleted.'));
     }
 }

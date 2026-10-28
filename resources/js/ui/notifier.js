@@ -1,5 +1,7 @@
 // Browser notifications for reminders. They fire while Habitude is open in a tab
 // or installed as an app; emails (sent by the scheduler) cover the rest.
+import { t } from './i18n.js';
+
 const KEY = 'habitude.notify';
 const FIRED = 'habitude.notify.fired';
 const WINDOW_MIN = 4;
@@ -12,7 +14,7 @@ const supported = () => 'Notification' in window;
 const enabled = () => supported() && Notification.permission === 'granted' && read(KEY) === 'on';
 
 async function show(item) {
-    const title = `Time for ${item.habit}`;
+    const title = t('Time for :habit', { habit: item.habit });
     const options = { body: `${item.detail} · ${item.time}`, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', tag: `habit-${item.id}`, data: { url: '/' } };
     const reg = await navigator.serviceWorker?.getRegistration();
     if (reg) reg.showNotification(title, options); else new Notification(title, options);
@@ -60,11 +62,11 @@ export function initNotifySetting() {
 
     const paint = () => {
         btn.hidden = false;
-        if (!supported()) { status.textContent = 'This browser does not support notifications.'; btn.hidden = true; return; }
-        if (Notification.permission === 'denied') { status.textContent = 'Blocked for this site. Allow it in your browser settings to use this.'; btn.hidden = true; return; }
+        if (!supported()) { status.textContent = t('This browser does not support notifications.'); btn.hidden = true; return; }
+        if (Notification.permission === 'denied') { status.textContent = t('Blocked for this site. Allow it in your browser settings to use this.'); btn.hidden = true; return; }
         const on = enabled();
-        status.textContent = on ? 'On in this browser.' : 'Off in this browser.';
-        label.textContent = on ? 'Turn off' : 'Allow notifications';
+        status.textContent = on ? t('On in this browser.') : t('Off in this browser.');
+        label.textContent = on ? t('Turn off') : t('Allow notifications');
     };
 
     btn.addEventListener('click', async () => {
@@ -72,7 +74,7 @@ export function initNotifySetting() {
         const permission = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
         if (permission === 'granted') {
             write(KEY, 'on');
-            show({ id: 0, habit: 'your habits', detail: 'Notifications are on', time: 'now' });
+            show({ id: 0, habit: t('your habits'), detail: t('Notifications are on'), time: t('now') });
         }
         paint();
     });

@@ -7,6 +7,9 @@ return [
     // Where beta testers can report problems.
     'feedback_url' => env('HABITUDE_FEEDBACK_URL', 'https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/issues'),
 
+    // Interface languages. The key is the Laravel locale, the label is shown in the language's own words.
+    'locales' => ['en' => 'English', 'id' => 'Bahasa Indonesia'],
+
     // Timezones offered in the profile and onboarding forms.
     'timezones' => [
         'Asia/Jakarta' => 'WIB (Jakarta)',

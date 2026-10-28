@@ -24,14 +24,14 @@ class PasswordResetController extends Controller
 
         $key = 'password-reset:'.Str::lower($data['email']).'|'.$request->ip();
         if (RateLimiter::tooManyAttempts($key, 3)) {
-            throw ValidationException::withMessages(['email' => 'Too many requests. Try again in '.RateLimiter::availableIn($key).' seconds.']);
+            throw ValidationException::withMessages(['email' => __('Too many requests. Try again in :seconds seconds.', ['seconds' => RateLimiter::availableIn($key)])]);
         }
         RateLimiter::hit($key, 60);
 
         Password::sendResetLink(['email' => $data['email']]);
 
         // The same answer whether or not the address exists, so this cannot be used to find accounts.
-        return back()->with('status', 'If that email has an account, a reset link is on its way. It works for 60 minutes.');
+        return back()->with('status', __('If that email has an account, a reset link is on its way. It works for 60 minutes.'));
     }
 
     public function reset(Request $request, string $token)
@@ -54,9 +54,9 @@ class PasswordResetController extends Controller
         });
 
         if ($status !== Password::PASSWORD_RESET) {
-            throw ValidationException::withMessages(['email' => 'This reset link is invalid or has expired. Request a new one.']);
+            throw ValidationException::withMessages(['email' => __('This reset link is invalid or has expired. Request a new one.')]);
         }
 
-        return redirect()->route('login')->with('status', 'Your password was changed. Log in with the new one.');
+        return redirect()->route('login')->with('status', __('Your password was changed. Log in with the new one.'));
     }
 }

@@ -25,7 +25,7 @@ class TagController extends Controller
         Tag::create($this->validated($request));
 
         return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag created.');
+            ->with('success', __('Tag created.'));
     }
 
     public function edit(Tag $tag)
@@ -38,7 +38,7 @@ class TagController extends Controller
         $tag->update($this->validated($request, $tag));
 
         return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag updated.');
+            ->with('success', __('Tag updated.'));
     }
 
     public function destroy(Tag $tag)
@@ -47,7 +47,7 @@ class TagController extends Controller
         $tag->delete();
 
         return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag deleted.');
+            ->with('success', __('Tag deleted.'));
     }
 
     private function validated(Request $request, ?Tag $tag = null): array
@@ -55,8 +55,8 @@ class TagController extends Controller
         return $request->validate([
             'name' => ['required', 'string', 'max:30', Rule::unique('tags', 'name')->ignore($tag)],
         ], [
-            'name.required' => 'Tag name is required.',
-            'name.unique' => 'This tag already exists.',
+            'name.required' => __('Tag name is required.'),
+            'name.unique' => __('This tag already exists.'),
         ]);
     }
 }

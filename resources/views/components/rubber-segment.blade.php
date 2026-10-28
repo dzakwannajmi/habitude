@@ -1,4 +1,4 @@
-@props(['items', 'value', 'label' => 'Segmented control', 'size' => 'md'])
+@props(['items', 'value', 'label' => __('Segmented control'), 'size' => 'md'])
 
 {{-- items: [['value' => 'list', 'label' => 'List', 'icon' => 'list', 'href' => url, 'count' => 3]] --}}
 <div {{ $attributes }} data-rubber-segment data-value="{{ $value }}" data-size="{{ $size }}" aria-label="{{ $label }}" class="rs">

@@ -32,7 +32,7 @@ class MoodEntryController extends Controller
             'mood_level' => ['required', 'integer', 'between:1,5'],
             'note' => ['nullable', 'string', 'max:255'],
         ], [
-            'mood_level.required' => 'Pick how you feel first.',
+            'mood_level.required' => __('Pick how you feel first.'),
         ]);
 
         $date = $data['entry_date'] ?? $user->today()->toDateString();
@@ -55,14 +55,14 @@ class MoodEntryController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'mood_level' => $mood->mood_level,
-                'label' => config('habitude.moods')[$mood->mood_level],
+                'label' => __(config('habitude.moods')[$mood->mood_level]),
                 'journal_url' => $journalUrl,
                 'has_journal' => $mood->journalEntry()->exists(),
-                'earned' => $earned->map(fn ($a) => ['name' => $a->name, 'description' => $a->description])->all(),
+                'earned' => $earned->map(fn ($a) => ['name' => $a->display_name, 'description' => $a->display_description])->all(),
             ]);
         }
 
-        $redirect = redirect()->route('mood.index')->with('success', 'Mood saved.');
+        $redirect = redirect()->route('mood.index')->with('success', __('Mood saved.'));
 
         // Close the loop: offer to write about it, unless a journal already exists for that day
         return $mood->journalEntry()->exists() ? $redirect : $redirect->with('action_url', $journalUrl)->with('action_label', 'Write about it');
@@ -74,6 +74,6 @@ class MoodEntryController extends Controller
 
         $mood->delete(); // journal_entries.mood_entry_id is set to null by the foreign key
 
-        return redirect()->route('mood.index')->with('success', 'Mood entry deleted.');
+        return redirect()->route('mood.index')->with('success', __('Mood entry deleted.'));
     }
 }

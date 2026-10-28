@@ -83,4 +83,14 @@ class OnboardingTest extends TestCase
         $this->assertTrue($user->achievements()->where('name', 'Starter')->exists());
         $this->assertGreaterThan(0, Category::count());
     }
+
+    public function test_starter_habits_are_named_in_the_users_language(): void
+    {
+        $user = $this->newUser();
+        $user->profile->update(['locale' => 'id']);
+
+        $this->post('/onboarding', ['timezone' => 'UTC', 'daily_goal' => 3, 'starters' => ['stay-hydrated|0']]);
+
+        $this->assertSame(['Minum air'], $user->habits()->pluck('name')->all());
+    }
 }

@@ -9,7 +9,7 @@
     $length = fn ($k) => round($rowY($k) - $radius + (M_PI * $radius) / 2 + ($endX - $trunk - $radius), 2);
 @endphp
 
-<nav class="bm" data-branched-menu aria-label="Main navigation">
+<nav class="bm" data-branched-menu aria-label="{{ __('Main navigation') }}">
     <span class="bm-marker" data-bm-marker aria-hidden="true"></span>
 
     @foreach ($items as $item)

@@ -28,7 +28,7 @@ class CategoryController extends Controller
         Category::create($data);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Category created.');
+            ->with('success', __('Category created.'));
     }
 
     public function edit(Category $category)
@@ -43,7 +43,7 @@ class CategoryController extends Controller
         $category->update($data);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Category updated.');
+            ->with('success', __('Category updated.'));
     }
 
     public function destroy(Category $category)
@@ -51,13 +51,13 @@ class CategoryController extends Controller
         // habits.category_id is restricted on delete, so explain instead of failing.
         if ($category->habits()->withTrashed()->exists()) {
             return redirect()->route('admin.categories.index')
-                ->with('error', "\"{$category->name}\" still has habits. Move or delete them first.");
+                ->with('error', __('":name" still has habits. Move or delete them first.', ['name' => $category->name]));
         }
 
         $category->delete();
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Category deleted.');
+            ->with('success', __('Category deleted.'));
     }
 
     private function validated(Request $request, ?Category $category = null): array
@@ -67,9 +67,9 @@ class CategoryController extends Controller
             'icon' => ['nullable', 'string', 'max:8'],
             'color' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
         ], [
-            'name.required' => 'Category name is required.',
-            'name.unique' => 'This category name is already used.',
-            'color.regex' => 'Pick a valid color.',
+            'name.required' => __('Category name is required.'),
+            'name.unique' => __('This category name is already used.'),
+            'color.regex' => __('Pick a valid color.'),
         ]);
 
         $data['slug'] = Str::slug($data['name']);

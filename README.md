@@ -7,6 +7,7 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 - Sign up, log in, and a first-run **stepper** that sets your timezone and picks starter habits
 - Track daily habits grouped into eight life categories:
   Health & Fitness, Mindfulness, Productivity, Better Sleep, Stay Hydrated, Read More, Social Connections, and Self Care
+- **English and Bahasa Indonesia**: pick the language on the sign-in pages or in your profile; dates, emails, greetings and messages follow it
 - **Reminders that reach you**: an email at the time you set (sent by the scheduler, with a switch in your profile) and browser notifications while the app is open or installed
 - **Installable app (PWA)**, works as a standalone window with an offline page, and a **command palette** (Cmd/Ctrl + K) to jump anywhere or add things by typing
 - Gentle flow helpers: undo after deleting a habit or unchecking one, quick add from just a name and a category, a journal prompt after you rate your mood, a celebration when the day is done, and a nudge to log a missed day
@@ -147,10 +148,14 @@ Automated tests (`php artisan test`) use an in-memory SQLite database, so they n
 
 Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status, and completion dates: [`docs/progress`](docs/progress/P01-database-design.md).
 
+## Languages
+
+The interface is in English by default and fully available in Bahasa Indonesia. English text is the translation key, so adding a language means adding `lang/xx.json` (and `lang/xx/validation.php`), then listing it in `config/habitude.php` under `locales`. `php artisan test` fails if any phrase in the code is missing from `lang/id.json`.
+
 ## Tests
 
 ```bash
-php artisan test   # 113 tests, in-memory SQLite
+php artisan test   # 126 tests, in-memory SQLite
 ```
 
 ## Contributing / Forking

@@ -42,16 +42,16 @@ class Greeting
     public static function for(User $user, CarbonImmutable $now, Collection $rows, array $streak, ?Randomizer $rng = null): array
     {
         $rng ??= new Randomizer;
-        $pick = fn (array $items) => $items[$rng->getInt(0, count($items) - 1)];
+        $pick = fn (array $items) => __($items[$rng->getInt(0, count($items) - 1)]);
 
         $hour = $now->hour;
         $part = match (true) {
-            $hour >= 5 && $hour < 12 => 'Good morning',
-            $hour >= 12 && $hour < 18 => 'Good afternoon',
-            default => 'Good evening',
+            $hour >= 5 && $hour < 12 => __('Good morning'),
+            $hour >= 12 && $hour < 18 => __('Good afternoon'),
+            default => __('Good evening'),
         };
         $first = explode(' ', trim($user->name))[0];
-        $hello = $pick([$part, $part, 'Hello', 'Hi', 'Welcome back']).', '.$first;
+        $hello = ($rng->getInt(0, 4) < 2 ? $part : $pick(['Hello', 'Hi', 'Welcome back'])).', '.$first;
 
         $open = $rows->where('done', false);
         $done = $rows->where('done', true)->count();
@@ -65,17 +65,17 @@ class Greeting
             }
         }
         if ($open->isNotEmpty() && $streak['current'] >= 3) {
-            $candidates[] = "Keep your {$streak['current']}-day streak alive?";
+            $candidates[] = __('Keep your :n-day streak alive?', ['n' => $streak['current']]);
         }
         if ($open->isNotEmpty() && $done > 0) {
-            $candidates[] = "{$done} of {$rows->count()} done. Ready for the next one?";
+            $candidates[] = __(':done of :total done. Ready for the next one?', ['done' => $done, 'total' => $rows->count()]);
         }
 
         $line = match (true) {
             $rows->isEmpty() => $pick(self::EMPTY_LINES),
             $open->isEmpty() => $pick(self::DONE_LINES),
             $candidates !== [] => $pick($candidates),
-            default => 'Ready for today?', // only habits we have no line for
+            default => __('Ready for today?'), // only habits we have no line for
         };
 
         return ['hello' => $hello, 'line' => $line];

@@ -3,6 +3,8 @@
 // One canvas scene: the 2D view is the grid seen from above, the 3D view the
 // same grid seen from the corner, and one camera swings between the two.
 
+import { t as tr } from './i18n.js'; // `t` is the animation time inside mount()
+
 // ---------- pure helpers: dates, grid, stats, camera, colour ----------
 export const DAY_MS = 86400000;
 export const clamp01 = (v) => (v > 0 ? (v < 1 ? v : 1) : 0);
@@ -206,20 +208,20 @@ function mount(host) {
     const df = new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric', timeZone: 'UTC' });
     const dfy = new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
     const dfl = new Intl.DateTimeFormat(locale, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-    const noun = (n) => (n === 1 ? unit : plural);
-    const range = (a, b, withYear = false) => (!a || !b ? '-' : (withYear ? dfy : df).format(dayMs(a)) + ' to ' + (withYear ? dfy : df).format(dayMs(b)));
+    const noun = (n) => tr(n === 1 ? unit : plural);
+    const range = (a, b, withYear = false) => (!a || !b ? '-' : (withYear ? dfy : df).format(dayMs(a)) + ' ' + tr('to') + ' ' + (withYear ? dfy : df).format(dayMs(b)));
     const describe = (i) => {
         const c = model.cells[i];
-        return c ? (c.count ? nf.format(c.count) + ' ' + noun(c.count) : 'No ' + plural) + ' on ' + dfl.format(dayMs(c.date)) : '';
+        return c ? (c.count ? tr(':count :unit on :date', { count: nf.format(c.count), unit: noun(c.count), date: dfl.format(dayMs(c.date)) }) : tr('No :plural on :date', { plural: tr(plural), date: dfl.format(dayMs(c.date)) })) : '';
     };
-    const levelNames = ['No ' + plural, 'Light', 'Moderate', 'Heavy', 'Heaviest'];
-    const hints = ['Hover a day for details, click to open it. Arrow keys to explore.', 'Drag to orbit, double-click to reset.'];
+    const levelNames = [tr('No :plural', { plural: tr(plural) }), tr('Light'), tr('Moderate'), tr('Heavy'), tr('Heaviest')];
+    const hints = [tr('Hover a day for details, click to open it. Arrow keys to explore.'), tr('Drag to orbit, double-click to reset.')];
     const { stats } = model;
     const blocks = [
-        { label: '1 year total', value: nf.format(stats.total), unit: noun(stats.total), sub: range(stats.first, stats.last, true) },
-        { label: 'Busiest day', value: nf.format(stats.busiest.count), unit: noun(stats.busiest.count), sub: stats.busiest.date ? df.format(dayMs(stats.busiest.date)) : '-' },
-        { label: 'Longest streak', value: nf.format(stats.longest.days), unit: stats.longest.days === 1 ? 'day' : 'days', sub: range(stats.longest.start, stats.longest.end) },
-        { label: 'Current streak', value: nf.format(stats.current.days), unit: stats.current.days === 1 ? 'day' : 'days', sub: range(stats.current.start, stats.current.end) },
+        { label: tr('1 year total'), value: nf.format(stats.total), unit: noun(stats.total), sub: range(stats.first, stats.last, true) },
+        { label: tr('Busiest day'), value: nf.format(stats.busiest.count), unit: noun(stats.busiest.count), sub: stats.busiest.date ? df.format(dayMs(stats.busiest.date)) : '-' },
+        { label: tr('Longest streak'), value: nf.format(stats.longest.days), unit: tr(stats.longest.days === 1 ? 'day' : 'days'), sub: range(stats.longest.start, stats.longest.end) },
+        { label: tr('Current streak'), value: nf.format(stats.current.days), unit: tr(stats.current.days === 1 ? 'day' : 'days'), sub: range(stats.current.start, stats.current.end) },
     ];
 
     const statHTML = (b, size, align) => {
@@ -237,17 +239,17 @@ function mount(host) {
     host.style.setProperty('--sk-dur', duration + 'ms');
     host.innerHTML = `
         <header class="sk-head">
-            <h3 class="sk-title"><strong>${esc(nf.format(stats.total))}</strong> ${esc(noun(stats.total))} in the last year</h3>
-            <div class="sk-toggle" role="group" aria-label="Chart view" data-view="${view}">
+            <h3 class="sk-title"><strong>${esc(nf.format(stats.total))}</strong> ${esc(noun(stats.total))} ${esc(tr('in the last year'))}</h3>
+            <div class="sk-toggle" role="group" aria-label="${esc(tr('Chart view'))}" data-view="${view}">
                 <span class="sk-glider" aria-hidden="true"></span>
-                <button type="button" class="sk-tbtn" data-v="2d" aria-label="Flat heat map" title="Flat heat map">${ICON_GRID}</button>
-                <button type="button" class="sk-tbtn" data-v="3d" aria-label="3D skyline" title="3D skyline">${ICON_CUBE}</button>
+                <button type="button" class="sk-tbtn" data-v="2d" aria-label="${esc(tr('Flat heat map'))}" title="${esc(tr('Flat heat map'))}">${ICON_GRID}</button>
+                <button type="button" class="sk-tbtn" data-v="3d" aria-label="${esc(tr('3D skyline'))}" title="${esc(tr('3D skyline'))}">${ICON_CUBE}</button>
             </div>
         </header>
         <div class="sk-box">
             <div class="sk-pad">
                 <div class="sk-stage" style="height:150px">
-                    <canvas class="sk-canvas" tabindex="0" role="img" aria-label="${esc(nf.format(stats.total) + ' ' + noun(stats.total) + ' between ' + range(stats.first, stats.last, true) + '. Use the arrow keys to read individual days.')}"></canvas>
+                    <canvas class="sk-canvas" tabindex="0" role="img" aria-label="${esc(nf.format(stats.total) + ' ' + noun(stats.total) + ' ' + range(stats.first, stats.last, true))}"></canvas>
                     <div class="sk-corner sk-tr" aria-hidden="true"></div>
                     <div class="sk-corner sk-bl" aria-hidden="true"></div>
                 </div>
@@ -256,7 +258,7 @@ function mount(host) {
             <div class="sk-rowwrap"><div class="sk-rowinner"><div class="sk-rowgrid"></div></div></div>
             <div class="sk-foot">
                 <span class="sk-hints">${hints.map((h) => `<span>${esc(h)}</span>`).join('')}</span>
-                <div class="sk-legend"><span>Less</span><span class="sk-swatches"></span><span>More</span></div>
+                <div class="sk-legend"><span>${esc(tr('Less'))}</span><span class="sk-swatches"></span><span>${esc(tr('More'))}</span></div>
             </div>
         </div>
         <p class="sr-only" aria-live="polite"></p>`;
@@ -324,7 +326,7 @@ function mount(host) {
         labelW = Math.ceil(Math.max(20, ...weekdayRows.map((r) => ctx.measureText(r.label).width))) + 8;
         const sw = all.map((c) => rgbString(c[0], c[1], c[2]));
         accent = sw[4];
-        swatchHost.innerHTML = sw.map((c, i) => `<button type="button" class="sk-sw" data-i="${i}" style="background:${c}" aria-label="Highlight ${esc(levelNames[i].toLowerCase())} days" aria-pressed="false" title="${esc(levelNames[i])}"></button>`).join('');
+        swatchHost.innerHTML = sw.map((c, i) => `<button type="button" class="sk-sw" data-i="${i}" style="background:${c}" aria-label="${esc(tr('Highlight :level days', { level: levelNames[i].toLowerCase() }))}" aria-pressed="false" title="${esc(levelNames[i])}"></button>`).join('');
         renderStats();
         kick();
     };
@@ -559,7 +561,7 @@ function mount(host) {
     const showTip = () => {
         const c = model.cells[activeIdx];
         if (!c) { tip.removeAttribute('data-on'); tip.setAttribute('aria-hidden', 'true'); return; }
-        tipText.innerHTML = '<strong>' + esc(c.count ? nf.format(c.count) + ' ' + noun(c.count) : 'No ' + plural) + '</strong><span style="opacity:.75"> on ' + esc(dfy.format(dayMs(c.date))) + '</span>';
+        tipText.innerHTML = '<strong>' + esc(c.count ? nf.format(c.count) + ' ' + noun(c.count) : tr('No :plural', { plural: tr(plural) })) + '</strong><span style="opacity:.75"> ' + esc(tr('on')) + ' ' + esc(dfy.format(dayMs(c.date))) + '</span>';
         tip.setAttribute('data-on', '');
         tip.setAttribute('aria-hidden', 'false');
         tipW = tip.offsetWidth;

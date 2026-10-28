@@ -1,6 +1,6 @@
 @props(['items'])
 
-<nav class="dock lg:hidden" data-dock aria-label="Quick navigation">
+<nav class="dock lg:hidden" data-dock aria-label="{{ __('Quick navigation') }}">
     @foreach ($items as $item)
         @if (! empty($item['toggle']))
             <button type="button" class="dock-item" data-sidebar-toggle aria-label="{{ $item['label'] }}">

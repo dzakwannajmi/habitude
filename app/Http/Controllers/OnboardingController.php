@@ -44,7 +44,7 @@ class OnboardingController extends Controller
             [$name, $target, $unit] = $starter;
             $habit = $user->habits()->create([
                 'category_id' => $categories[$slug]->id,
-                'name' => $name,
+                'name' => __($name), // starter names follow the language they were picked in
                 'target_count' => $target,
                 'unit' => $unit,
             ]);
@@ -65,6 +65,6 @@ class OnboardingController extends Controller
 
         $achievements->award($user);
 
-        return redirect()->route('dashboard')->with('success', 'You are all set. Check off your first habit!');
+        return redirect()->route('dashboard')->with('success', __('You are all set. Check off your first habit!'));
     }
 }
