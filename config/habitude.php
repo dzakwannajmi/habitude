@@ -15,6 +15,13 @@ return [
         'UTC' => 'UTC',
     ],
 
+    // Profile pictures (DiceBear "Waves", CC0). Animation: fastest, fast, medium, slow, slowest, none.
+    'avatar' => [
+        'animation' => 'slow',
+        'backgrounds' => ['ff5900', 'e04e00', 'ff7a33', 'c2410c', 'f97316'], // Ember family, hex without #
+        'wave' => 'ffffff',
+    ],
+
     // Units offered when creating a habit.
     'units' => ['times', 'glasses', 'pages', 'minutes', 'hours', 'steps', 'km', 'sessions'],
 

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Achievement;
 use App\Models\Habit;
 use App\Models\User;
+use App\Support\Avatars;
 use Database\Seeders\AdminSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -173,6 +174,31 @@ class AdminTest extends TestCase
         // and the account can actually log in
         $this->post('/login', ['email' => 'admin@example.com', 'password' => 'password'])->assertRedirect('/');
         $this->assertAuthenticatedAs($admin);
+    }
+
+    public function test_avatars_are_animated_waves_that_stay_the_same_per_user(): void
+    {
+        $a = Avatars::svg('user-1');
+        $b = Avatars::svg('user-2');
+
+        $this->assertStringContainsString('<svg', $a);
+        $this->assertStringContainsString('dbwa-l1', $a);            // layers the CSS animation moves
+        $this->assertStringContainsString('@keyframes', $a);          // the "slow" animation variant is on
+        $this->assertStringContainsString('prefers-reduced-motion', $a);
+        $this->assertStringNotContainsString('<metadata', $a);
+        $this->assertSame($a, Avatars::svg('user-1')); // deterministic
+        $this->assertNotSame($a, $b);                                // different people look different
+    }
+
+    public function test_avatar_shows_in_the_sidebar_profile_and_admin_list(): void
+    {
+        $admin = $this->admin();
+        $other = User::factory()->create(['name' => 'Budi Santoso']);
+
+        $this->get('/')->assertSee('Avatar of Root Admin', false);
+        $this->get('/profile')->assertSee('Avatar of Root Admin', false);
+        $this->get('/admin/users')->assertSee('Avatar of Budi Santoso', false)->assertSee('dbwa-l1', false);
+        $this->get("/admin/users/{$other->id}/edit")->assertSee('Avatar of Budi Santoso', false);
     }
 
     public function test_make_admin_command_grants_and_revokes_the_role(): void

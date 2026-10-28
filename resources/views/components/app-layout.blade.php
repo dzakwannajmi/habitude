@@ -23,7 +23,6 @@
 <body class="min-h-svh antialiased" style="--bar-h: {{ request()->routeIs('admin.*') || config('habitude.stage') !== 'production' ? '1.75rem' : '0px' }}">
     @php
         $user = auth()->user();
-        $initials = collect(explode(' ', $user->name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('');
         $admin = request()->routeIs('admin.*');
         $preview = config('habitude.stage') !== 'production';
         $bar = $admin || $preview;
@@ -108,7 +107,7 @@
         <div class="relative border-t border-mist/60 p-3">
             <details class="group" data-menu>
                 <summary class="flex cursor-pointer list-none items-center gap-2 rounded-xl p-2 hover:bg-paper [&::-webkit-details-marker]:hidden">
-                    <span class="flex size-8 shrink-0 items-center justify-center rounded-md bg-ink text-caption font-semibold text-paper">{{ $initials }}</span>
+                    <x-avatar :user="$user" size="size-8" />
                     <span class="grid flex-1 text-left leading-tight">
                         <span class="truncate text-body-sm font-semibold">{{ $user->name }}</span>
                         <span class="truncate text-caption text-pewter">{{ $user->email }}</span>

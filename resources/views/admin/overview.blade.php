@@ -58,7 +58,7 @@
             <ul class="divide-y divide-mist/40">
                 @foreach ($recentUsers as $u)
                     <li class="flex items-center gap-3 px-6 py-3">
-                        <span class="flex size-9 flex-none items-center justify-center rounded-md bg-ink text-caption font-semibold text-paper">{{ collect(explode(' ', $u->name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('') }}</span>
+                        <x-avatar :user="$u" size="size-9" />
                         <span class="min-w-0 flex-1"><span class="block truncate text-body-sm font-semibold">{{ $u->name }}</span><span class="block truncate text-caption text-pewter">{{ $u->email }}</span></span>
                         @if ($u->isAdmin()) <span class="badge badge-active">Admin</span> @endif
                         <span class="text-caption text-pewter">{{ $u->created_at->diffForHumans() }}</span>

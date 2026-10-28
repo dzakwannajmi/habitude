@@ -42,7 +42,7 @@
         </div>
 
         <aside class="card h-fit lg:col-span-2">
-            <div class="card-header"><h2 class="text-subheading">Activity</h2></div>
+            <div class="card-header"><h2 class="text-subheading">Activity</h2><x-avatar :user="$user" size="size-10" /></div>
             <dl class="card-body space-y-2 text-body-sm">
                 <div class="flex justify-between"><dt class="text-pewter">Joined</dt><dd class="font-medium">{{ $user->created_at->format('j M Y') }}</dd></div>
                 <div class="flex justify-between"><dt class="text-pewter">Habits</dt><dd class="font-medium">{{ $user->habits_count }}</dd></div>

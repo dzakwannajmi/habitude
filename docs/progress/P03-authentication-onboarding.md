@@ -31,6 +31,10 @@ Replace the stand-in user with real accounts, and guide new users through a firs
 ### J2: Profile page
 - **What:** Edit name, email, bio, timezone, daily goal, and optionally the password. The timezone decides when a new day starts for streaks (`User::today()`).
 
+### J2b: Profile picture
+- Each user gets a generated, animated avatar: the DiceBear *Waves* style (CC0) rendered by `dicebear/core` in PHP, seeded by the user id so it never changes with the name or email. Colours are the Ember family on white waves, drifting slowly through CSS inside the SVG (it respects `prefers-reduced-motion`). Shown in the sidebar, profile, and admin user list. Config: `config/habitude.php` (`avatar`).
+- **Verified:** layer positions move over time in the browser; tests check the SVG is deterministic, animated, and unique per user.
+
 ### J3: Onboarding stepper
 - **What:** New users are redirected by the `onboarded` middleware until they finish 4 steps: profile, starter habits, reminder time, finish. Picked starters become real habits (with a reminder when a time is set). Adds `profiles.onboarded_at` (new migration).
 - **Verified:** `OnboardingTest`, plus a browser run: register, four steps, dashboard shows the chosen habits.

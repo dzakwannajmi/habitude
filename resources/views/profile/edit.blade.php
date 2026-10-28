@@ -5,7 +5,12 @@
 
 <x-app-layout title="Profile" :crumbs="[['Profile']]">
     <div class="card max-w-2xl">
-        <div class="card-header"><h1 class="text-subheading">Your profile</h1></div>
+        <div class="card-header">
+            <div class="flex items-center gap-3">
+                <x-avatar :user="$user" size="size-14" />
+                <div><h1 class="text-subheading">Your profile</h1><p class="text-body-sm text-pewter">Your picture is generated from your account, no upload needed.</p></div>
+            </div>
+        </div>
         <form action="{{ route('profile.update') }}" method="POST" class="card-body space-y-5">
             @csrf
             @method('PUT')

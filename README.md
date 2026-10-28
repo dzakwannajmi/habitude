@@ -18,6 +18,7 @@ Habitude is a habit tracking web application built with **Laravel**, **Blade**, 
 - Dashboard with today's habits, streaks, and per-category progress (a Has-Many-Through query)
 - Habits as a grouped **list or grid** (Finder style) with swipe-to-edit rows
 - Mobile **dock** navigation
+- Animated profile pictures: a unique drifting orange **waves** avatar per user, generated on the server (no upload needed)
 
 ## Two Sides: Beta app and Admin console
 
@@ -76,7 +77,7 @@ erDiagram
 git clone https://github.com/dzakwannajmi/PBO2_LARAVEL_5C.git
 cd PBO2_LARAVEL_5C
 
-# Install dependencies
+# Install dependencies (includes the DiceBear avatar library)
 composer install
 npm install
 
@@ -129,7 +130,7 @@ Phase progress (P01, P02, ...) broken into jobs (J1, J2, ...) with proof, status
 ## Tests
 
 ```bash
-php artisan test   # 60 tests, in-memory SQLite
+php artisan test   # 62 tests, in-memory SQLite
 ```
 
 ## Contributing / Forking
@@ -176,3 +177,5 @@ Muhammad Dzakwan Najmi — NPM 2410010454 — TI 5C REG BJB
 Released under the [MIT License](https://opensource.org/licenses/MIT).
 
 Interaction designs are ports of [React Bits](https://reactbits.dev) micro-interactions; check its license terms before publishing the project publicly.
+
+Profile pictures use the [DiceBear](https://www.dicebear.com) *Waves* style, released under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/); the PHP library `dicebear/core` is MIT.

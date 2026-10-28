@@ -32,7 +32,7 @@
                         <tr>
                             <td>
                                 <span class="flex items-center gap-3">
-                                    <span class="flex size-9 flex-none items-center justify-center rounded-md bg-ink text-caption font-semibold text-paper">{{ collect(explode(' ', $u->name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->implode('') }}</span>
+                                    <x-avatar :user="$u" size="size-9" />
                                     <span class="min-w-0"><span class="block truncate font-medium text-ink">{{ $u->name }} @if ($u->is(auth()->user())) <span class="font-normal text-pewter">(you)</span> @endif</span><span class="block truncate text-caption text-pewter">{{ $u->email }}</span></span>
                                 </span>
                             </td>
