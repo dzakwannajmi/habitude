@@ -5,7 +5,7 @@
 | **Status** | ✅ Done |
 | **Started** | 2026-10-28 |
 | **Completed** | 2026-10-28 |
-| **Branch** | `feature/crud-ui` |
+| **Branch** | `feature/habitude` |
 | **Module** | [Laravel 5: CRUD Periode dengan Template AdminLTE](https://mirzayogy.github.io/blog/2026-10-13-laravel-simtikum-5/) |
 
 ## Goal
@@ -15,10 +15,10 @@ Replace the stand-in user with real accounts, and guide new users through a firs
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | Register, login, logout with throttling | ✅ Done | 2026-10-28 | [`AuthController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/AuthController.php), [`views/auth`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/auth) |
-| J2 | Profile page (name, email, bio, timezone, goal, password) | ✅ Done | 2026-10-28 | [`ProfileController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/ProfileController.php) |
-| J3 | Onboarding stepper and starter habits | ✅ Done | 2026-10-28 | [`OnboardingController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/OnboardingController.php), [`onboarding.blade.php`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/onboarding.blade.php) |
-| J4 | Data scoping: every user sees only their own rows | ✅ Done | 2026-10-28 | [`routes/web.php`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/routes/web.php) |
+| J1 | Register, login, logout with throttling | ✅ Done | 2026-10-28 | [`AuthController`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/app/Http/Controllers/AuthController.php), [`views/auth`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/resources/views/auth) |
+| J2 | Profile page (name, email, bio, timezone, goal, password) | ✅ Done | 2026-10-28 | [`ProfileController`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/app/Http/Controllers/ProfileController.php) |
+| J3 | Onboarding stepper and starter habits | ✅ Done | 2026-10-28 | [`OnboardingController`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/app/Http/Controllers/OnboardingController.php), [`onboarding.blade.php`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/resources/views/onboarding.blade.php) |
+| J4 | Data scoping: every user sees only their own rows | ✅ Done | 2026-10-28 | [`routes/web.php`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/routes/web.php) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 

@@ -5,7 +5,7 @@
 | **Status** | ✅ Done |
 | **Started** | 2026-10-28 |
 | **Completed** | 2026-10-28 |
-| **Branch** | `feature/crud-ui` |
+| **Branch** | `feature/habitude` |
 | **Module** | [Laravel 5: CRUD Periode dengan Template AdminLTE](https://mirzayogy.github.io/blog/2026-10-13-laravel-simtikum-5/) |
 
 ## Goal
@@ -15,9 +15,9 @@ Daily mood check-in and journal entries that link to the day's mood.
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | Mood check-in with Peek Rating and history | ✅ Done | 2026-10-28 | [`MoodEntryController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/MoodEntryController.php), [`views/mood`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/mood) |
-| J2 | Journal CRUD with list and grid views | ✅ Done | 2026-10-28 | [`JournalEntryController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/JournalEntryController.php), [`views/journal`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/journal) |
-| J3 | One-to-one link between mood and journal | ✅ Done | 2026-10-28 | [`TrackingTest`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/tests/Feature/TrackingTest.php) |
+| J1 | Mood check-in with Peek Rating and history | ✅ Done | 2026-10-28 | [`MoodEntryController`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/app/Http/Controllers/MoodEntryController.php), [`views/mood`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/resources/views/mood) |
+| J2 | Journal CRUD with list and grid views | ✅ Done | 2026-10-28 | [`JournalEntryController`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/app/Http/Controllers/JournalEntryController.php), [`views/journal`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/resources/views/journal) |
+| J3 | One-to-one link between mood and journal | ✅ Done | 2026-10-28 | [`TrackingTest`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/tests/Feature/TrackingTest.php) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 

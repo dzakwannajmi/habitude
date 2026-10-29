@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\AchievementService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use RuntimeException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // The demo accounts and sample data use a well-known password, so they never go to production.
+        if (app()->isProduction()) {
+            throw new RuntimeException('DatabaseSeeder creates demo accounts. In production run CategorySeeder, AchievementSeeder and AdminSeeder one by one.');
+        }
+
         $this->call([CategorySeeder::class, AchievementSeeder::class]);
 
         mt_srand(42); // the same demo data on every run

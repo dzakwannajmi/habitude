@@ -5,7 +5,7 @@
 | **Status** | 🚧 In progress |
 | **Started** | 2026-10-29 |
 | **Completed** | - |
-| **Branch** | `feature/crud-ui` |
+| **Branch** | `feature/habitude` |
 
 ## Goal
 Get the project ready to hand in and show: license, credits, mascot, and deployment or demo.
@@ -14,11 +14,12 @@ Get the project ready to hand in and show: license, credits, mascot, and deploym
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | MIT license file | ✅ Done | 2026-10-29 | [`LICENSE`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/LICENSE) |
-| J2 | Check the React Bits license and record third-party credits | ✅ Done | 2026-10-29 | [`THIRD_PARTY_NOTICES.md`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/THIRD_PARTY_NOTICES.md) |
+| J1 | MIT license file | ✅ Done | 2026-10-29 | [`LICENSE`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/LICENSE) |
+| J2 | Check the React Bits license and record third-party credits | ✅ Done | 2026-10-29 | [`THIRD_PARTY_NOTICES.md`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/THIRD_PARTY_NOTICES.md) |
 | J3 | Mood mascot (bear) | ⏳ Planned | - | artwork to be generated, then wired into the mood page |
 | J4 | Deployment or recorded demo | ⏳ Planned | - | - |
 | J5 | Pre-push audit and rename to `habitude` | ✅ Done | 2026-10-30 | see J5 below |
+| J6 | Production safety: seeders and branch name | ✅ Done | 2026-10-30 | [`SeederSafetyTest`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/tests/Feature/SeederSafetyTest.php) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 
@@ -36,3 +37,9 @@ Get the project ready to hand in and show: license, credits, mascot, and deploym
 ### J5: Pre-push audit and rename
 - **Audit:** the 234 tracked files hold no `.env`, database, log, key or build output (all ignored). No tokens or keys in any commit, and the real database password never appeared in the history. No personal data beyond the author line in the README. `CLAUDE.md` and `AGENTS.md` come from the course template.
 - **Rename:** the repository is now `dzakwannajmi/habitude` (it stays a fork of `mirzayogy/laravel5d`, and PR #1 keeps working because GitHub redirects the old name). Links in the README, progress docs, the sidebar and the feedback URL use the new name; `package.json` gets `"name": "habitude"`. The local folder is renamed to `habitude`.
+
+### J6: Production safety
+- `DatabaseSeeder` (demo accounts with a well-known password) refuses to run in production; there, run `CategorySeeder`, `AchievementSeeder` and `AdminSeeder` one by one.
+- `AdminSeeder` refuses to create a new administrator in production while `ADMIN_PASSWORD` is empty or `password`. An existing account is only promoted and keeps its password.
+- The working branch is now `feature/habitude` (was `feature/crud-ui`), and the links in these progress documents follow it.
+- Removed the "Laravel MCP" line from the README tech stack, since the package is not used by the app.

@@ -75,7 +75,6 @@ erDiagram
 - Blade templates
 - Tailwind CSS v4 (via Vite) with the Brex-style design tokens, Inter font, a shadcn sidebar-08 style layout, and plain JavaScript ports of React Bits micro-interactions (no frontend framework)
 - MySQL (SQLite is used for automated tests)
-- Laravel MCP for AI-assisted development
 
 ## Getting Started
 

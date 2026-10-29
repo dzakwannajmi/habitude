@@ -5,7 +5,7 @@
 | **Status** | ✅ Done |
 | **Started** | 2026-10-28 |
 | **Completed** | 2026-10-28 |
-| **Branch** | `feature/crud-ui` |
+| **Branch** | `feature/habitude` |
 
 ## Goal
 Remove friction from the whole journey, from signing up to closing the day, in three waves: quick wins, connecting the flow, and the larger features.
@@ -14,12 +14,12 @@ Remove friction from the whole journey, from signing up to closing the day, in t
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | Wave 1: open menu, undo, time-ordered list, quick add, no dead ends | ✅ Done | 2026-10-28 | [`UxFlowTest`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/tests/Feature/UxFlowTest.php) |
-| J2 | Wave 2: mood to journal prompt, celebration, missed-day nudge, password reset | ✅ Done | 2026-10-28 | [`PasswordResetController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/PasswordResetController.php), [`celebrate.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/celebrate.js) |
-| J3 | Wave 3a: reminder delivery (email and browser) | ✅ Done | 2026-10-28 | [`SendReminders`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Console/Commands/SendReminders.php), [`notifier.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/notifier.js) |
-| J4 | Wave 3b: installable app (PWA) | ✅ Done | 2026-10-28 | [`manifest`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/public/manifest.webmanifest), [`sw.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/public/sw.js) |
-| J5 | Wave 3c: command palette | ✅ Done | 2026-10-28 | [`palette.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/palette.js) |
-| J6 | Wave 3d: Indonesian language | ✅ Done | 2026-10-28 | [`lang/id.json`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/lang/id.json), [`LocaleTest`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/tests/Feature/LocaleTest.php) |
+| J1 | Wave 1: open menu, undo, time-ordered list, quick add, no dead ends | ✅ Done | 2026-10-28 | [`UxFlowTest`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/tests/Feature/UxFlowTest.php) |
+| J2 | Wave 2: mood to journal prompt, celebration, missed-day nudge, password reset | ✅ Done | 2026-10-28 | [`PasswordResetController`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/app/Http/Controllers/PasswordResetController.php), [`celebrate.js`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/resources/js/ui/celebrate.js) |
+| J3 | Wave 3a: reminder delivery (email and browser) | ✅ Done | 2026-10-28 | [`SendReminders`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/app/Console/Commands/SendReminders.php), [`notifier.js`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/resources/js/ui/notifier.js) |
+| J4 | Wave 3b: installable app (PWA) | ✅ Done | 2026-10-28 | [`manifest`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/public/manifest.webmanifest), [`sw.js`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/public/sw.js) |
+| J5 | Wave 3c: command palette | ✅ Done | 2026-10-28 | [`palette.js`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/resources/js/ui/palette.js) |
+| J6 | Wave 3d: Indonesian language | ✅ Done | 2026-10-28 | [`lang/id.json`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/lang/id.json), [`LocaleTest`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/tests/Feature/LocaleTest.php) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 
