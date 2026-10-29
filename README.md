@@ -81,8 +81,8 @@ erDiagram
 
 ```bash
 # Clone the repository
-git clone https://github.com/dzakwannajmi/PBO2_LARAVEL_5C.git
-cd PBO2_LARAVEL_5C
+git clone https://github.com/dzakwannajmi/habitude.git
+cd habitude
 
 # Install dependencies (includes the DiceBear avatar library)
 composer install

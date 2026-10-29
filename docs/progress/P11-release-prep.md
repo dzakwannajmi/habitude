@@ -14,10 +14,11 @@ Get the project ready to hand in and show: license, credits, mascot, and deploym
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | MIT license file | ✅ Done | 2026-10-29 | [`LICENSE`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/LICENSE) |
-| J2 | Check the React Bits license and record third-party credits | ✅ Done | 2026-10-29 | [`THIRD_PARTY_NOTICES.md`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/THIRD_PARTY_NOTICES.md) |
+| J1 | MIT license file | ✅ Done | 2026-10-29 | [`LICENSE`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/LICENSE) |
+| J2 | Check the React Bits license and record third-party credits | ✅ Done | 2026-10-29 | [`THIRD_PARTY_NOTICES.md`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/THIRD_PARTY_NOTICES.md) |
 | J3 | Mood mascot (bear) | ⏳ Planned | - | artwork to be generated, then wired into the mood page |
 | J4 | Deployment or recorded demo | ⏳ Planned | - | - |
+| J5 | Pre-push audit and rename to `habitude` | ✅ Done | 2026-10-30 | see J5 below |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 
@@ -31,3 +32,7 @@ Get the project ready to hand in and show: license, credits, mascot, and deploym
 - Habitude is a coursework app and does not sell the components, so using the ports here is fine. The ported files are listed in `THIRD_PARTY_NOTICES.md` and stay under the original terms; the repository's MIT license does not widen them.
 - Checked from the project's license file and its introduction page on 2026-10-29. The text was read through a summary, so read `LICENSE.md` in the React Bits repository once yourself before publishing publicly.
 - The logo, design tokens and Contribution Skyline were supplied by the author and have no recorded source; noted for confirmation.
+
+### J5: Pre-push audit and rename
+- **Audit:** the 234 tracked files hold no `.env`, database, log, key or build output (all ignored). No tokens or keys in any commit, and the real database password never appeared in the history. No personal data beyond the author line in the README. `CLAUDE.md` and `AGENTS.md` come from the course template.
+- **Rename:** the repository is now `dzakwannajmi/habitude` (it stays a fork of `mirzayogy/laravel5d`, and PR #1 keeps working because GitHub redirects the old name). Links in the README, progress docs, the sidebar and the feedback URL use the new name; `package.json` gets `"name": "habitude"`. The local folder is renamed to `habitude`.

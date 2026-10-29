@@ -133,7 +133,7 @@
         </div>
 
         <div class="px-3 pb-2">
-            <a href="https://github.com/dzakwannajmi/PBO2_LARAVEL_5C" target="_blank" rel="noopener" class="menu-item">
+            <a href="https://github.com/dzakwannajmi/habitude" target="_blank" rel="noopener" class="menu-item">
                 <x-icon name="external-link" />
                 {{ __('Repository') }}
             </a>

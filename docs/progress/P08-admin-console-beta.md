@@ -14,12 +14,12 @@ Split the app in two sides: an **Admin** console that manages the whole system, 
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | Roles: `users.role`, admin middleware, make-admin command | ✅ Done | 2026-10-28 | [`EnsureAdmin`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Middleware/EnsureAdmin.php), [`MakeAdmin`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Console/Commands/MakeAdmin.php) |
-| J2 | Admin overview (system numbers, sign-ups, top categories) | ✅ Done | 2026-10-28 | [`OverviewController`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Controllers/Admin/OverviewController.php) |
-| J3 | User management (search, filter, edit, role, delete) | ✅ Done | 2026-10-28 | [`Admin/UserController`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Controllers/Admin/UserController.php), [`views/admin`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/admin) |
-| J4 | Master data moved behind the admin | ✅ Done | 2026-10-28 | [`routes/web.php`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/routes/web.php) |
-| J5 | Beta stage label and preview banner | ✅ Done | 2026-10-28 | [`app-layout`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/components/app-layout.blade.php), [`logo`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/components/logo.blade.php) |
-| J6 | Tests (59) and login-3 style sign-in page | ✅ Done | 2026-10-28 | [`AdminTest`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/tests/Feature/AdminTest.php) |
+| J1 | Roles: `users.role`, admin middleware, make-admin command | ✅ Done | 2026-10-28 | [`EnsureAdmin`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Middleware/EnsureAdmin.php), [`MakeAdmin`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Console/Commands/MakeAdmin.php) |
+| J2 | Admin overview (system numbers, sign-ups, top categories) | ✅ Done | 2026-10-28 | [`OverviewController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/Admin/OverviewController.php) |
+| J3 | User management (search, filter, edit, role, delete) | ✅ Done | 2026-10-28 | [`Admin/UserController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/Admin/UserController.php), [`views/admin`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/admin) |
+| J4 | Master data moved behind the admin | ✅ Done | 2026-10-28 | [`routes/web.php`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/routes/web.php) |
+| J5 | Beta stage label and preview banner | ✅ Done | 2026-10-28 | [`app-layout`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/components/app-layout.blade.php), [`logo`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/components/logo.blade.php) |
+| J6 | Tests (59) and login-3 style sign-in page | ✅ Done | 2026-10-28 | [`AdminTest`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/tests/Feature/AdminTest.php) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 

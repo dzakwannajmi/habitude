@@ -14,10 +14,10 @@ Make streaks fair to real life. A habit like "work out 3 times a week" should no
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | Weekly goals ("3 days a week") for habits | ✅ Done | 2026-10-29 | [`StreakService`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Services/StreakService.php), [`FlexibleScheduleTest`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/tests/Feature/FlexibleScheduleTest.php) |
-| J2 | Rest days: one per week that keep the streak safe | ✅ Done | 2026-10-29 | [`RestDayController`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Controllers/RestDayController.php), [`rest_days` migration](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/database/migrations/2026_10_28_220048_create_rest_days_table.php) |
-| J3 | Mood history shows 5 rows, extendable by choice | ✅ Done | 2026-10-29 | [`history-list.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/history-list.js) |
-| J4 | Fix: check-ins looked like failed saves | ✅ Done | 2026-10-29 | [`tracker.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/tracker.js), [`LocaleTest`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/tests/Feature/LocaleTest.php) |
+| J1 | Weekly goals ("3 days a week") for habits | ✅ Done | 2026-10-29 | [`StreakService`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Services/StreakService.php), [`FlexibleScheduleTest`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/tests/Feature/FlexibleScheduleTest.php) |
+| J2 | Rest days: one per week that keep the streak safe | ✅ Done | 2026-10-29 | [`RestDayController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/RestDayController.php), [`rest_days` migration](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/database/migrations/2026_10_28_220048_create_rest_days_table.php) |
+| J3 | Mood history shows 5 rows, extendable by choice | ✅ Done | 2026-10-29 | [`history-list.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/history-list.js) |
+| J4 | Fix: check-ins looked like failed saves | ✅ Done | 2026-10-29 | [`tracker.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/tracker.js), [`LocaleTest`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/tests/Feature/LocaleTest.php) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 

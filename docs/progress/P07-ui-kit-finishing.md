@@ -15,12 +15,12 @@ Apply the design system and the React Bits micro-interactions across the app, th
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | Branched menu sidebar with icons | ✅ Done | 2026-10-28 | [`branched-menu.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/branched-menu.js), [`nav-tree`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/components/nav-tree.blade.php) |
-| J2 | Glide select for every dropdown | ✅ Done | 2026-10-28 | [`glide-select.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/glide-select.js) |
-| J3 | Swipe row and list/grid grouping | ✅ Done | 2026-10-28 | [`swipe-row.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/swipe-row.js), [`habits/index`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/habits/index.blade.php) |
-| J4 | Spring check, peek rating, counter | ✅ Done | 2026-10-28 | [`resources/js/ui`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui) |
-| J5 | Stepper (onboarding) and dock (mobile) | ✅ Done | 2026-10-28 | [`stepper.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/stepper.js), [`dock.js`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/js/ui/dock.js) |
-| J6 | Tests and browser verification | ✅ Done | 2026-10-28 | [`tests/Feature`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/tests/Feature) |
+| J1 | Branched menu sidebar with icons | ✅ Done | 2026-10-28 | [`branched-menu.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/branched-menu.js), [`nav-tree`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/components/nav-tree.blade.php) |
+| J2 | Glide select for every dropdown | ✅ Done | 2026-10-28 | [`glide-select.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/glide-select.js) |
+| J3 | Swipe row and list/grid grouping | ✅ Done | 2026-10-28 | [`swipe-row.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/swipe-row.js), [`habits/index`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/habits/index.blade.php) |
+| J4 | Spring check, peek rating, counter | ✅ Done | 2026-10-28 | [`resources/js/ui`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui) |
+| J5 | Stepper (onboarding) and dock (mobile) | ✅ Done | 2026-10-28 | [`stepper.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/stepper.js), [`dock.js`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/js/ui/dock.js) |
+| J6 | Tests and browser verification | ✅ Done | 2026-10-28 | [`tests/Feature`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/tests/Feature) |
 | J7 | MySQL run on the lecturer's setup | ✅ Done | 2026-10-29 | 19 migrations, 20 tables, 12 foreign keys; 126 tests pass on MySQL (see J7) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked

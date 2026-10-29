@@ -15,9 +15,9 @@ Per-habit reminders and badges that unlock automatically.
 
 | Code | Job | Status | Completed | Proof |
 |---|---|---|---|---|
-| J1 | Reminders per habit (time and weekdays) | ✅ Done | 2026-10-28 | [`ReminderController`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Controllers/ReminderController.php) |
-| J2 | Achievement CRUD and gallery | ✅ Done | 2026-10-28 | [`AchievementController`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Http/Controllers/AchievementController.php), [`views/achievements`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/resources/views/achievements) |
-| J3 | Automatic unlocking with pivot `earned_at` | ✅ Done | 2026-10-28 | [`AchievementService`](https://github.com/dzakwannajmi/PBO2_LARAVEL_5C/tree/feature/crud-ui/app/Services/AchievementService.php) |
+| J1 | Reminders per habit (time and weekdays) | ✅ Done | 2026-10-28 | [`ReminderController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/ReminderController.php) |
+| J2 | Achievement CRUD and gallery | ✅ Done | 2026-10-28 | [`AchievementController`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Http/Controllers/AchievementController.php), [`views/achievements`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/resources/views/achievements) |
+| J3 | Automatic unlocking with pivot `earned_at` | ✅ Done | 2026-10-28 | [`AchievementService`](https://github.com/dzakwannajmi/habitude/tree/feature/crud-ui/app/Services/AchievementService.php) |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 
