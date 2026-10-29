@@ -193,6 +193,7 @@ docs/
 - [x] UI kit: branched menu, glide select, swipe row, spring check, peek rating, counter, stepper, dock
 - [x] Admin console and Beta release stage
 - [x] Flexible schedule: weekly goals and rest days
+- [x] MIT license and third-party notices
 - [x] Run and verify on MySQL
 
 ## Author
@@ -201,8 +202,6 @@ Muhammad Dzakwan Najmi — NPM 2410010454 — TI 5C REG BJB
 
 ## License
 
-Released under the [MIT License](https://opensource.org/licenses/MIT).
+Released under the [MIT License](LICENSE).
 
-Interaction designs are ports of [React Bits](https://reactbits.dev) micro-interactions; check its license terms before publishing the project publicly.
-
-Profile pictures use the [DiceBear](https://www.dicebear.com) *Waves* style, released under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/); the PHP library `dicebear/core` is MIT.
+The interactions in `resources/js/ui/` are ports of [React Bits](https://reactbits.dev) micro-interactions, which use **MIT + Commons Clause**: fine to use inside an app like this one, not to sell or redistribute as components. Profile pictures use the [DiceBear](https://www.dicebear.com) *Waves* style ([CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)). Full list in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
