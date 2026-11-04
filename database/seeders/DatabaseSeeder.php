@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             throw new RuntimeException('DatabaseSeeder creates demo accounts. In production run CategorySeeder, AchievementSeeder and AdminSeeder one by one.');
         }
 
-        $this->call([CategorySeeder::class, AchievementSeeder::class]);
+        // PeriodeSeeder is the course module's example table (periode of terms); the habit tracker does not use it.
+        $this->call([CategorySeeder::class, AchievementSeeder::class, PeriodeSeeder::class]);
 
         mt_srand(42); // the same demo data on every run
 
