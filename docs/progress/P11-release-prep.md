@@ -20,6 +20,7 @@ Get the project ready to hand in and show: license, credits, mascot, and deploym
 | J4 | Deployment or recorded demo | ⏳ Planned | - | - |
 | J5 | Pre-push audit and rename to `habitude` | ✅ Done | 2026-10-30 | see J5 below |
 | J6 | Production safety: seeders and branch name | ✅ Done | 2026-10-30 | [`SeederSafetyTest`](https://github.com/dzakwannajmi/habitude/tree/feature/habitude/tests/Feature/SeederSafetyTest.php) |
+| J7 | Sync with the lecturer's `main` and open the pull request | ✅ Done | 2026-11-04 | merge commit on `feature/habitude` |
 
 **Status legend:** ⏳ Planned · 🚧 In progress · ✅ Done · ⛔ Blocked
 
@@ -43,3 +44,9 @@ Get the project ready to hand in and show: license, credits, mascot, and deploym
 - `AdminSeeder` refuses to create a new administrator in production while `ADMIN_PASSWORD` is empty or `password`. An existing account is only promoted and keeps its password.
 - The working branch is now `feature/habitude` (was `feature/crud-ui`), and the links in these progress documents follow it.
 - Removed the "Laravel MCP" line from the README tech stack, since the package is not used by the app.
+
+### J7: Sync with the lecturer's repository
+- Merged `upstream/main` (`mirzayogy/laravel5d`, 3 new commits) into `feature/habitude`, so the pull request has no conflicts. `feature/database-relations` was already contained in this branch.
+- New from the lecturer: the `Periode` model, `PeriodeController`, the `periode` table migration and `PeriodeSeeder` (the course module's example). They are kept as they are; `DatabaseSeeder` also calls `PeriodeSeeder`. The habit tracker does not use them.
+- Two conflicts were resolved in favor of Habitude: `.env.example` keeps the MySQL defaults (`DB_DATABASE=habitude`), and `DatabaseSeeder` keeps the demo data.
+- Existing databases need `php artisan migrate` to get the `periode` table.
